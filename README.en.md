@@ -21,7 +21,7 @@ An AI translation Chrome extension MVP built with **Manifest V3 and vanilla Java
 
 ## Screenshots
 
-These screenshots show the actual extension UI during browser tests using a local mock API. They do not demonstrate the translation quality of a real model. The screenshots below show the English UI; Chinese is also supported.
+These screenshots are synced from the latest browser tests using a local mock API (October 2, 2026). They show the actual extension UI, not the translation quality of a real model. API keys are not displayed, and test unlock passwords are masked. The screenshots below show the English UI; Simplified and Traditional Chinese are also supported.
 
 ### Toolbar translation
 
@@ -33,7 +33,13 @@ Type text or import a webpage selection, choose a target language, and view or c
 
 Configure the API endpoint, password-protected key, model, and translation preferences, then test the connection. The screenshot uses a local mock service; saved keys are not filled back into the form.
 
-<img src="docs/screenshots/en/options.png" alt="Transight AI settings page with AI service configuration, translation preferences, and usage instructions" width="900">
+<img src="docs/screenshots/en/options.png" alt="Transight AI settings page with API key password protection, model selection, translation preferences, and usage instructions" width="900">
+
+### Unlock without leaving the panel
+
+When the API key is locked, enter your password directly in the toolbar popup or on-page panel. The compact form resumes pending translation after unlocking, without a trip to Settings. The screenshot below shows the on-page panel.
+
+<img src="docs/screenshots/en/selection-locked.png" alt="Compact inline password field and Unlock button in the English on-page panel, with the test password masked" width="900">
 
 ### On-page translation panel
 
@@ -273,7 +279,11 @@ The store ZIP, trilingual listing copy, icon, screenshots, and promotional image
 
 ![Traditional Chinese multi-model translation](docs/screenshots/zh-TW/popup-multi.png)
 
-The store submission folder also includes Traditional Chinese listing copy and 3 localized screenshots.
+Inline unlocking in Traditional Chinese:
+
+<img src="docs/screenshots/zh-TW/selection-locked.png" alt="Compact inline unlock form in the Traditional Chinese translation panel" width="900">
+
+The store submission folder also includes Traditional Chinese listing copy and 4 localized screenshots.
 
 ## License
 

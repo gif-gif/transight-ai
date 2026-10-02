@@ -22,7 +22,7 @@
 
 ## 界面预览
 
-以下截图来自本机模拟 API 的浏览器测试，展示插件的实际界面，不代表真实模型的翻译效果。
+以下截图同步自最新本机模拟 API 浏览器测试（2026-10-02），展示插件的实际界面，不代表真实模型的翻译效果。密钥不展示，测试解锁密码已遮挡。
 
 ### 工具栏翻译
 
@@ -34,7 +34,13 @@
 
 配置 API 地址、密码加密的密钥、模型和翻译偏好，并测试连接。截图使用本机模拟服务，已保存的密钥不会回填或显示。
 
-<img src="docs/screenshots/options.png" alt="译见 AI 设置页面，包含 AI 服务配置、翻译偏好和使用指南" width="900">
+<img src="docs/screenshots/options.png" alt="译见 AI 设置页面，包含 API Key 密码保护、多模型选择、翻译偏好和使用指南" width="900">
+
+### 浮窗内解锁
+
+API Key 锁定时，可直接在工具栏弹窗或页面浮窗输入密码。解锁框紧凑显示，解锁后继续等待中的翻译，无需跳转设置页。下图展示页面浮窗。
+
+<img src="docs/screenshots/selection-locked.png" alt="页面浮窗中的紧凑解锁表单，包含密码输入框和解锁按钮，测试密码已遮挡" width="900">
 
 ### 页面划词翻译
 
@@ -272,7 +278,11 @@ tests/                        Node.js 自动化测试
 
 ![繁體中文多模型翻译](docs/screenshots/zh-TW/popup-multi.png)
 
-商店材料已补充繁体中文详细介绍及 3 张繁体界面截图，见 `chrome-web-store/`。
+繁體中文浮窗内解锁：
+
+<img src="docs/screenshots/zh-TW/selection-locked.png" alt="繁體中文翻譯浮動視窗中的緊湊解鎖表單" width="900">
+
+商店材料已补充繁体中文详细介绍及 4 张繁体界面截图，见 `chrome-web-store/`。
 
 ## 许可证
 
