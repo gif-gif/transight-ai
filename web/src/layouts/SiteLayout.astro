@@ -1,13 +1,15 @@
 ---
 import { getDictionary, locales, localeInfo, localePath, type Locale, type Page } from '../i18n';
+import { getPrivacyPolicy } from '../i18n/privacy';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 interface Props { locale: Locale; page?: Page }
 const { locale, page = '' } = Astro.props;
 const t = getDictionary(locale);
-const title = page === 'guide' ? t.meta.guideTitle : t.meta.title;
-const description = page === 'guide' ? t.meta.guideDescription : t.meta.description;
+const policy = getPrivacyPolicy(locale);
+const title = page === 'privacy' ? `${policy.title} — ${t.brand}` : page === 'guide' ? t.meta.guideTitle : t.meta.title;
+const description = page === 'privacy' ? policy.description : page === 'guide' ? t.meta.guideDescription : t.meta.description;
 const canonical = Astro.site ? new URL(localePath(locale, page), Astro.site) : undefined;
 ---
 <!doctype html>
@@ -15,7 +17,7 @@ const canonical = Astro.site ? new URL(localePath(locale, page), Astro.site) : u
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
     <meta name="theme-color" content="#126754" />
     <title>{title}</title>
     <meta name="description" content={description} />

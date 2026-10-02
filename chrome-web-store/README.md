@@ -64,23 +64,30 @@
 1. 开发者账号、注册及后台要求的身份/联系信息。
 2. 可公开访问的隐私政策地址，以及你希望公开的支持邮箱或支持页面。当前没有提供这些信息，因此没有编造 URL、开发者身份或联系方式。
 3. 在 Privacy practices 栏目中如实说明：用户提供的文本发送到其配置的 AI 服务；API Key 存在浏览器本地；多模型会分别请求，第三方服务可能收费。不要因为没有自建服务器，就宣称“数据从不离开设备”。
-4. 核对全部 HTTP/HTTPS 网站访问权限的理由：普通网页划词翻译，以及访问用户自定义的 AI API。可参考下面的英文权限说明；它们是提交辅助草稿，需按实际后台问题确认。
+4. 核对全部 HTTP/HTTPS 网站访问权限的理由：普通网页划词翻译，以及访问用户自定义的 AI API。可参考 `dashboard/02-privacy-practices.md` 的英文权限说明；它们是提交辅助草稿，需按实际后台问题确认。
 5. 如审核要求测试方法，提供你认可的可用测试服务与必要说明；不要把真实密钥放进商店图片、公开介绍或安装包。
 6. 上传后检查图片裁切和本地化展示，确认版本号和商品名称后再提交审核。
 
-### 单一用途说明（英文草稿）
+## 开发者后台填写材料
 
-> Translate user-provided or selected text using the user’s configured AI service, with optional comparison of multiple translation models.
+以下四份文件按后台栏目组织：中文填写指引 + 可粘贴的英文申报/审核文案，复用已有介绍与图片，不重复生成素材。核对日期：**2026-10-02**。
 
-### 权限用途（英文草稿）
+| 后台栏目 | 文件 | 包含内容 |
+| --- | --- | --- |
+| Store listing / 商店详情 | [01-store-listing.md](dashboard/01-store-listing.md) | 名称、简介、分类、三种语言、图标和截图路径、主页/支持链接与待补字段 |
+| Privacy practices / 隐私权规范 | [02-privacy-practices.md](dashboard/02-privacy-practices.md) | 单一用途、manifest 各项权限理由、远程代码选项、数据类别建议、数据流、留存与删除、安全核对项 |
+| Distribution / 分发 | [03-distribution.md](dashboard/03-distribution.md) | Public + All regions 建议、Unlisted/Private 区别及发布前确认 |
+| Test instructions / 测试说明 | [04-test-instructions.md](dashboard/04-test-instructions.md) | 英文审核操作步骤、预期结果、故障检查、仅用于后台填写的测试服务凭据占位模板 |
 
-| 权限 | 说明 |
-| --- | --- |
-| storage | Store the user's endpoint, API key, selected models, language preferences and consent locally. Session storage temporarily transfers selected text when a standalone fallback window is needed. |
-| contextMenus | Add a command to translate selected text from the webpage context menu. |
-| activeTab | Read selected text from the active tab after the user invokes the extension. |
-| scripting | Read the current selection and inject the shared translation panel when the user invokes context-menu translation. |
-| http://*/* and https://*/* | Provide selection-translation controls on ordinary webpages without per-site setup, and send translation/model-discovery requests to the AI endpoint configured by the user. Text is sent for translation in response to translation actions, not by automatically uploading whole pages. |
+**当前仍需开发者完成，不能直接视为可提交状态：**
+
+- 提供公开隐私政策 URL、运营者与支持联系渠道；许可证不等于隐私政策。
+- 确认数据类别、最小权限和 Limited use 各项声明。当前会处理网站内容、API Key，并在本地读取标签页 URL/来源，不能申报为“不处理数据”。
+- 核对并完善 API Key 静态存储保护；当前没有应用层加密，不得宣称已加密保存。另需复核模型发现前的凭据使用告知。
+- 确认 Public / All regions，或指定需排除的地区。
+- 提供审核可用的 AI 服务、模型 ID、专用凭据、额度与有效期；真实凭据只填审核后台，**禁止提交至公开仓库**。
+
+此次仅补充本地材料，没有登录后台、变更分发设置或提交审核。
 
 ## 以后如何重新生成
 

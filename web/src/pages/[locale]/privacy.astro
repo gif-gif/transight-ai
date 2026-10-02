@@ -1,0 +1,35 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { locales, localePath, type Locale } from '../../i18n';
+import { getPrivacyPolicy, privacyUpdated } from '../../i18n/privacy';
+import { siteLinks } from '../../config/site';
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const policy = getPrivacyPolicy(locale);
+---
+<SiteLayout locale={locale} page="privacy">
+  <article class="policy container">
+    <a class="text-link" href={localePath(locale)}><span aria-hidden="true">←</span>{policy.back}</a>
+    <header class="guide-header">
+      <p class="eyebrow">{policy.eyebrow}</p>
+      <h1>{policy.title}</h1>
+      <p class="policy-date">{policy.updated}: <time datetime={privacyUpdated}>{policy.date}</time></p>
+      <p>{policy.intro}</p>
+    </header>
+    <aside class="notice"><h2>{policy.summaryTitle}</h2><p>{policy.summary}</p></aside>
+    <nav class="policy-toc" aria-labelledby="policy-contents">
+      <h2 id="policy-contents">{policy.contents}</h2>
+      <ul role="list">{policy.sections.map((section) => <li><a href={`#${section.id}`}>{section.title}</a></li>)}</ul>
+    </nav>
+    <div class="policy-body">{policy.sections.map((section) => (
+      <section id={section.id} aria-labelledby={`${section.id}-heading`}>
+        <h2 id={`${section.id}-heading`}>{section.title}</h2>
+        {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        {section.id === 'contact' && <div class="policy-links">
+          <a class="text-link" href={siteLinks.privacyContact} target="_blank" rel="noopener noreferrer">{policy.contactLink} <span aria-hidden="true">↗</span></a>
+          <a class="text-link" href={siteLinks.repository} target="_blank" rel="noopener noreferrer">{policy.sourceLink} <span aria-hidden="true">↗</span></a>
+        </div>}
+      </section>
+    ))}</div>
+  </article>
+</SiteLayout>

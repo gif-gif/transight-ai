@@ -8,7 +8,9 @@
     "archive_source_match_except_store_icon": true,
     "runtime_file_count": 27,
     "description_limit_132": true,
-    "dimensions_and_image_modes_valid": true
+    "dimensions_and_image_modes_valid": true,
+    "dashboard_guides_present": true,
+    "permission_explanations_present": true
   },
   "sources": {
     "icon": "assets/icon-128.png",
@@ -22,8 +24,28 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 8164,
-      "sha256": "65bd1fe0eff9e4799d10f91302a0b0dc8b042ced04a3e47ad6963f61d26f597d"
+      "bytes": 9007,
+      "sha256": "7a44e30a84ce40d4483d84b05d87e8af83d35ca803a342bc5c87901a4238d3f2"
+    },
+    {
+      "path": "dashboard/01-store-listing.md",
+      "bytes": 3223,
+      "sha256": "ed5029506441b57d3e3ffeda460057535d8dedebd4dc6828efdc5973371f7643"
+    },
+    {
+      "path": "dashboard/02-privacy-practices.md",
+      "bytes": 9968,
+      "sha256": "2057aee892a43177c15e6402c502ba3d9106a8882d59e29b56910b66e5b76de5"
+    },
+    {
+      "path": "dashboard/03-distribution.md",
+      "bytes": 1899,
+      "sha256": "aecc44c8a9b358868779c4aa99196f16744eb0663f82d0693cd0fdb68c2a9a11"
+    },
+    {
+      "path": "dashboard/04-test-instructions.md",
+      "bytes": 6689,
+      "sha256": "61a28583a0d138a6ea69bfa6c7f562f33d5b98562f1e0a8bc05fdedf7068d3aa"
     },
     {
       "path": "icons/icon-128.png",
@@ -153,8 +175,8 @@
     },
     {
       "path": "tools/validate.py",
-      "bytes": 3920,
-      "sha256": "bc230c186114ee3974d9c5d0f0b39cc24ff3b6dc86f43902cb59ec636d7d880a"
+      "bytes": 4466,
+      "sha256": "b8c9cc208a73729d83f858f1481151979fd22bb0dbdf2c7f3d7ded19266277d6"
     }
   ]
 }

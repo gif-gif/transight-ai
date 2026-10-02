@@ -22,7 +22,7 @@ test('browser language matching, script precedence, and English fallback', () =>
 });
 
 for (const locale of locales) {
-  for (const page of ['', 'guide']) {
+  for (const page of ['', 'guide', 'privacy']) {
     const route = localePath(locale, page);
     test(`${route}: prerendered language, navigation, content and metadata`, async () => {
       const html = await read(`${route.slice(1)}index.html`);
@@ -36,11 +36,33 @@ for (const locale of locales) {
       assert.doesNotMatch(html, /\bundefined\b|\[object Object\]|TODO|Lorem ipsum/);
       for (const target of locales) assert.ok(html.includes(`href="${localePath(target, page)}"`));
       if (page === 'guide') {
-        assert.ok(html.includes('npm run build'));
-        assert.ok(html.includes('chrome://extensions'));
-      } else {
+        assert.ok(html.includes('https://chromewebstore.google.com/search/Transight%20AI'));
+        assert.doesNotMatch(html, /npm run build|Node\.js|chrome:\/\/extensions|Load unpacked|开发者模式|開發人員模式/);
+      } else if (page === '') {
         assert.ok(html.includes('id="features"'));
         assert.ok(html.includes('id="how-it-works"'));
+      }
+      assert.ok(html.includes(`href="${localePath(locale, 'privacy')}"`));
+      if (page === 'privacy') {
+        assert.ok(html.includes('datetime="2026-10-02"'));
+        assert.ok(html.includes('href="https://github.com/gif-gif/transight-ai/issues"'));
+        for (const id of ['data', 'requests', 'providers', 'storage', 'permissions', 'security', 'choices', 'website', 'updates', 'contact']) {
+          assert.ok(html.includes(`id="${id}"`));
+          assert.ok(html.includes(`href="#${id}"`));
+        }
+        for (const detail of ['chrome.storage.local', 'chrome.storage.session.contextDraft', '/chat/completions', '/models', 'Authorization: Bearer', 'Hello, world!', '127.0.0.1', 'yijian-site-locale']) assert.ok(html.includes(detail), detail);
+        assert.match(html, /no application-layer encryption|没有应用层静态加密|沒有應用層靜態加密/);
+        assert.match(html, /before confirming translation consent|确认翻译同意之前|確認翻譯同意之前/);
+        assert.match(html, /Issues are public|Issues 是公开渠道|Issues 是公開管道/);
+        if (locale === 'en') assert.match(html, /<h1>Privacy Policies<\/h1>/);
+      }
+      assert.ok(html.includes('href="https://github.com/gif-gif/transight-ai"'));
+      assert.doesNotMatch(html, /Yijian AI/);
+      if (locale === 'en') assert.match(html, /<title>[^<]*Transight AI[^<]*<\/title>/);
+      if (page === '') {
+        assert.ok(html.includes('id="open-source"'));
+        assert.ok(html.includes('class="selection-flow"'));
+        assert.ok(html.includes({ en: 'Fully open source', 'zh-cn': '完全开源', 'zh-tw': '完全開源' }[locale]));
       }
       if (process.env.SITE_URL) {
         assert.ok(html.includes(`rel="canonical" href="${new URL(route, process.env.SITE_URL)}"`));
@@ -56,7 +78,7 @@ for (const locale of locales) {
 }
 
 test('every local link, anchor and static asset resolves', async () => {
-  const files = ['index.html', '404.html', ...locales.flatMap((locale) => [`${locale}/index.html`, `${locale}/guide/index.html`])];
+  const files = ['index.html', '404.html', ...locales.flatMap((locale) => [`${locale}/index.html`, `${locale}/guide/index.html`, `${locale}/privacy/index.html`])];
   for (const file of files) {
     const html = await read(file);
     for (const [, reference] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
@@ -85,12 +107,28 @@ test('robots and sitemap match deployment configuration', async () => {
     assert.ok(sitemapLocation);
     const sitemap = await read(new URL(sitemapLocation).pathname.slice(1));
     for (const locale of locales) {
-      for (const page of ['', 'guide']) assert.ok(sitemap.includes(`<loc>${new URL(localePath(locale, page), process.env.SITE_URL)}</loc>`));
+      for (const page of ['', 'guide', 'privacy']) assert.ok(sitemap.includes(`<loc>${new URL(localePath(locale, page), process.env.SITE_URL)}</loc>`));
     }
     assert.ok(!sitemap.includes(`<loc>${new URL('/', process.env.SITE_URL)}</loc>`));
     assert.ok(!sitemap.includes('/404'));
   } else {
     assert.match(robots, /Disallow: \//);
     await assert.rejects(access(new URL('sitemap-index.xml', dist)));
+  }
+});
+
+
+test('favicon has transparent background, no white frame, and a separate page logo', async () => {
+  const icon = await read('favicon.svg');
+  assert.match(icon, /viewBox="0 0 24 24"/);
+  assert.match(icon, /fill="none"/);
+  assert.match(icon, /stroke="#126754"/);
+  assert.doesNotMatch(icon, /<rect|#fff|white/i);
+  assert.match(await read('brand.svg'), /<rect/);
+  for (const file of ['index.html', '404.html', 'en/index.html']) {
+    const html = await read(file);
+    assert.ok(html.includes('href="/favicon.svg?v=2"'));
+    assert.ok(html.includes('src="/brand.svg"'));
+    assert.doesNotMatch(html, /Yijian AI/);
   }
 });

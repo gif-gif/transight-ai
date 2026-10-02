@@ -1,14 +1,18 @@
 ---
 import { getDictionary, localePath, type Locale } from '../i18n';
+import { getPrivacyPolicy } from '../i18n/privacy';
+import { siteLinks } from '../config/site';
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const t = getDictionary(locale);
 ---
 <footer class="site-footer container">
   <div class="footer-top">
-    <a class="brand" href={localePath(locale)}><img src="/favicon.svg" width="28" height="28" alt="" /><span>{t.brand}</span></a>
+    <a class="brand" href={localePath(locale)}><img src="/brand.svg" width="28" height="28" alt="" /><span>{t.brand}</span></a>
     <p>{t.footer.note}</p>
+    <a class="text-link footer-repository" href={siteLinks.repository} target="_blank" rel="noopener noreferrer">{t.openSource.nav} <span aria-hidden="true">↗</span></a>
     <a class="text-link" href={localePath(locale, 'guide')}>{t.footer.guide} <span aria-hidden="true">↗</span></a>
+    <a class="text-link" href={localePath(locale, 'privacy')}>{getPrivacyPolicy(locale).title}</a>
   </div>
   <div class="footer-bottom"><span>© {new Date().getFullYear()} {t.brand}</span><p>{t.footer.privacy}</p></div>
 </footer>

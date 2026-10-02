@@ -1,5 +1,6 @@
 ---
 import { getDictionary, localePath, type Locale, type Page } from '../i18n';
+import { siteLinks } from '../config/site';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 interface Props { locale: Locale; page: Page }
 const { locale, page } = Astro.props;
@@ -8,12 +9,13 @@ const t = getDictionary(locale);
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href={localePath(locale)} aria-label={t.brand}>
-      <img src="/favicon.svg" width="34" height="34" alt="" /><span>{t.brand}</span>
+      <img src="/brand.svg" width="34" height="34" alt="" /><span>{t.brand}</span>
     </a>
     <nav class="main-nav" aria-label={t.nav.main}>
       <a href={`${localePath(locale)}#features`}>{t.nav.features}</a>
       <a href={`${localePath(locale)}#how-it-works`}>{t.nav.how}</a>
       <a href={localePath(locale, 'guide')} aria-current={page === 'guide' ? 'page' : undefined}>{t.nav.guide}</a>
+      <a href={siteLinks.repository} target="_blank" rel="noopener noreferrer">{t.openSource.nav}</a>
     </nav>
     <LanguageSwitcher locale={locale} page={page} label={t.nav.language} />
   </div>

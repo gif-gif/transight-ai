@@ -15,6 +15,12 @@ for locale, record in metadata['localizations'].items():
     assert len(record['short_description'])==record['description_character_count']<=132
 for filename in ['description.en.txt','description.zh-CN.txt','description.zh-TW.txt']:
     assert (OUT/'listing'/filename).stat().st_size>0
+dashboard_docs=['01-store-listing.md','02-privacy-practices.md','03-distribution.md','04-test-instructions.md']
+for filename in dashboard_docs:
+    assert (OUT/'dashboard'/filename).stat().st_size>0, filename
+privacy=(OUT/'dashboard/02-privacy-practices.md').read_text()
+for permission in manifest['permissions'] + manifest['host_permissions']:
+    assert permission in privacy, f'Missing permission explanation: {permission}'
 expected={'icons/icon-128.png':(128,128),'promo/small-440x280.png':(440,280),'promo/marquee-1400x560.png':(1400,560)}
 for locale in ['en','zh-CN','zh-TW']:
     screenshots=sorted((OUT/'screenshots'/locale).glob('*.png'))
@@ -49,8 +55,8 @@ for p in sorted(OUT.rglob('*')):
         im=Image.open(p);record.update(width=im.width,height=im.height,mode=im.mode)
     files.append(record)
 report={'prepared_date':'2026-10-02','version':manifest['version'],'archive':str(archive.relative_to(OUT)),
-        'checks':{'manifest_at_zip_root':True,'runtime_and_license_only':True,'archive_source_match_except_store_icon':True,'runtime_file_count':archive_count,'description_limit_132':True,'dimensions_and_image_modes_valid':True},
+        'checks':{'manifest_at_zip_root':True,'runtime_and_license_only':True,'archive_source_match_except_store_icon':True,'runtime_file_count':archive_count,'description_limit_132':True,'dimensions_and_image_modes_valid':True,'dashboard_guides_present':True,'permission_explanations_present':True},
         'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/context-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/options-multi.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
 (OUT/'inventory.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-print(f'PASS: ZIP root/runtime/license contents ({archive_count} files), source parity, localized descriptions, padded icon, 9 screenshots, 2 promotional tiles.')
+print(f'PASS: ZIP root/runtime/license contents ({archive_count} files), source parity, localized descriptions, padded icon, 9 screenshots, 2 promotional tiles, 4 dashboard guides and permission explanations.')
 print('Inventory:',OUT/'inventory.json')

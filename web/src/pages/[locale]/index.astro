@@ -1,4 +1,5 @@
 ---
+import { siteLinks } from '../../config/site';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import Icon from '../../components/Icon.astro';
 import { locales, getDictionary, localePath, type Locale } from '../../i18n';
@@ -13,6 +14,7 @@ const featureIcons = ['cursor', 'layers', 'sliders'] as const;
       <p class="eyebrow"><span class="status-dot" />{t.hero.eyebrow}</p>
       <h1>{t.hero.title}<br /><em>{t.hero.accent}</em></h1>
       <p class="hero-description">{t.hero.description}</p>
+      <ol class="selection-flow" role="list">{t.hero.steps.map((step, index) => <li><span class="selection-number">{index + 1}</span>{step}</li>)}</ol>
       <div class="hero-actions">
         <a class="button button-primary" href={localePath(locale, 'guide')}>{t.hero.primary}<Icon name="arrow" size={18} /></a>
         <a class="button button-text" href="#how-it-works">{t.hero.secondary}<span aria-hidden="true">↗</span></a>
@@ -22,7 +24,7 @@ const featureIcons = ['cursor', 'layers', 'sliders'] as const;
     <figure class="demo" aria-label={t.demo.label}>
       <div class="demo-decoration" aria-hidden="true"><span>文</span><span>A</span></div>
       <div class="translation-card">
-        <div class="card-toolbar"><span class="mini-brand"><img src="/favicon.svg" width="22" height="22" alt="" />{t.brand}</span><span class="window-dots" aria-hidden="true">···</span></div>
+        <div class="card-toolbar"><span class="mini-brand"><img src="/brand.svg" width="22" height="22" alt="" />{t.brand}</span><span class="window-dots" aria-hidden="true">···</span></div>
         <div class="source-block"><p class="field-label">{t.demo.source}</p><blockquote lang="en">{t.demo.original.split('\n').map((line, index, lines) => <>{index > 0 && <br />}{index === lines.length - 1 ? <mark>{line}</mark> : line}</>)}</blockquote></div>
         <div class="translation-divider"><span><Icon name="globe" size={16} /></span><i></i><span class="style-label">{t.demo.style}</span></div>
         <div class="result-block"><p class="field-label">{t.demo.target}</p><p class="translated-text" lang={locale === 'zh-tw' ? 'zh-TW' : 'zh-CN'}>{t.demo.translation}</p></div>
@@ -42,5 +44,9 @@ const featureIcons = ['cursor', 'layers', 'sliders'] as const;
     <div class="section-heading"><p class="eyebrow">{t.how.eyebrow}</p><h2>{t.how.title}</h2><a class="text-link" href={localePath(locale, 'guide')}>{t.nav.guide}<Icon name="arrow" size={18} /></a></div>
     <ol class="steps" role="list">{t.how.steps.map((step, index) => <li><span class="step-number">0{index + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></li>)}</ol>
   </div></section>
+  <section class="open-source container" id="open-source">
+    <div><p class="eyebrow">{t.openSource.eyebrow}</p><h2>{t.openSource.title}</h2><p>{t.openSource.description}</p></div>
+    <a class="button button-primary" href={siteLinks.repository} target="_blank" rel="noopener noreferrer">{t.openSource.link}<Icon name="arrow" size={18} /></a>
+  </section>
   <section class="cta container"><p class="eyebrow">{t.tagline}</p><h2>{t.cta.title}</h2><p>{t.cta.text}</p><a class="button button-primary" href={localePath(locale, 'guide')}>{t.cta.button}<Icon name="arrow" size={18} /></a></section>
 </SiteLayout>

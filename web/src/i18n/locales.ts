@@ -23,7 +23,7 @@ export function detectLocale(languages: readonly string[]): Locale {
   return defaultLocale;
 }
 
-export type Page = '' | 'guide';
+export type Page = '' | 'guide' | 'privacy';
 export function localePath(locale: Locale, page: Page = ''): string {
   return `/${locale}/${page ? `${page}/` : ''}`;
 }
