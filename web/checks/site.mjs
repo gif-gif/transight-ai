@@ -51,7 +51,17 @@ for (const locale of locales) {
           assert.ok(html.includes(`href="#${id}"`));
         }
         for (const detail of ['chrome.storage.local', 'chrome.storage.session.contextDraft', '/chat/completions', '/models', 'Authorization: Bearer', 'Hello, world!', '127.0.0.1', 'yijian-site-locale']) assert.ok(html.includes(detail), detail);
-        assert.match(html, /no application-layer encryption|没有应用层静态加密|沒有應用層靜態加密/);
+        for (const detail of ['AES-256-GCM', 'PBKDF2-SHA-256', '600,000', 'chrome.storage.session']) assert.ok(html.includes(detail));
+        assert.doesNotMatch(html, /no application-layer encryption|没有应用层静态加密|沒有應用層靜態加密/);
+        // Keep lifecycle and security limits visible in every translated policy.
+        for (const disclosure of [
+          /Passwords and derived encryption keys are not saved|解锁密码和派生加密密钥不保存|解鎖密碼和衍生加密金鑰不保存/,
+          /ordinary settings.*are not encrypted|普通设置不作加密|一般設定不作加密/,
+          /old plaintext remains until the encrypted vault is successfully saved|密文保存成功后才移除旧明文|密文保存成功後才移除舊明文/,
+          /Lock now|立即锁定|立即鎖定/,
+          /Forgotten passwords cannot be recovered|忘记密码无法恢复|忘記密碼無法復原/,
+          /Encryption at rest does not hide your API key|本地加密保存不代表.*隐藏 API Key|本機加密保存不代表.*隱藏 API Key/
+        ]) assert.match(html, disclosure);
         assert.match(html, /before confirming translation consent|确认翻译同意之前|確認翻譯同意之前/);
         assert.match(html, /Issues are public|Issues 是公开渠道|Issues 是公開管道/);
         if (locale === 'en') assert.match(html, /<h1>Privacy Policies<\/h1>/);

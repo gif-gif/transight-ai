@@ -1,3 +1,4 @@
+import { credentialSmoke } from './credential-smoke.mjs';
 import { resolveBrowserLanguage } from '../src/shared/i18n.js';
 import { contextMenuSmoke } from './context-menu-smoke.mjs';
 import { multiModelSmoke } from './multi-model-smoke.mjs';
@@ -64,7 +65,7 @@ try {
     await writeFile(launcher, `#!/bin/sh\nexec ${quote(executablePath)} -AppleLanguages ${quote(`(${requestedLocale})`)} "$@"\n`, { mode: 0o755 });
     executablePath = launcher;
   }
-  context = await chromium.launchPersistentContext(path.join(temp, 'profile'), {
+  const launch = () => chromium.launchPersistentContext(path.join(temp, 'profile'), {
     executablePath,
     // macOS language arguments are treated as an extra target in headless mode.
     channel: 'chromium', headless: process.platform !== 'darwin',
@@ -72,6 +73,7 @@ try {
     args: [`--lang=${requestedLocale}`, `--disable-extensions-except=${extension}`, `--load-extension=${extension}`],
     viewport: { width: 1120, height: 980 }
   });
+  context = await launch();
   const worker = context.serviceWorkers()[0] || await context.waitForEvent('serviceworker');
   const id = new URL(worker.url()).host;
   const uiLocale = await worker.evaluate(() => chrome.i18n.getUILanguage());
@@ -178,8 +180,23 @@ try {
   await page.locator('#model-list-field:visible').waitFor();
   assert.equal(await page.locator('#model-list input[value="mock-translator"]').isChecked(), true);
   await page.locator('#save').click(); assert.equal(await page.locator('#status').innerText(), msg('consentRequired'));
-  await page.locator('#consent').check(); await page.locator('#save').click();
+  await page.locator('#consent').check();
+  await page.locator('#vault-password').fill('local-test-unlock-password');
+  await page.locator('#vault-confirm').fill('local-test-unlock-password');
+  await page.locator('#save').click();
   await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('saved'));
+  assert.equal(await worker.evaluate(async () => JSON.stringify(await chrome.storage.local.get(null)).includes('local-test-key')), false);
+  assert.equal(await page.locator('#api-key').inputValue(), '');
+  await page.locator('#lock-vault').click();
+  await page.locator('#vault-unlock-fields:visible').waitFor();
+  assert.equal(await page.locator('#fetch-models').isDisabled(), true);
+  assert.equal(await page.locator('#test').isDisabled(), true);
+  await page.locator('#unlock-password').fill('incorrect-unlock-password');
+  await page.locator('#unlock-vault').click();
+  await page.waitForFunction(expected => document.querySelector('#vault-status').textContent === expected, msg('vaultUnlockFailed'));
+  await page.locator('#unlock-password').fill('local-test-unlock-password');
+  await page.locator('#unlock-vault').click();
+  await page.locator('#test:enabled').waitFor();
   await page.locator('#test').click();
   await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('connectionSuccess', '多一点理解，让我们更靠近。'));
   const screenshotDir = path.join(root, 'artifacts', 'screenshots', requestedLocale); await mkdir(screenshotDir, { recursive: true });
@@ -281,6 +298,15 @@ try {
   assert.deepEqual(errors, []);
   await multiModelSmoke({ context, worker, page, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
   await contextMenuSmoke({ context, worker, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
+  assert.deepEqual(errors, []);
+  await credentialSmoke({ context, worker, page, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; },
+    restart: async () => {
+      await context.close(); context = await launch();
+      const worker = context.serviceWorkers()[0] || await context.waitForEvent('serviceworker');
+      const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
+      return { context, worker, page };
+    }
+  });
   assert.deepEqual(errors, []);
   console.log('✓ Browser smoke: model discovery, selection, failure, permission denial and stale-response cancellation; real toolbar popup sizing and standalone narrow viewport, initial setup, consent, save, test connection, unsaved edits, translation, copy, HTTP errors, panel dismissal and credential isolation');
   console.log('Screenshots:', screenshotDir);

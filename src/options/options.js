@@ -1,10 +1,65 @@
 import { t, localizePage, initI18n, onLanguageChanged } from '../shared/i18n.js';
-import { fetchModels, modelConnection } from '../shared/models.js';
+import { modelConnection } from '../shared/models.js';
 import { fillLanguages, getSettings, permissionOrigin, validateSettings, parseModelInput, MAX_MODELS } from '../shared/settings.js';
 await initI18n();
 localizePage();
 const $ = id => document.getElementById(id);
 let savedSettings;
+let vault = { state: 'loading', configured: false };
+let vaultBusy = false;
+async function rpc(type, payload = {}) {
+  const response = await chrome.runtime.sendMessage({ type, ...payload });
+  if (!response?.ok) throw new Error(response?.error || t('vaultOperationFailed'));
+  return response;
+}
+function clearSecrets() {
+  for (const id of ['api-key', 'vault-password', 'vault-confirm', 'unlock-password']) $(id).value = '';
+  $('api-key').type = 'password';
+  $('toggle-key').textContent = t('show'); $('toggle-key').setAttribute('aria-pressed', 'false');
+}
+function renderVault() {
+  const locked = vault.state === 'locked';
+  const keys = { empty: 'vaultEmpty', locked: 'vaultLocked', unlocked: 'vaultUnlocked', migration: 'vaultMigration', loading: 'vaultLoading' };
+  $('vault-state').textContent = t(keys[vault.state]);
+  $('vault-unlock-fields').hidden = !locked;
+  $('vault-password-fields').hidden = locked;
+  $('vault-password-hint').hidden = locked;
+  $('lock-vault').hidden = !vault.hasSession;
+  $('reset-vault').hidden = !vault.configured;
+  $('api-key').disabled = locked || vaultBusy;
+  $('toggle-key').disabled = locked || vaultBusy;
+  $('unlock-vault').disabled = vaultBusy;
+  $('reset-vault').disabled = vaultBusy;
+  updateButtons();
+}
+async function refreshVault() {
+  const next = (await rpc('VAULT_STATUS')).vault;
+  if ((next.state === 'locked' || !next.hasSession) && vault.hasSession) {
+    clearSecrets(); invalidateModels();
+  }
+  vault = next; renderVault();
+}
+async function vaultAction(type, payload = {}) {
+  if (vaultBusy) return;
+  vaultBusy = true; renderVault();
+  $('vault-status').textContent = '';
+  if (type !== 'VAULT_UNLOCK') { clearSecrets(); invalidateModels(); }
+  try { await rpc(type, payload); }
+  catch (error) { $('vault-status').textContent = error.message; $('vault-status').className = 'status error'; }
+  finally { vaultBusy = false; await refreshVault(); }
+}
+$('unlock-vault').addEventListener('click', () => {
+  const password = $('unlock-password').value; $('unlock-password').value = '';
+  vaultAction('VAULT_UNLOCK', { password });
+});
+$('unlock-password').addEventListener('keydown', event => {
+  if (event.key === 'Enter') { event.preventDefault(); $('unlock-vault').click(); }
+});
+$('lock-vault').addEventListener('click', () => vaultAction('VAULT_LOCK'));
+$('reset-vault').addEventListener('click', () => {
+  if (confirm(t('vaultResetConfirm'))) vaultAction('VAULT_RESET');
+});
+
 let busy = false;
 let fetching = false;
 let modelRequest = 0;
@@ -16,9 +71,9 @@ function modelStatusKey(key, kind = '', substitutions) {
   $('models-status').className = `status ${kind}`;
 }
 function updateButtons() {
-  $('save').disabled = busy || fetching;
-  $('test').disabled = busy || fetching;
-  $('fetch-models').disabled = busy || fetching;
+  $('save').disabled = busy || fetching || vaultBusy || ['locked', 'loading'].includes(vault.state);
+  $('test').disabled = busy || fetching || vaultBusy || ['locked', 'loading', 'migration'].includes(vault.state);
+  $('fetch-models').disabled = busy || fetching || vaultBusy || ['locked', 'loading', 'migration'].includes(vault.state);
   $('fetch-models').textContent = fetching ? t('fetchingModels') : t('fetchModels');
   $('fetch-models').setAttribute('aria-busy', String(fetching));
 }
@@ -56,11 +111,18 @@ $('settings-form').addEventListener('submit', async event => {
   if (busy || fetching) return;
   try {
     const settings = readForm();
+    const password = $('vault-password').value, confirmation = $('vault-confirm').value;
+    if (settings.apiKey || password || vault.state === 'migration') {
+      if (password.length < 6 || password.length > 1024) throw new Error(t('vaultPasswordLength'));
+      if (password !== confirmation) throw new Error(t('vaultPasswordMismatch'));
+    }
     const origin = permissionOrigin(settings.baseUrl);
     setBusy(true);
     if (!await chrome.permissions.contains({ origins: [origin] })) throw new Error(t('permissionMissing'));
-    await chrome.storage.local.set({ settings });
-    savedSettings = settings;
+    $('vault-password').value = ''; $('vault-confirm').value = ''; $('api-key').value = '';
+    await rpc('VAULT_SAVE', { settings, password, confirmation });
+    savedSettings = { ...settings, apiKey: '' };
+    await refreshVault();
     $('base-url').value = settings.baseUrl;
     $('model').value = settings.models.join(', '); syncModelChecks();
     // HTTP(S) access is now a required global grant. Saving a provider must not
@@ -73,6 +135,7 @@ $('test').addEventListener('click', async () => {
   if (busy || fetching) return;
   try {
     const form = readForm();
+    if ($('vault-password').value || $('vault-confirm').value) throw new Error(t('saveFirst'));
     if (Object.keys(form).some(key => JSON.stringify(form[key]) !== JSON.stringify(savedSettings[key]))) throw new Error(t('saveFirst'));
     setBusy(true); statusKey('testing');
     const results = await Promise.all(form.models.map(async model => {
@@ -87,6 +150,7 @@ $('test').addEventListener('click', async () => {
 });
 async function init() {
   setBusy(true);
+  await refreshVault();
   const settings = await getSettings();
   $('base-url').value = settings.baseUrl; $('api-key').value = settings.apiKey; $('model').value = settings.models.join(', ');
   fillLanguages($('target-language'), settings.targetLanguage);
@@ -101,7 +165,7 @@ onLanguageChanged(() => {
   fillLanguages($('target-language'), $('target-language').value);
   $('toggle-key').textContent = $('api-key').type === 'text' ? t('hide') : t('show');
   if (statusMessage) statusKey(statusMessage.key, statusMessage.kind, statusMessage.substitutions);
-  updateButtons();
+  renderVault();
   if (modelStatus) modelStatusKey(modelStatus.key, modelStatus.kind, modelStatus.substitutions);
 });
 
@@ -131,7 +195,8 @@ $('fetch-models').addEventListener('click', async () => {
     fetching = true; updateButtons(); resetModelList(); modelStatusKey('fetchingModels');
     if (!await chrome.permissions.contains({ origins: [permissionOrigin(connection.baseUrl)] })) throw new Error(t('permissionMissing'));
     if (request !== modelRequest) return;
-    const models = await fetchModels(connection, { signal: controller.signal });
+    controller.signal.addEventListener('abort', () => { rpc('CANCEL_MODELS').catch(() => {}); }, { once: true });
+    const { models } = await rpc('FETCH_MODELS', { connection });
     if (request !== modelRequest) return;
     for (const id of models) {
       const label = document.createElement('label');
@@ -152,3 +217,10 @@ $('fetch-models').addEventListener('click', async () => {
   }
 });
 window.addEventListener('pagehide', () => modelController?.abort());
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if ((area === 'local' && (changes.credentialVault || changes.settings)) || (area === 'session' && changes.credentialSession)) {
+    refreshVault().catch(() => statusKey('vaultOperationFailed', 'error'));
+  }
+});
+window.addEventListener('pagehide', clearSecrets);

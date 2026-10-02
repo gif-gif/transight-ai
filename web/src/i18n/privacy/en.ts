@@ -28,7 +28,9 @@ export const enPrivacy = {
       'The extension does not sell user data or use it for advertising, behavioral analytics, credit assessment, or lending. Its processing is for translation and the related settings and connection functions described here. Following a GitHub or Chrome Web Store link takes you to a separate service governed by its own privacy policy.'
     ] },
     { id: 'storage', title: '4. Local storage and retention', paragraphs: [
-      'Configuration, API credentials, preferences, and consent are saved in chrome.storage.local, not Chrome sync. They remain until you modify them, clear extension data, or uninstall the extension.',
+      'Configuration, preferences, consent, and password-encrypted API credentials are saved in chrome.storage.local, not Chrome sync. The API key is encrypted; ordinary settings such as the Base URL, model IDs, and language preferences are not encrypted by this feature. Saved settings and encrypted credentials remain until you change or delete them or uninstall the extension.',
+      'Unlocked API keys are temporarily cached in restricted chrome.storage.session memory until you lock them, restart the browser, or reload, update, or disable the extension. Passwords and derived encryption keys are not saved.',
+      'Legacy plaintext credentials cannot be used for requests until password encryption is completed. The old plaintext remains until the encrypted vault is successfully saved to prevent data loss; complete migration promptly.',
       'Source text and results are primarily held in the current interface’s memory, without a persistent translation history. Clearing the input or closing the interface removes the current display, but cannot recall requests already received by a service.',
       'For the standalone fallback window, selected text is temporarily placed in chrome.storage.session.contextDraft. It is removed when that window reads it; if never read, it may remain until the browser session ends.',
       'Copying a translation writes it to the system clipboard at your request. The extension does not read clipboard contents. Copied text can remain under the control of your operating system or other clipboard tools.'
@@ -40,12 +42,13 @@ export const enPrivacy = {
     ] },
     { id: 'security', title: '6. Security and its limits', paragraphs: [
       'Non-local AI endpoints must use HTTPS. Plain HTTP is accepted only for localhost or 127.0.0.1 endpoints. HTTPS is preferable where available; a local HTTP connection is not encrypted in transit.',
-      'Access to local extension storage is restricted to trusted extension contexts; content scripts cannot directly read stored API credentials. This access restriction is not encryption: API keys currently have no application-layer encryption at rest in chrome.storage.local.',
+      'API keys are encrypted at rest using AES-256-GCM and a key derived from your password with PBKDF2-SHA-256 (600,000 iterations, random salt, and a fresh IV for each encryption). Local and session storage are restricted to trusted extension contexts. Only the background worker resolves saved keys for translation and model discovery; content scripts never receive them. Passwords are not sent to AI providers. Encryption protects locked persistent data, not a compromised browser, device, or an unlocked session.',
+      'Encryption at rest does not hide your API key from your chosen AI service: requests still send it as an authentication credential, using the transport rules above.',
       'Service requests omit browser cookies and reject redirects. No storage or transmission method is completely secure. Protect your device and browser profile, use appropriately restricted API keys, and revoke or rotate a key with its provider if it is exposed.'
     ] },
     { id: 'choices', title: '7. Your choices and deletion', paragraphs: [
       'You choose the source text, AI service, models, and translation settings. Avoid submitting sensitive information unless you understand and accept the receiving service’s handling of it.',
-      'You can edit your saved configuration in extension settings, clear the current input, restrict website access through Chrome’s extension controls, disable the extension, or uninstall it to remove its local settings. There is currently no dedicated “delete all data” button in the extension.',
+      'You can edit your saved configuration in extension settings, clear the current input, restrict website access through Chrome’s extension controls, disable the extension, or uninstall it to remove its local settings. Use Lock now to remove the unlocked session key and cancel active requests, or Forgot password / remove saved key to delete the ciphertext and session key while keeping other settings. Forgotten passwords cannot be recovered; enter your API key again. These actions cannot retract requests already received by a provider. There is no dedicated delete-all-data button.',
       'To revoke an API key or request deletion of data already sent to an AI service, contact that provider or use its account controls. Removing local settings or uninstalling the extension does not delete provider-side records or system clipboard contents.'
     ] },
     { id: 'website', title: '8. Website privacy', paragraphs: [

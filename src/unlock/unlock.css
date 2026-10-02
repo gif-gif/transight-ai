@@ -1,0 +1,10 @@
+:root{background:var(--tint);font-size:12px}
+body{padding:8px 10px}
+label{display:block;font-weight:600;color:var(--ink)}
+p{font-size:11px;line-height:1.5;margin:2px 0 6px}
+.unlock-row{display:flex;gap:8px;align-items:center}
+input{min-width:0;flex:1;min-height:34px;padding:5px 10px}
+.primary{flex-shrink:0;min-height:34px;padding:5px 12px;font-size:12px}
+.status{font-size:11px;line-height:1.5;min-height:0;margin-top:4px}
+
+.status:empty{display:none}

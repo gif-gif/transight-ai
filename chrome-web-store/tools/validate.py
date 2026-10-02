@@ -1,7 +1,12 @@
 """Validate store assets and archive; write a reproducible material inventory."""
 from pathlib import Path
 from PIL import Image
-import hashlib, io, json, zipfile
+import argparse, hashlib, io, json, zipfile
+from datetime import date
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--assets-only", action="store_true", help="Validate materials and record archive drift without requiring a release-ready ZIP")
+args = parser.parse_args()
 
 OUT=Path(__file__).resolve().parents[1]
 ROOT=OUT.parent
@@ -39,14 +44,24 @@ with zipfile.ZipFile(archive) as z:
     assert 'manifest.json' in names and 'LICENSE' in names
     assert all(n in ('manifest.json', 'LICENSE') or n.startswith(('assets/','src/','_locales/')) for n in names)
     assert not any('..' in Path(n).parts or n.startswith('/') or Path(n).name.startswith('.') for n in names)
-    assert json.loads(z.read('manifest.json'))==manifest
+    manifest_matches = json.loads(z.read('manifest.json'))==manifest
     assert z.read('assets/icon-128.png')==(OUT/'icons/icon-128.png').read_bytes()
-    # Apart from the intentional store icon adaptation, archive bytes must match source.
-    for name in names:
-        if not name.endswith('/') and name!='assets/icon-128.png':
-            assert z.read(name)==(ROOT/name).read_bytes(), name
+    # Compare the complete runtime set too, so new source files missing from
+    # an older archive cannot accidentally pass source parity.
+    expected_runtime = {'manifest.json', 'LICENSE'}
+    for directory, extensions in [('src', {'.js', '.css', '.html'}), ('assets', {'.png', '.svg'}), ('_locales', {'.json'})]:
+        for path in (ROOT/directory).rglob('*'):
+            if path.is_file() and path.suffix in extensions and not any(part.startswith('.') for part in path.relative_to(ROOT).parts):
+                expected_runtime.add(str(path.relative_to(ROOT)))
+    archived_runtime = {name for name in names if not name.endswith('/')}
+    missing = sorted(expected_runtime - archived_runtime)
+    extra = sorted(archived_runtime - expected_runtime)
+    changed = sorted(name for name in expected_runtime & archived_runtime
+                     if name != 'assets/icon-128.png' and z.read(name) != (ROOT/name).read_bytes())
+    source_matches = manifest_matches and not (missing or extra or changed)
     assert Image.open(io.BytesIO(z.read('assets/icon-128.png'))).size==(128,128)
-    archive_count=sum(not n.endswith('/') for n in names)
+    archive_count=len(archived_runtime)
+archive_status = 'current' if source_matches else 'outdated: listing and screenshots are current; existing ZIP does not match source and must be rebuilt before submission'
 files=[]
 for p in sorted(OUT.rglob('*')):
     if not p.is_file() or p.name=='inventory.json' or p.name.startswith('.'):continue
@@ -54,9 +69,20 @@ for p in sorted(OUT.rglob('*')):
     if p.suffix=='.png':
         im=Image.open(p);record.update(width=im.width,height=im.height,mode=im.mode)
     files.append(record)
-report={'prepared_date':'2026-10-02','version':manifest['version'],'archive':str(archive.relative_to(OUT)),
-        'checks':{'manifest_at_zip_root':True,'runtime_and_license_only':True,'archive_source_match_except_store_icon':True,'runtime_file_count':archive_count,'description_limit_132':True,'dimensions_and_image_modes_valid':True,'dashboard_guides_present':True,'permission_explanations_present':True},
-        'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/context-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/options-multi.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
+report={'prepared_date':date.today().isoformat(),'version':manifest['version'],'archive':str(archive.relative_to(OUT)),
+        'checks':{'manifest_at_zip_root':True,'runtime_and_license_only':True,'archive_source_match_except_store_icon':source_matches,'runtime_file_count':archive_count,'description_limit_132':True,'dimensions_and_image_modes_valid':True,'dashboard_guides_present':True,'permission_explanations_present':True},
+        'validation_mode':'assets-only' if args.assets_only else 'release',
+        'archive_status':archive_status,'ready_to_upload_archive':source_matches,
+        'archive_differences':{'missing':missing,'extra':extra,'changed':changed},
+        'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/context-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/options-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/selection-locked.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
 (OUT/'inventory.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-print(f'PASS: ZIP root/runtime/license contents ({archive_count} files), source parity, localized descriptions, padded icon, 9 screenshots, 2 promotional tiles, 4 dashboard guides and permission explanations.')
+screenshot_count = sum(len(list((OUT/'screenshots'/locale).glob('*.png'))) for locale in ['en','zh-CN','zh-TW'])
+print(f'PASS: localized descriptions, padded icon, {screenshot_count} screenshots, 2 promotional tiles, 4 dashboard guides and permission explanations.')
+print('Archive:', archive_status)
 print('Inventory:',OUT/'inventory.json')
+if not source_matches:
+    print(f'Archive drift: {len(missing)} missing, {len(extra)} extra, {len(changed)} changed runtime files.')
+    if not args.assets_only:
+        raise SystemExit('FAIL: stale ZIP. Rebuild explicitly before release, or use --assets-only to validate materials without packaging.')
+else:
+    print(f'PASS: ZIP root/runtime/license contents ({archive_count} files) and complete source parity.')

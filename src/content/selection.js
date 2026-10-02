@@ -37,7 +37,7 @@
       if (!result?.ok) { disable(); return; }
       config = result; enabled = true;
       if (!host) mount();
-      view?.setLocale(config.locale); view?.applySettings(config.settings, false);
+      view?.setLocale(config.locale); view?.applySettings(config.settings, false); view?.setVault(config.vault);
     } catch { if (version === lifecycle) disable(); }
   }
   function mount() {
@@ -214,6 +214,12 @@
     panel.hidden = false; panelAnchor = chosen.rect;
     const updatePinLocale = installPin();
     view = new TransightTranslationView(panel, {
+      vault: config.vault, unlockUrl: chrome.runtime.getURL('src/unlock/unlock.html'),
+      async getVaultStatus() {
+        const response = await send({ type: 'SELECTION_VAULT_STATUS' });
+        if (!response?.ok) throw new Error();
+        return response.vault;
+      },
       async translate(text, targetLanguage, model) {
         const id = crypto.randomUUID(); requestIds.add(id);
         try { return await send({ type: 'SELECTION_TRANSLATE', id, text, targetLanguage, model }); }
@@ -253,6 +259,7 @@
       if (bubble) { bubble.title = message.locale.messages.selectionTranslate; bubble.setAttribute('aria-label', bubble.title); }
       panel?.setAttribute('aria-label', message.locale.messages.panelLabel);
     }
+    if (message?.type === 'SELECTION_VAULT' && config) { config.vault = message.vault; view?.setVault(message.vault); }
     if (message?.type === 'SELECTION_SETTINGS' && config) { config.settings = message.settings; view?.applySettings(message.settings); }
   });
   refresh();

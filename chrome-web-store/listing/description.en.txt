@@ -15,6 +15,11 @@ STAY WITH YOUR READING
 • With one or two models, the panel adapts to its content. With more models, it shows two result cards and lets you scroll to the rest, subject to available screen space.
 • Choose natural, faithful, or professional translation styles.
 
+UNLOCK WITHOUT LEAVING THE PAGE
+• Protect your saved API key with a local password.
+• Unlock directly in the toolbar popup or on-page panel with a compact password form; pending translations resume after unlocking.
+• Lock immediately or remove the saved key in Settings. Forgotten passwords cannot be recovered; remove and re-enter the key to start again.
+
 LANGUAGE SUPPORT
 • Translate into Simplified Chinese, Traditional Chinese, English, Japanese, Korean, French, German, Spanish, Russian, and Portuguese.
 • Simplified Chinese, Traditional Chinese, and English interface. The interface follows your browser language, falls back to English, and can be switched manually.
@@ -22,12 +27,12 @@ LANGUAGE SUPPORT
 GET STARTED
 1. Open Settings and enter your compatible AI service’s Base URL and API key, if required.
 2. Fetch the model list or enter your model IDs, then select your preferred models.
-3. Review the data-sharing notice, save your settings, and test the connection.
+3. When saving an API key, set and confirm a local unlock password of at least 6 characters. Review the data-sharing notice, save your settings, and test the connection.
 4. Select text on an ordinary webpage and click the translation icon, use the right-click translation command, or paste text into the toolbar popup.
 
 IMPORTANT INFORMATION
 Transight AI does not include an AI subscription, API key, or translation credits. You need access to a compatible AI service. Provider charges may apply, and each selected model sends a separate request. Unauthenticated local services are also supported. Model-list availability depends on your provider.
 
-Text submitted for translation is sent to the AI endpoint you configure. Changing the target language in an active translation panel can send another request. Connection testing sends a short test request, and fetching models contacts your configured service. API keys and settings are stored locally in your browser, not through Chrome sync; local storage is not an encrypted vault. The extension does not include analytics or persistent translation history, and does not automatically scan and upload entire webpages.
+Text submitted for translation is sent to the AI endpoint you configure. Changing the target language in an active translation panel can send another request. Connection testing sends a short test request, and fetching models contacts your configured service. API keys are encrypted locally with your unlock password using AES-256-GCM. Unlock again after restarting Chrome or reloading/updating the extension; passwords are not saved or sent to AI providers. Unlocked keys are held in session memory and can be locked or removed in Settings. Settings are not Chrome-synced. The extension does not include analytics or persistent translation history, and does not automatically scan and upload entire webpages.
 
 All-site access enables selection translation on ordinary HTTP/HTTPS pages and requests to your configured API. Chrome internal pages, the Chrome Web Store, and other protected pages may restrict on-page features. AI translations may be inaccurate; verify important information. Your provider’s data-processing terms apply to submitted content.

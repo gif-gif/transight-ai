@@ -32,7 +32,7 @@ Support contact: <REVIEW_SUPPORT_CONTACT>
 
 1. Install the submitted extension in Chrome 114 or later. Pin it to the toolbar if desired. Open the toolbar popup and click the Settings gear. The globe button beside Settings lets you choose English for these instructions; Simplified and Traditional Chinese are also available.
 
-2. Enter the Base URL and API key above. Do not append /chat/completions. Click Fetch models if the service supports GET /models; otherwise enter the exact model ID manually. Choose one or two of the provided models (maximum supported: five). Review and accept the data-sharing notice, select a target language and translation style, and save the settings. Fetching models itself contacts the configured service with the API key, but does not send source text.
+2. Enter the Base URL and API key above. Do not append /chat/completions. Click Fetch models if the service supports GET /models; otherwise enter the exact model ID manually. Choose one or two of the provided models (maximum supported: five). If using an API key, create and confirm a local unlock password of at least 6 characters before saving. This password is separate from the API key and is not sent to the AI service. Unauthenticated services do not need a password. Review and accept the data-sharing notice, select a target language and translation style, and save the settings. Fetching models itself contacts the configured service with the API key, but does not send source text.
 
 3. Click Test connection after saving. It sends 'Hello, world!' to each selected model and requests Simplified Chinese. Expect a successful connection message. If settings were edited, save again before testing.
 
@@ -46,11 +46,13 @@ Support contact: <REVIEW_SUPPORT_CONTACT>
 
 8. Optional multi-model check: if two valid model IDs were provided, select both and save. Expect independent result cards for the same source text. With three or more configured models, results beyond the first two are scrollable, subject to available viewport space.
 
-9. Optional retry check: open the popup, temporarily disconnect the network, and translate the sample text. Expect an error card. Restore connectivity and click that card's Retry link; only that model is retried. Provider errors, unavailable models, or quota limits may also produce error cards. Do not change real credentials for this check.
+9. Credential protection check: click Lock now in Settings. Translation must ask you to unlock, and model discovery and connection testing are disabled. An incorrect password must not unlock the key; expect a visible error below the compact form, with no clipped input or error text. Enter your password directly in the toolbar popup or on-page translation panel; waiting translations resume after unlock, and other views unlock too. Settings also supports unlocking. Restarting Chrome or reloading/updating the extension also locks it. Forgot password / remove saved key deletes the key after confirmation, keeping other settings; re-enter the review key and set a password afterward. Do not share your local unlock password.
+
+10. Optional retry check: open the popup, temporarily disconnect the network, and translate the sample text. Expect an error card. Restore connectivity and click that card's Retry link; only that model is retried. If the key is locked before retrying, unlock within the panel; only that pending model retry should resume. Provider errors, unavailable models, or quota limits may also produce error cards. Do not change real credentials for this check.
 
 Limitations: on-page controls cannot run on chrome:// pages, the Chrome Web Store, or other protected pages. Use manual input in the toolbar popup there. Automatic selection controls are intended for ordinary webpage text, not editable fields. Allow the extension's requested site access for on-page tests. Model discovery depends on provider support; manual model entry is supported. No separate speech, phonetics, full-page translation, or translation-history feature is included in this version.
 
-Data handling: text and credentials go to the configured endpoint. Models receive separate requests; quota usage can therefore increase with the number of selected models. There is no built-in analytics or persistent translation history. API configuration is saved locally; the current implementation does not apply application-level encryption to the stored API key.
+Data handling: text and credentials go to the configured endpoint. Models receive separate requests; quota usage can therefore increase with the number of selected models. There is no built-in analytics or persistent translation history. API configuration is saved locally; API keys are encrypted with AES-256-GCM and a PBKDF2-SHA-256 password-derived key. Unlocked keys are cached only in restricted session storage. Passwords and derived keys are not persisted.
 ```
 
 ## 测试服务与凭据维护

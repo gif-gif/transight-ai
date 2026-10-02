@@ -102,7 +102,7 @@
     "message": "隐藏"
   },
   "keyHint": {
-    "message": "仅保存在当前浏览器，不通过 Chrome 同步。不应在共享设备上保存敏感密钥。"
+    "message": "使用解锁密码加密，不通过 Chrome 同步。留空保留已保存的 Key；解锁密码不会发送给 AI 服务。"
   },
   "model": {
     "message": "模型 ID"
@@ -402,7 +402,7 @@
     "message": "拉取模型列表失败，请重试或手动填写模型 ID。"
   },
   "modelFetchHint": {
-    "message": "使用当前填写的 Base URL 和 API Key 请求 /models，不发送原文，也不会自动保存设置。"
+    "message": "后台使用当前 Base URL 与填写的 Key（或已解锁的 Key）请求 /models，不发送原文，也不保存设置。"
   },
   "selectionUnavailable": {
     "message": "此页面暂不支持划词翻译。"
@@ -436,5 +436,83 @@
   },
   "dragTranslation": {
     "message": "拖动顶部移动浮窗；聚焦后也可使用方向键"
+  },
+  "vaultTitle": {
+    "message": "API Key 安全保护"
+  },
+  "vaultHint": {
+    "message": "使用本地密码加密保存密钥，浏览器重启后解锁一次。忘记密码无法恢复，只能重新填写 API Key。"
+  },
+  "vaultUnlockPassword": {
+    "message": "解锁密码"
+  },
+  "vaultUnlock": {
+    "message": "解锁"
+  },
+  "vaultNewPassword": {
+    "message": "设置新解锁密码"
+  },
+  "vaultConfirmPassword": {
+    "message": "确认密码"
+  },
+  "vaultPasswordHint": {
+    "message": "至少 6 个字符。保存新 Key 时必填；保留现有密码时两项留空。请使用独立密码，不要使用 API Key 作为密码。"
+  },
+  "vaultLock": {
+    "message": "立即锁定"
+  },
+  "vaultReset": {
+    "message": "忘记密码 / 删除已保存的 Key"
+  },
+  "vaultResetConfirm": {
+    "message": "确定删除已保存的 API Key 和本次解锁状态？此操作无法撤销，其他设置保留。使用需要认证的服务时必须重新填写 Key。"
+  },
+  "vaultEmpty": {
+    "message": "尚未保存 Key。保存 API Key 时需要设置密码；无需认证的服务不需要密码。"
+  },
+  "vaultLocked": {
+    "message": "已锁定：请先解锁，再翻译、拉取模型或修改已保存的 Key。"
+  },
+  "vaultUnlocked": {
+    "message": "本次浏览器会话已解锁。表单不会显示已保存的 Key。"
+  },
+  "vaultMigration": {
+    "message": "检测到旧版明文 Key。请设置密码并保存以完成加密；成功前保留旧 Key 防止丢失，并暂停翻译和模型请求。"
+  },
+  "vaultLoading": {
+    "message": "正在读取密钥状态…"
+  },
+  "vaultPasswordLength": {
+    "message": "解锁密码需为 6–1024 个字符。"
+  },
+  "vaultPasswordMismatch": {
+    "message": "两次输入的密码不一致。"
+  },
+  "vaultUnlockFailed": {
+    "message": "密码错误或密钥数据已损坏。请重试，或重置后重新填写 API Key。"
+  },
+  "vaultLockedError": {
+    "message": "API Key 已锁定，请输入解锁密码后继续。"
+  },
+  "vaultMissing": {
+    "message": "尚无可用的加密 API Key，请先填写 Key 再设置密码。"
+  },
+  "vaultMigrationRequired": {
+    "message": "请打开设置，为旧 API Key 设置密码并加密保存后再翻译。"
+  },
+  "vaultEndpointChanged": {
+    "message": "API 地址已更改。请明确填写用于新地址的 Key；无需认证的服务请先删除已保存的 Key。"
+  },
+  "vaultOperationFailed": {
+    "message": "密钥保护操作失败，请重试。"
+  },
+  "vaultInlineHint": {
+    "message": "在此解锁即可继续翻译，密码仅在扩展内处理。"
+  },
+  "vaultUnlocking": {
+    "message": "正在解锁…"
+  },
+  "vaultInlineUnlocked": {
+    "message": "已解锁，可以继续翻译。"
   }
 }

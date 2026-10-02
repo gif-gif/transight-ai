@@ -8,7 +8,7 @@ export function sitePattern(url) {
 export function publicSettings(settings) {
   return { model: settings.model, models: selectedModels(settings), consent: settings.consent === true, targetLanguage: settings.targetLanguage };
 }
-export function installSelection(ready, runTranslation) {
+export function installSelection(ready, runTranslation, vaultStatus = async () => ({ state: 'empty' })) {
   const jobs = new Map();
   let queue = Promise.resolve(), resources;
   const serial = fn => { const result = queue.then(fn); queue = result.catch(() => {}); return result; };
@@ -66,7 +66,8 @@ export function installSelection(ready, runTranslation) {
       const pattern = sitePattern(sender.url);
       if (!await enabled(pattern)) throw new Error(t('selectionUnavailable'));
       switch (message.type) {
-        case 'SELECTION_INIT': return { ...(await assets()), locale: localeSnapshot(), settings: publicSettings(await getSettings()) };
+        case 'SELECTION_INIT': return { ...(await assets()), locale: localeSnapshot(), settings: publicSettings(await getSettings()), vault: await vaultStatus() };
+        case 'SELECTION_VAULT_STATUS': return { vault: await vaultStatus() };
         case 'SELECTION_LANGUAGE':
           if (!UI_LANGUAGES.includes(message.value)) throw new Error(t('selectionUnavailable'));
           await setLanguagePreference(message.value); return { locale: localeSnapshot() };
@@ -86,6 +87,11 @@ export function installSelection(ready, runTranslation) {
   chrome.runtime.onStartup.addListener(() => serial(reconcile).catch(console.error));
   chrome.runtime.onInstalled.addListener(() => serial(reconcile).catch(console.error));
   chrome.storage.onChanged.addListener((changes, area) => { if (area === 'local' && changes.settings) ready.then(async () => broadcast('SELECTION_SETTINGS', { settings: publicSettings(await getSettings()) })).catch(() => {}); });
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if ((area === 'session' && changes.credentialSession) || (area === 'local' && (changes.credentialVault || changes.settings))) {
+      ready.then(async () => broadcast('SELECTION_VAULT', { vault: await vaultStatus() })).catch(() => {});
+    }
+  });
   onLanguageChanged(() => broadcast('SELECTION_LOCALE', { locale: localeSnapshot() }).catch(() => {}));
   ready.then(() => serial(reconcile)).catch(console.error);
 }

@@ -9,11 +9,21 @@
     const container = root.querySelector('.translation-view') || root.documentElement;
     let locale = initialLocale, busy = false, disposed = false, revision = 0;
     let entries = [], statusState, configured = false;
-    let editVersion = 0;
+    let editVersion = 0, vaultState, waitingForUnlock = false, pendingRetry = null;
     const cardTemplate = $('result-card').cloneNode(true);
     const resultsList = $('results-list');
     const events = new AbortController();
     const listen = (element, event, fn) => element.addEventListener(event, fn, { signal: events.signal });
+    if (adapter.unlockUrl) {
+      const url = new URL(adapter.unlockUrl);
+      const unlockOrigin = `${url.protocol}//${url.host}`;
+      listen(window, 'message', event => {
+        const frame = $('inline-unlock')?.querySelector('iframe');
+        if (disposed || !event.isTrusted || !frame || event.source !== frame.contentWindow || event.origin !== unlockOrigin) return;
+        if (event.data?.type !== 'TRANSIGHT_UNLOCK_SIZE' || !Number.isFinite(event.data.height)) return;
+        frame.style.height = `${Math.max(80, Math.min(260, Math.ceil(event.data.height)))}px`;
+      });
+    }
     const t = (key, substitutions = []) => {
       const values = Array.isArray(substitutions) ? substitutions : [substitutions];
       return (locale.messages[key] || '').replace(/\$([1-9])/g, (_, n) => String(values[Number(n) - 1] ?? ''));
@@ -86,7 +96,36 @@
         resultsList.append(card); renderEntry(entry); return entry;
       });
     }
-    function cancel() { revision++; adapter.cancel?.(); setBusy(false); }
+    function cancel() { revision++; waitingForUnlock = false; pendingRetry = null; adapter.cancel?.(); setBusy(false); }
+    function setVault(next) {
+      if (disposed || !next) return;
+      const previous = vaultState;
+      vaultState = next.state;
+      const holder = $('inline-unlock');
+      if (vaultState === 'locked') {
+        if (previous !== 'locked') {
+          cancel();
+          for (const entry of entries) if (entry.state === 'loading') {
+            entry.state = 'error'; entry.error = t('vaultLockedError'); renderEntry(entry);
+          }
+          statusKey('vaultLockedError');
+        }
+        holder.hidden = false;
+        if (!holder.firstChild && adapter.unlockUrl) {
+          const frame = document.createElement('iframe');
+          frame.src = adapter.unlockUrl;
+          frame.title = t('vaultUnlockPassword');
+          holder.append(frame);
+        }
+      } else {
+        holder.hidden = true; holder.replaceChildren();
+        const resume = previous === 'locked' && vaultState === 'unlocked' && waitingForUnlock;
+        const retry = pendingRetry;
+        waitingForUnlock = false; pendingRetry = null;
+        if (resume) { if (retry && entries.includes(retry)) retryEntry(retry); else translate(); }
+        else if (previous === 'locked' && vaultState === 'unlocked') status('');
+      }
+    }
     function updateBatchStatus() {
       const pending = entries.some(entry => entry.state === 'loading');
       setBusy(pending);
@@ -110,10 +149,23 @@
       }
       if (!disposed && current === revision) { renderEntry(entry); updateBatchStatus(); }
     }
-    function retryEntry(entry) {
+    async function retryEntry(entry) {
       // Other models may still be loading: retry only this failed card, using the
-      // original request. Its synchronous state change prevents duplicate clicks.
+      // original request. Recheck its state after the vault lookup to prevent duplicates.
       if (disposed || entry.state !== 'error' || !entry.request) return;
+      const current = revision;
+      if (adapter.getVaultStatus) {
+        try {
+          const vault = await adapter.getVaultStatus();
+          if (disposed || current !== revision || entry.state !== 'error') return;
+          setVault(vault);
+          if (vault.state === 'locked') {
+            pendingRetry = entry; waitingForUnlock = true; statusKey('vaultLockedError');
+            $('inline-unlock').scrollIntoView({ block: 'nearest' }); return;
+          }
+          if (vault.state === 'migration') { statusKey('vaultMigrationRequired', true); return; }
+        } catch { if (!disposed && current === revision) statusKey('readConfigFailed', true); return; }
+      }
       return translateEntry(entry, revision);
     }
     async function translate() {
@@ -122,6 +174,24 @@
       if (!$('source').value.trim()) { statusKey('enterText', true); $('source').focus(); return; }
       if ($('source').value.length > 12000) { statusKey('selectionTooLong', true); return; }
       const current = ++revision, text = $('source').value, target = $('target').value;
+      waitingForUnlock = false; pendingRetry = null;
+      if (adapter.getVaultStatus) {
+        setBusy(true);
+        try {
+          const vault = await adapter.getVaultStatus();
+          if (disposed || current !== revision) return;
+          setBusy(false); setVault(vault);
+          if (vault.state === 'locked') {
+            waitingForUnlock = true; statusKey('vaultLockedError');
+            $('inline-unlock').scrollIntoView({ block: 'nearest' });
+            return;
+          }
+          if (vault.state === 'migration') { statusKey('vaultMigrationRequired', true); return; }
+        } catch {
+          if (!disposed && current === revision) { setBusy(false); statusKey('readConfigFailed', true); }
+          return;
+        }
+      }
       setBusy(true); resetResult('loading'); statusKey('waiting');
       for (const entry of entries) entry.request = { text, target };
       await Promise.all(entries.map(entry => translateEntry(entry, current)));
@@ -144,6 +214,8 @@
       for (const button of root.querySelectorAll('[data-language]')) button.setAttribute('aria-pressed', String(button.dataset.language === next.preference));
       entries.forEach(renderEntry);
       if (statusState) statusKey(statusState.key, statusState.error);
+      const unlockFrame = $('inline-unlock')?.querySelector('iframe');
+      if (unlockFrame) unlockFrame.title = t('vaultUnlockPassword');
       adapter.localized?.(locale);
     }
     function applySettings(next, updateTarget = true) {
@@ -158,8 +230,8 @@
       if (text.length > 12000) statusKey('selectionTooLong', true);
       else if (auto) translate();
     }
-    listen($('source'), 'input', () => { editVersion++; count(); resetResult(); status(''); });
-    listen($('target'), 'change', () => { resetResult(); status(''); if (adapter.autoTranslateTarget) translate(); });
+    listen($('source'), 'input', () => { cancel(); editVersion++; count(); resetResult(); status(''); });
+    listen($('target'), 'change', () => { cancel(); resetResult(); status(''); if (adapter.autoTranslateTarget) translate(); });
     listen($('clear'), 'click', () => { input(''); $('source').focus(); });
     listen($('translate'), 'click', translate);
     listen($('settings'), 'click', () => adapter.openSettings());
@@ -207,8 +279,8 @@
     });
     $('close-view').hidden = !adapter.close;
     if (adapter.close) listen($('close-view'), 'click', () => adapter.close());
-    setLocale(locale); applySettings(settings);
-    return { setLocale, applySettings, input, status, statusKey, cancel, get editVersion() { return editVersion; },
-      dispose() { disposed = true; clearCopyTimers(); cancel(); events.abort(); } };
+    setLocale(locale); applySettings(settings); setVault(adapter.vault);
+    return { setLocale, applySettings, setVault, input, status, statusKey, cancel, get editVersion() { return editVersion; },
+      dispose() { $('inline-unlock').replaceChildren(); disposed = true; clearCopyTimers(); cancel(); events.abort(); } };
   };
 })();

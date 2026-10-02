@@ -15,7 +15,7 @@ Translate text that the user types, pastes, or selects, using the user's configu
 ### storage
 
 ```text
-Save the user's AI endpoint, API key, selected model IDs, translation preferences, interface language, and consent in chrome.storage.local. chrome.storage.session temporarily holds selected text for the standalone fallback window and removes it when the window reads it. Settings are not stored in Chrome sync. Content scripts cannot directly read local API credentials.
+Save the user's AI endpoint, password-encrypted API key, selected model IDs, translation preferences, interface language, and consent in chrome.storage.local. The API key is encrypted using AES-256-GCM with a password-derived PBKDF2-SHA-256 key. Passwords and derived keys are never saved. Unlocked API keys are held in trusted-context chrome.storage.session until locked or the browser session ends. chrome.storage.session temporarily holds selected text for the standalone fallback window and removes it when the window reads it. Settings are not stored in Chrome sync. Content scripts cannot directly read local API credentials.
 ```
 
 ### contextMenus
@@ -79,7 +79,8 @@ The extension processes user-provided source text, translations, AI service sett
 | 数据 | 去向 / 保存 |
 | --- | --- |
 | 原文、模型 ID、目标语言、翻译风格 | POST 到配置 Base URL 的 `/chat/completions`；每个选中模型单独请求。打开划词/右键翻译、点击翻译、重试及浮窗内修改目标语言均可能发起请求 |
-| API Key | 本地 `chrome.storage.local`；服务请求中通过 Bearer header 发送，不交给内容脚本或硬编码的开发者服务器 |
+| API Key | 密文保存在本地 `chrome.storage.local`；解锁后明文只暂存受限 `chrome.storage.session`；服务请求中通过 Bearer header 发送，不交给内容脚本或硬编码的开发者服务器 |
+| 解锁密码 | 至少 6 个字符；仅用于本地派生解密密钥，不持久保存、不发送给 AI 服务。页面浮窗使用扩展来源的独立 iframe 收集密码，通过扩展内部消息发送给后台；父页面仅收到高度通知，不收到密码 |
 | 模型列表 | GET `/models` 返回的数据供设置页选择；选中的模型 ID 会保存。获取模型可在勾选翻译同意前执行，仍会发送 API Key，不要宣称同意前绝无网络请求 |
 | 连接测试 | 对每个已选模型发送 `Hello, world!`，目标语言为简体中文 |
 | 原文与译文 | 主要存在当前界面内存；没有持久翻译历史。关闭界面或清空输入可移除当前展示，但已发出的请求不能保证从服务端撤回 |
@@ -99,15 +100,16 @@ The extension processes user-provided source text, translations, AI service sett
 
 需要公开、稳定、免登录的隐私政策页面。现有仓库主页、开源 LICENSE、商品介绍和这份后台草稿不能自动当作已完成的隐私政策。发布前至少补齐：开发者/运营者及联系渠道、数据类型与处理目的、第三方接收方、存储与删除、安全措施、提供方留存条款和政策更新日期。
 
-**安全核对项（尚未解决，不能在提交文案中掩盖）：**
+**安全核对项（与实现保持一致，仍需核实实际服务和部署）：**
 
-- 当前 `chrome.storage.local` 中的 API Key 没有应用层加密；`TRUSTED_CONTEXTS` 访问限制不等于静态加密。官方 User Data FAQ 有存储与传输安全要求，提交前需要核对适用要求并完善密钥保护，不能直接声明“API Key 已加密存储”。
+- API Key 已使用 AES-256-GCM + PBKDF2-SHA-256（600,000 次迭代、随机盐和新 IV）进行应用层加密。密码及派生密钥不保存；解锁后 Key 暂存受限的 `chrome.storage.session`。重启浏览器或重载/更新扩展后需解锁；支持立即锁定和删除凭据。锁定无法撤回服务端已接收的请求，不能防御已被控制的浏览器或系统。旧版明文 Key 在完成密码加密前禁止用于请求；密文成功保存后才移除旧明文，以防止迁移中断导致丢失。完成前旧 Key 仍是明文，需提示用户及时迁移。
+- 工具栏弹窗及页面浮窗均可直接解锁，成功后继续等待中的翻译。密码表单使用扩展来源 iframe；消息权限按打包页面精确校验，iframe 仅可查询凭据状态和解锁。页面高度通知不含密码或 API Key。忘记密码只能删除凭据后重新配置。最少 6 字符是输入限制，不代表密码强度保证，建议使用更长的独立密码。
 - 非本地 API 强制 HTTPS，但 localhost / 127.0.0.1 明文 HTTP 例外必须如实说明；审核与实际部署时优先 HTTPS。
 - 已有翻译同意确认，但模型发现会独立发送凭据，需核对相应操作前的告知是否足够明确。
 
 ## 源码核对入口
 
-`manifest.json`；`src/shared/settings.js`；`src/shared/translator.js`；`src/shared/models.js`；`src/background.js`；`src/popup/popup.js`；`src/options/options.js`；`src/shared/context-menu.js`；`src/shared/selection-background.js`；`src/shared/translation-view.js`。
+`manifest.json`；`src/shared/settings.js`；`src/shared/credentials.js`；`src/shared/credential-access.js`；`src/unlock/unlock.html`；`src/unlock/unlock.js`；`src/shared/translator.js`；`src/shared/models.js`；`src/background.js`；`src/popup/popup.js`；`src/options/options.js`；`src/shared/context-menu.js`；`src/shared/selection-background.js`；`src/shared/translation-view.js`。
 
 ## 官方参考
 

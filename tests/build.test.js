@@ -26,7 +26,7 @@ test('build produces an unpacked extension with runtime files, license, and curr
   const output = await buildExtension(root);
   assert.equal(output, path.join(root, 'dist'));
   assert.deepEqual((await readdir(output)).sort(), ['LICENSE', '_locales', 'assets', 'manifest.json', 'src']);
-  for (const file of ['LICENSE', '_locales/en/messages.json', '_locales/zh_CN/messages.json', '_locales/zh_TW/messages.json', 'manifest.json', 'src/popup/popup.css', 'src/popup/popup.js', 'src/background.js', 'assets/icon-16.png', 'assets/icon-32.png', 'assets/icon-48.png', 'assets/icon-128.png']) {
+  for (const file of ['LICENSE', '_locales/en/messages.json', '_locales/zh_CN/messages.json', '_locales/zh_TW/messages.json', 'manifest.json', 'src/popup/popup.css', 'src/popup/popup.js', 'src/background.js', 'src/unlock/unlock.html', 'src/unlock/unlock.js', 'src/unlock/unlock.css', 'src/shared/credential-access.js', 'assets/icon-16.png', 'assets/icon-32.png', 'assets/icon-48.png', 'assets/icon-128.png']) {
     assert.deepEqual(await readFile(path.join(output, file)), await readFile(path.join(root, file)));
   }
   await assert.rejects(readFile(path.join(output, 'src', '.env')), { code: 'ENOENT' });

@@ -56,7 +56,7 @@ export function validateSettings(input) {
 
 export async function getSettings() {
   const { settings } = await chrome.storage.local.get('settings');
-  const merged = { ...DEFAULT_SETTINGS, ...settings };
+  const merged = { ...DEFAULT_SETTINGS, ...settings, apiKey: '' };
   const models = selectedModels(merged);
   return { ...merged, models, model: models[0] || '' };
 }

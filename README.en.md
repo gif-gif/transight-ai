@@ -31,7 +31,7 @@ Type text or import a webpage selection, choose a target language, and view or c
 
 ### AI service settings
 
-Configure the API endpoint, key, model, and translation preferences, then test the connection. The screenshot uses a local mock service with the key masked.
+Configure the API endpoint, password-protected key, model, and translation preferences, then test the connection. The screenshot uses a local mock service; saved keys are not filled back into the form.
 
 <img src="docs/screenshots/en/options.png" alt="Transight AI settings page with AI service configuration, translation preferences, and usage instructions" width="900">
 
@@ -98,13 +98,23 @@ Check the text-sharing and cost acknowledgment, then click **Save settings**. Th
 - A ChatGPT website subscription is not an API credential. You need API access from a provider.
 - This is a Chat Completions protocol client. It does not directly support Anthropic Messages, the native Gemini protocol, or OpenAI Responses. A compatible gateway can be used instead.
 
+### Password-protected API keys
+
+- When saving an API key, set and confirm a separate unlock password of **at least 6 characters**. Unauthenticated services may leave both the key and password blank.
+- Unlock once in the toolbar popup, selection panel, or Settings after a browser restart or extension reload/update. Closing the popup does not lock it. All translation, connection-test, and model-list requests resolve saved credentials in the background worker.
+- Locked translation views show an inline unlock form and resume pending translation after unlocking. Other views share the unlocked session. The password field lives in an extension-origin iframe; passwords never pass through the webpage or content script. Password changes and resets remain in Settings.
+- The saved key is never filled back into the form. Leave the key/password fields blank to keep it while editing preferences; supply only a new password and confirmation to rotate the password. Replacing the key requires a password. Changing endpoints requires explicitly entering a key for that endpoint, rather than silently reusing saved credentials.
+- **Lock now** clears the session key and cancels active translation/model requests. It cannot retract requests already received by a provider.
+- **Forgot password / remove saved key** asks for confirmation, then deletes the ciphertext and session key, keeping other settings. Forgotten passwords cannot be recovered; re-enter your API key. Local removal does not revoke the key at the provider.
+- **Legacy migration:** on update, legacy plaintext keys are quarantined and cannot be used for translation or model discovery. Set a password in Settings and save. The plaintext is removed only when the encrypted vault is successfully persisted, so an interrupted migration or browser restart cannot lose your only key. Until then, the legacy key remains plaintext; complete migration promptly. This does not guarantee secure erasure of old backups or storage-engine remnants; rotate previously exposed keys at the provider.
+
 ### Fetch and select models
 
 1. Enter the API Base URL and API key (optional for unauthenticated local services).
 2. Click **Fetch models**. No model ID, saved settings, or translation consent is needed for discovery.
 3. Check the desired **Available models** (up to 5), then click **Save settings**. You can also enter comma-separated IDs manually.
 
-Discovery sends `GET /models` using the current form’s address and key. It sends no source text, does not save settings, and does not automatically replace the selected models. Editing the address or key clears the list and cancels the old request. Manual entry remains available if discovery is unsupported, empty, or fails. A listed model is not guaranteed to support Chat Completions.
+Discovery sends `GET /models` from the background using the current address and entered key (or the unlocked saved key). It sends no source text, does not save settings, and does not automatically replace the selected models. Editing the address or key clears the list and cancels the old request. Manual entry remains available if discovery is unsupported, empty, or fails. A listed model is not guaranteed to support Chat Completions.
 
 ### Multi-model translation
 
@@ -157,7 +167,7 @@ Input/password fields, editable regions, and the panel itself do not trigger sel
 
 ## Privacy and Security Boundaries
 
-- **API keys are stored in `chrome.storage.local`, not browser sync.** This is not an encrypted vault: someone with local machine or browser administration access may still retrieve them. Avoid storing highly privileged production keys in shared browsers, and use spending limits and least-privilege credentials.
+- **API keys are password-encrypted in `chrome.storage.local`, never Chrome-synced.** AES-256-GCM uses a PBKDF2-SHA-256-derived key (600,000 iterations), a random salt and a fresh IV. Passwords and derived keys are never saved. Unlocked API keys live only in trusted-context `chrome.storage.session` until locked or the browser session/extension reload ends. This protects locked persistent data, not a compromised browser or device. Avoid storing highly privileged production keys in shared browsers, and use spending limits and least-privilege credentials.
 - Local storage access is restricted to `TRUSTED_CONTEXTS`, so injected content scripts cannot directly read API keys. Network requests run in the extension background.
 - Text is sent only when you explicitly translate or test a connection. The extension does not automatically scan entire pages, upload webpage URLs, store translation history, or include analytics tracking.
 - Your provider may process submitted text according to its own policies. Avoid sending sensitive information. The on-page panel is not a secure interface for displaying confidential content.

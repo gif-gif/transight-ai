@@ -102,7 +102,7 @@
     "message": "Hide"
   },
   "keyHint": {
-    "message": "Stored only in this browser, without Chrome sync. Do not save sensitive keys on shared devices."
+    "message": "Encrypted with your unlock password; never Chrome-synced. Leave blank to keep the saved key. Unlock passwords are never sent to the AI service."
   },
   "model": {
     "message": "Model IDs"
@@ -402,7 +402,7 @@
     "message": "Could not fetch models. Try again or enter a model ID manually."
   },
   "modelFetchHint": {
-    "message": "Uses the current Base URL and API key to request /models. No source text is sent and settings are not saved."
+    "message": "Uses the current Base URL and entered key (or the unlocked saved key) to request /models in the background. No source text is sent and settings are not saved."
   },
   "selectionUnavailable": {
     "message": "Selection translation is unavailable on this page."
@@ -436,5 +436,83 @@
   },
   "dragTranslation": {
     "message": "Drag to move; use arrow keys when focused"
+  },
+  "vaultTitle": {
+    "message": "API key protection"
+  },
+  "vaultHint": {
+    "message": "Saved keys are encrypted with your local password. Unlock once after restarting Chrome. Forgotten passwords cannot be recovered."
+  },
+  "vaultUnlockPassword": {
+    "message": "Unlock password"
+  },
+  "vaultUnlock": {
+    "message": "Unlock"
+  },
+  "vaultNewPassword": {
+    "message": "New unlock password"
+  },
+  "vaultConfirmPassword": {
+    "message": "Confirm password"
+  },
+  "vaultPasswordHint": {
+    "message": "At least 6 characters. Required for a new key; leave both blank to keep the existing password. Use a unique password, not your API key."
+  },
+  "vaultLock": {
+    "message": "Lock now"
+  },
+  "vaultReset": {
+    "message": "Forgot password / remove saved key"
+  },
+  "vaultResetConfirm": {
+    "message": "Remove the saved API key and its unlocked session? This cannot be undone. Other settings will remain. Enter your API key again to use an authenticated service."
+  },
+  "vaultEmpty": {
+    "message": "No saved key. A password is required when saving an API key; unauthenticated services need no password."
+  },
+  "vaultLocked": {
+    "message": "Locked — unlock to translate, fetch models, or edit the saved key."
+  },
+  "vaultUnlocked": {
+    "message": "Unlocked for this browser session. The saved key is not shown in this form."
+  },
+  "vaultMigration": {
+    "message": "A legacy plaintext key was found. Set a password and save to encrypt it. Until encryption succeeds, the old key is retained to prevent data loss and translation/model requests are blocked."
+  },
+  "vaultLoading": {
+    "message": "Loading key protection…"
+  },
+  "vaultPasswordLength": {
+    "message": "Use an unlock password between 6 and 1024 characters."
+  },
+  "vaultPasswordMismatch": {
+    "message": "The passwords do not match."
+  },
+  "vaultUnlockFailed": {
+    "message": "Incorrect password or damaged key data. Try again, or reset and re-enter your API key."
+  },
+  "vaultLockedError": {
+    "message": "API key is locked. Enter your unlock password to continue."
+  },
+  "vaultMissing": {
+    "message": "No encrypted API key is available. Enter an API key before setting a password."
+  },
+  "vaultMigrationRequired": {
+    "message": "Open Settings and set a password to encrypt your previous API key before translating."
+  },
+  "vaultEndpointChanged": {
+    "message": "The API endpoint changed. Enter a key explicitly for the new endpoint, or remove the saved key for an unauthenticated service."
+  },
+  "vaultOperationFailed": {
+    "message": "Could not update key protection. Please try again."
+  },
+  "vaultInlineHint": {
+    "message": "Unlock here to continue translating. Your password stays in the extension."
+  },
+  "vaultUnlocking": {
+    "message": "Unlocking…"
+  },
+  "vaultInlineUnlocked": {
+    "message": "Unlocked. You can continue translating."
   }
 }

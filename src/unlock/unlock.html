@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title data-i18n="vaultUnlock">Unlock</title><link rel="stylesheet" href="../shared/ui.css"><link rel="stylesheet" href="unlock.css"></head>
+<body>
+  <form id="unlock-form">
+    <label for="unlock-password" data-i18n="vaultUnlockPassword">Unlock password</label>
+    <p data-i18n="vaultInlineHint">Unlock here to continue translating. Your password stays in the extension.</p>
+    <div class="unlock-row"><input id="unlock-password" type="password" minlength="6" maxlength="1024" required autocomplete="off" spellcheck="false" aria-describedby="unlock-status"><button class="primary" id="unlock-vault" type="submit" data-i18n="vaultUnlock">Unlock</button></div>
+    <div id="unlock-status" class="status" role="status" aria-live="polite"></div>
+  </form>
+  <script type="module" src="unlock.js"></script>
+</body>
+</html>

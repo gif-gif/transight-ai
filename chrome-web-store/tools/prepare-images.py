@@ -18,6 +18,16 @@ def font(size, bold=False, zh=False):
     return ImageFont.truetype(CJK if zh else BOLD if bold else FONT, size)
 
 TRADITIONAL_COPY = {
+    '保护你的密钥，\n选择翻译模型。': '保護你的金鑰，\n選擇翻譯模型。',
+    '至少 6 个字符的本地解锁密码。': '至少 6 個字元的本機解鎖密碼。',
+    '加密保存密钥，随时锁定。': '加密儲存金鑰，隨時鎖定。',
+    '实际设置截图 · 示例模型，不展示已保存密钥。': '實際設定截圖 · 範例模型，不顯示已儲存金鑰。',
+    '就地解锁，\n继续翻译。': '就地解鎖，\n繼續翻譯。',
+    '在浮窗或工具栏弹窗中输入密码。': '在浮動視窗或工具列彈出視窗中輸入密碼。',
+    '紧凑显示，解锁后继续等待中的翻译。': '緊湊顯示，解鎖後繼續等待中的翻譯。',
+    '密码不保存，也不发送给 AI 服务。': '密碼不儲存，也不傳送給 AI 服務。',
+    '重启浏览器或重载扩展后需重新解锁。': '重新啟動瀏覽器或載入擴充功能後需重新解鎖。',
+    '实际界面截图 · 测试密码已遮挡。': '實際介面截圖 · 測試密碼已遮蔽。',
     '一段原文，\n多种模型对照。': '一段原文，\n多種模型對照。',
     '最多同时对比 5 个 AI 模型。': '最多同時比較 5 個 AI 模型。',
     '独立译文、复制与失败重试。': '獨立譯文、複製與失敗重試。',
@@ -102,14 +112,27 @@ for locale, folder, zh in [('en-US','en',False),('zh-CN','zh-CN',True),('zh-TW',
 
     im=canvas()
     text(im,(60,175),'03 / YOUR AI SERVICE',17,GREEN,bold=True)
-    text(im,(60,231),'Choose your\ntranslation models.' if not zh else '连接自己的服务，\n选择翻译模型。',42,bold=True,zh=zh)
-    lines=['Set your endpoint and API key.', 'Fetch models or enter model IDs.', 'English + Simplified / Traditional Chinese.'] if not zh else ['设置 API 地址与密钥。','拉取模型列表，或手动填写模型 ID。','简体、繁体中文与英文界面。']
+    text(im,(60,231),'Protect your key.\nChoose your models.' if not zh else '保护你的密钥，\n选择翻译模型。',42,bold=True,zh=zh)
+    lines=['Local unlock password: 6+ characters.', 'Encrypt your key. Lock it at any time.', 'Fetch models or enter model IDs.'] if not zh else ['至少 6 个字符的本地解锁密码。','加密保存密钥，随时锁定。','拉取模型列表，或手动填写模型 ID。']
     for i,line in enumerate(lines):text(im,(60,414+i*43),line,21 if not zh else 22,MUTED,zh=zh)
-    # Crop the existing service configuration card, keeping masked test key.
-    screenshot(im,src/'options-multi.png',(96,285,730,950 if not zh else 935),(650,112),(570,598 if not zh else 584))
+    # Crop the actual protection + model controls, preserving their aspect ratio.
+    settings_box = {'en-US': (123,641,702,1318), 'zh-CN': (123,620,702,1256), 'zh-TW': (123,620,702,1277)}[locale]
+    settings_height = round((settings_box[3] - settings_box[1]) * 530 / 579)
+    screenshot(im,src/'options-multi.png',settings_box,(650,112),(530,settings_height))
     text(im,(60,680),'Compatible Chat Completions API required.' if not zh else '需要兼容 Chat Completions 的 AI 服务。',18,MUTED,zh=zh)
-    text(im,(60,718),'Actual UI · Local test endpoint, masked test key.' if not zh else '实际界面截图 · 本地测试地址，密钥已遮挡。',17,MUTED,zh=zh)
+    text(im,(60,718),'Actual settings · Test models, saved key not displayed.' if not zh else '实际设置截图 · 示例模型，不展示已保存密钥。',17,MUTED,zh=zh)
     save_if_changed(im, dest/'03-settings.png')
+
+    im=canvas()
+    text(im,(60,175),'04 / UNLOCK IN PLACE',17,GREEN,bold=True)
+    text(im,(60,231),'Unlock here.\nKeep translating.' if not zh else '就地解锁，\n继续翻译。',48,bold=True,zh=zh)
+    lines = ['Unlock in the popup or on-page panel.', 'A compact form. Pending work resumes.', 'Passwords stay out of AI requests.'] if not zh else ['在浮窗或工具栏弹窗中输入密码。','紧凑显示，解锁后继续等待中的翻译。','密码不保存，也不发送给 AI 服务。']
+    for i,line in enumerate(lines): text(im,(60,414+i*43),line,22,MUTED,zh=zh)
+    # Include the entire actual locked panel, uniformly scaled to fit the canvas.
+    screenshot(im,src/'selection-locked.png',(696,0,1120,860),(792,26),(365,740))
+    text(im,(60,680),'Unlock again after browser restart or extension reload.' if not zh else '重启浏览器或重载扩展后需重新解锁。',18,MUTED,zh=zh)
+    text(im,(60,718),'Actual UI · Masked test password.' if not zh else '实际界面截图 · 测试密码已遮挡。',17,MUTED,zh=zh)
+    save_if_changed(im, dest/'04-inline-unlock.png')
 
 # Promotions are language-neutral branding plus concise English copy.
 # High-resolution rendering followed by downsampling keeps type crisp.
@@ -135,4 +158,4 @@ for w,h,filename in [(440,280,'small-440x280.png'),(1400,560,'marquee-1400x560.p
         # Reuse the brand artwork, not an invented translation/chat symbol.
         logo(im,(1080*scale,190*scale),200*scale)
     save_if_changed(im.resize((w,h),Image.Resampling.LANCZOS), OUT/'promo'/filename)
-print('Prepared store icon, 3 existing-UI screenshots per locale, and both promotional tiles.')
+print('Prepared store icon, 4 existing-UI screenshots per locale, and both promotional tiles.')
