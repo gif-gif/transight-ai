@@ -186,7 +186,7 @@ npm test            # Build pipeline, settings, requests, responses, HTTP errors
 npm run check       # Manifest, resource paths, JavaScript syntax, and inline script checks
 ```
 
-Load `dist/` through Chrome's Developer mode. The build stages and validates files in a temporary directory before replacing the previous `dist/` output. Do not manually edit files or store unrelated data in `dist/`. The output contains only `manifest.json`, `src/`, `assets/`, and `_locales/`, excluding tests, screenshots, documentation, development scripts, and ZIP archives. Since the source is vanilla JavaScript / HTML / CSS, the build validates and copies files without transpiling, minifying, or downloading dependencies.
+Load `dist/` through Chrome's Developer mode. The build stages and validates files in a temporary directory before replacing the previous `dist/` output. Do not manually edit files or store unrelated data in `dist/`. The output contains only `manifest.json`, `LICENSE`, `src/`, `assets/`, and `_locales/`, excluding tests, screenshots, documentation, development scripts, and ZIP archives. Since the source is vanilla JavaScript / HTML / CSS, the build validates and copies files without transpiling, minifying, or downloading dependencies.
 
 After each source change, run `npm run build`, reload the extension at `chrome://extensions`, and close and reopen the popup. If you previously loaded the project root, switch to loading `dist/` instead of continuing to use the old entry.
 
@@ -264,3 +264,7 @@ The store ZIP, trilingual listing copy, icon, screenshots, and promotional image
 ![Traditional Chinese multi-model translation](docs/screenshots/zh-TW/popup-multi.png)
 
 The store submission folder also includes Traditional Chinese listing copy and 3 localized screenshots.
+
+## License
+
+Transight AI is open source under the [Apache License 2.0](LICENSE). Unless otherwise noted for third-party content, this license applies to the extension source, website source, documentation, and original assets in this repository. Third-party dependencies and assets retain their respective licenses.

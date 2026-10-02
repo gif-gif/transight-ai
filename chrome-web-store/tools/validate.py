@@ -30,8 +30,8 @@ archive=OUT/'package'/f'transight-{manifest["version"]}.zip'
 with zipfile.ZipFile(archive) as z:
     assert z.testzip() is None
     names=z.namelist()
-    assert 'manifest.json' in names
-    assert all(n=='manifest.json' or n.startswith(('assets/','src/','_locales/')) for n in names)
+    assert 'manifest.json' in names and 'LICENSE' in names
+    assert all(n in ('manifest.json', 'LICENSE') or n.startswith(('assets/','src/','_locales/')) for n in names)
     assert not any('..' in Path(n).parts or n.startswith('/') or Path(n).name.startswith('.') for n in names)
     assert json.loads(z.read('manifest.json'))==manifest
     assert z.read('assets/icon-128.png')==(OUT/'icons/icon-128.png').read_bytes()
@@ -49,8 +49,8 @@ for p in sorted(OUT.rglob('*')):
         im=Image.open(p);record.update(width=im.width,height=im.height,mode=im.mode)
     files.append(record)
 report={'prepared_date':'2026-10-02','version':manifest['version'],'archive':str(archive.relative_to(OUT)),
-        'checks':{'manifest_at_zip_root':True,'runtime_only':True,'archive_source_match_except_store_icon':True,'runtime_file_count':archive_count,'description_limit_132':True,'dimensions_and_image_modes_valid':True},
+        'checks':{'manifest_at_zip_root':True,'runtime_and_license_only':True,'archive_source_match_except_store_icon':True,'runtime_file_count':archive_count,'description_limit_132':True,'dimensions_and_image_modes_valid':True},
         'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/context-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/options-multi.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
 (OUT/'inventory.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-print(f'PASS: ZIP root/runtime contents ({archive_count} files), source parity, localized descriptions, padded icon, 9 screenshots, 2 promotional tiles.')
+print(f'PASS: ZIP root/runtime/license contents ({archive_count} files), source parity, localized descriptions, padded icon, 9 screenshots, 2 promotional tiles.')
 print('Inventory:',OUT/'inventory.json')

@@ -4,9 +4,9 @@
   "archive": "package/transight-0.1.0.zip",
   "checks": {
     "manifest_at_zip_root": true,
-    "runtime_only": true,
+    "runtime_and_license_only": true,
     "archive_source_match_except_store_icon": true,
-    "runtime_file_count": 26,
+    "runtime_file_count": 27,
     "description_limit_132": true,
     "dimensions_and_image_modes_valid": true
   },
@@ -22,8 +22,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 8109,
-      "sha256": "439a4b758da7dbf1dc2dc8a3de214ebcc608885706a46bf86ee6dc47941d4b5a"
+      "bytes": 8164,
+      "sha256": "65bd1fe0eff9e4799d10f91302a0b0dc8b042ced04a3e47ad6963f61d26f597d"
     },
     {
       "path": "icons/icon-128.png",
@@ -55,8 +55,8 @@
     },
     {
       "path": "package/transight-0.1.0.zip",
-      "bytes": 58330,
-      "sha256": "b7dbb6c031afaa001ae3116d23c95f3844486bfc7874643c992e40ed4512d6b8"
+      "bytes": 62421,
+      "sha256": "23fcca5dbb2881679170b446c8801e8178b86aff340c1d353e83cdd8d568ee95"
     },
     {
       "path": "promo/marquee-1400x560.png",
@@ -153,8 +153,8 @@
     },
     {
       "path": "tools/validate.py",
-      "bytes": 3862,
-      "sha256": "3bee2867a13d02e9a22a163fc44c6fee283edf5a2dde89ca8415c2b94f3eb057"
+      "bytes": 3920,
+      "sha256": "bc230c186114ee3974d9c5d0f0b39cc24ff3b6dc86f43902cb59ec636d7d880a"
     }
   ]
 }

@@ -91,3 +91,7 @@ SITE_URL=https://your-domain.com npm --prefix web run build
 每种语言均有独立 title / description / Open Graph 信息。根入口不纳入 sitemap，`x-default` 指向英文对应页。域名之外不需要后端、数据库或 API Key。
 
 使用支持目录 `index.html` 与 `404.html` 的静态托管，**不要启用把所有路径重写到 `/index.html` 的 SPA 回退**。上线前补充正式下载入口、社交分享图片和独立隐私政策（当前只有配置服务的数据流说明）。
+
+## 许可证
+
+本网站作为 Transight AI 仓库的一部分，采用 [Apache License 2.0](../LICENSE) 开源发布。第三方依赖及其素材保留各自的许可证。

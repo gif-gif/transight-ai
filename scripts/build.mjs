@@ -12,7 +12,9 @@ export async function buildExtension(sourceRoot = projectRoot) {
   const staging = await mkdtemp(path.join(root, '.dist-stage-'));
   try {
     // Keep paths unchanged so Manifest, ES modules and content-script URLs still resolve.
-    await cp(path.join(root, 'manifest.json'), path.join(staging, 'manifest.json'));
+    for (const file of ['manifest.json', 'LICENSE']) {
+      await cp(path.join(root, file), path.join(staging, file));
+    }
     for (const [directory, extensions] of [
       ['src', new Set(['.js', '.css', '.html'])],
       ['assets', new Set(['.png', '.svg'])],
@@ -41,6 +43,6 @@ export async function buildExtension(sourceRoot = projectRoot) {
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const output = await buildExtension();
   console.log(`✓ 构建完成：${output}`);
-  console.log('仅包含 manifest.json、src/、assets/ 和 _locales/，未生成 ZIP。');
+  console.log('仅包含 manifest.json、LICENSE、src/、assets/ 和 _locales/，未生成 ZIP。');
   console.log('请在 Chrome 开发者模式中加载此目录；后续构建后重新加载扩展即可。');
 }

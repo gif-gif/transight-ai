@@ -187,7 +187,7 @@ npm test            # 构建流程、配置校验、请求构造、响应解析�
 npm run check       # Manifest、资源路径、JavaScript 语法与内联脚本检查
 ```
 
-本项目使用 Chrome 开发者模式加载 `dist/`。构建会先在临时目录整理并检查文件，校验通过后清理旧 `dist/` 并替换为新产物；请勿在 `dist/` 中手动修改或保存其他资料。产物只包含 `manifest.json`、`src/`、`assets/`、`_locales/`，不包含测试、截图、文档、开发脚本或 ZIP。当前源码是原生 JavaScript / HTML / CSS，构建仅做校验和文件整理，不做转译、压缩，也不下载依赖。
+本项目使用 Chrome 开发者模式加载 `dist/`。构建会先在临时目录整理并检查文件，校验通过后清理旧 `dist/` 并替换为新产物；请勿在 `dist/` 中手动修改或保存其他资料。产物只包含 `manifest.json`、`LICENSE`、`src/`、`assets/`、`_locales/`，不包含测试、截图、文档、开发脚本或 ZIP。当前源码是原生 JavaScript / HTML / CSS，构建仅做校验和文件整理，不做转译、压缩，也不下载依赖。
 
 每次修改源码后，运行 `npm run build`，然后在 `chrome://extensions` 中重新加载该扩展，关闭旧弹窗后再打开。如果之前加载的是工程根目录，需要改为加载 `dist/`，不要继续使用旧目录条目。
 
@@ -263,3 +263,7 @@ tests/                        Node.js 自动化测试
 ![繁體中文多模型翻译](docs/screenshots/zh-TW/popup-multi.png)
 
 商店材料已补充繁体中文详细介绍及 3 张繁体界面截图，见 `chrome-web-store/`。
+
+## 许可证
+
+Transight AI 采用 [Apache License 2.0](LICENSE) 开源发布。除另有说明的第三方内容外，本仓库的插件源码、网站源码、文档及原创素材均适用该许可证。第三方依赖及其素材保留各自的许可证。

@@ -8,7 +8,7 @@
 
 | 项目 | 材料 | 说明 |
 | --- | --- | --- |
-| 插件安装包 | `package/transight-0.1.0.zip` | ZIP 根目录直接包含 `manifest.json`；仅包含扩展运行文件 |
+| 插件安装包 | `package/transight-0.1.0.zip` | ZIP 根目录直接包含 `manifest.json`；仅包含扩展运行文件及 Apache-2.0 许可证 |
 | 名称 / 简短描述 / 版本 | ZIP 内 `manifest.json` 和 `_locales/`；便于复制的汇总见 `listing/metadata.json` | 沿用现有版本和国际化配置，没有创建重复 manifest |
 | 英文详细介绍 | `listing/description.en.txt` | 可直接粘贴到英文商品介绍 |
 | 简体中文详细介绍 | `listing/description.zh-CN.txt` | 可直接粘贴到简体中文商品介绍 |
@@ -90,7 +90,7 @@
 npm run package
 ```
 
-该命令先执行静态检查及单元测试，再从当前源码白名单打包；ZIP 输出到本目录的 `package/`，**不写入、不清理 `dist/`**。`npm run build` 仍只构建开发者模式加载目录，不生成 ZIP。
+该命令先执行静态检查及单元测试，再从当前源码白名单打包，并包含根目录 `LICENSE`；ZIP 输出到本目录的 `package/`，**不写入、不清理 `dist/`**。`npm run build` 仍只构建开发者模式加载目录，不生成 ZIP。
 
 只有在更新现有图标或截图之后，才需要重新做尺寸适配（Python 3 + Pillow，字体路径按 macOS 编写）：
 

@@ -10,13 +10,13 @@ const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 async function fixture(t) {
   const root = await mkdtemp(path.join(tmpdir(), 'yijian-build-test-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  for (const name of ['manifest.json', 'src', 'assets', '_locales']) {
+  for (const name of ['manifest.json', 'LICENSE', 'src', 'assets', '_locales']) {
     await cp(path.join(projectRoot, name), path.join(root, name), { recursive: true });
   }
   return root;
 }
 
-test('build produces an unpacked extension with only runtime files and current icons', async t => {
+test('build produces an unpacked extension with runtime files, license, and current icons', async t => {
   const root = await fixture(t);
   await writeFile(path.join(root, 'src', '.env'), 'must not ship');
   await writeFile(path.join(root, 'assets', '.DS_Store'), 'must not ship');
@@ -25,8 +25,8 @@ test('build produces an unpacked extension with only runtime files and current i
   await writeFile(path.join(root, 'dist', 'stale.zip'), 'old artifact');
   const output = await buildExtension(root);
   assert.equal(output, path.join(root, 'dist'));
-  assert.deepEqual((await readdir(output)).sort(), ['_locales', 'assets', 'manifest.json', 'src']);
-  for (const file of ['_locales/en/messages.json', '_locales/zh_CN/messages.json', '_locales/zh_TW/messages.json', 'manifest.json', 'src/popup/popup.css', 'src/popup/popup.js', 'src/background.js', 'assets/icon-16.png', 'assets/icon-32.png', 'assets/icon-48.png', 'assets/icon-128.png']) {
+  assert.deepEqual((await readdir(output)).sort(), ['LICENSE', '_locales', 'assets', 'manifest.json', 'src']);
+  for (const file of ['LICENSE', '_locales/en/messages.json', '_locales/zh_CN/messages.json', '_locales/zh_TW/messages.json', 'manifest.json', 'src/popup/popup.css', 'src/popup/popup.js', 'src/background.js', 'assets/icon-16.png', 'assets/icon-32.png', 'assets/icon-48.png', 'assets/icon-128.png']) {
     assert.deepEqual(await readFile(path.join(output, file)), await readFile(path.join(root, file)));
   }
   await assert.rejects(readFile(path.join(output, 'src', '.env')), { code: 'ENOENT' });

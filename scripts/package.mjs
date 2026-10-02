@@ -17,8 +17,10 @@ const staging = await mkdtemp(path.join(tmpdir(), 'transight-store-'));
 try {
   const extension = path.join(staging, 'extension');
   await mkdir(extension);
-  // Whitelist only runtime files. Never package docs, screenshots, tools, or credentials.
-  await copyFile(path.join(root, 'manifest.json'), path.join(extension, 'manifest.json'));
+  // Whitelist runtime files and the license. Never package docs, screenshots, tools, or credentials.
+  for (const file of ['manifest.json', 'LICENSE']) {
+    await copyFile(path.join(root, file), path.join(extension, file));
+  }
   for (const [dir, extensions] of [
     ['src', new Set(['.js', '.css', '.html'])],
     ['assets', new Set(['.png', '.svg'])],
@@ -34,11 +36,11 @@ try {
   await copyFile(storeIcon, path.join(extension, 'assets/icon-128.png'));
   execFileSync(process.execPath, [path.join(root, 'scripts/check.mjs'), extension], { stdio: 'inherit' });
   const archive = path.join(staging, filename);
-  execFileSync('zip', ['-q', '-r', archive, 'manifest.json', 'assets', 'src', '_locales'], { cwd: extension });
+  execFileSync('zip', ['-q', '-r', archive, 'manifest.json', 'LICENSE', 'assets', 'src', '_locales'], { cwd: extension });
   execFileSync('unzip', ['-t', archive], { stdio: 'pipe' });
   const entries = execFileSync('unzip', ['-Z1', archive], { encoding: 'utf8' }).trim().split('\n');
-  if (!entries.includes('manifest.json') || entries.some(entry => !/^(manifest\.json|assets\/|src\/|_locales\/)/.test(entry))) {
-    throw new Error('ZIP must contain manifest.json at its root and runtime files only.');
+  if (!entries.includes('manifest.json') || !entries.includes('LICENSE') || entries.some(entry => !/^(manifest\.json$|LICENSE$|assets\/|src\/|_locales\/)/.test(entry))) {
+    throw new Error('ZIP must contain manifest.json and LICENSE at its root, plus runtime files only.');
   }
   await mkdir(outputDir, { recursive: true });
   await copyFile(archive, path.join(outputDir, filename));
