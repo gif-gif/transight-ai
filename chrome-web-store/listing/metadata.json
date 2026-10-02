@@ -1,0 +1,31 @@
+{
+  "version": "0.1.0",
+  "primary_language": "English (en)",
+  "recommended_category": "Productivity",
+  "recommended_subcategory_if_available": "Tools",
+  "category_note": "建议分类；按提交时开发者后台提供的分类选项确认。",
+  "manifest_name": "__MSG_extensionName__",
+  "manifest_description": "__MSG_extensionDescription__",
+  "default_locale": "en",
+  "localizations": {
+    "en": {
+      "name": "Transight AI",
+      "short_description": "Translate text with your own AI service. Select text and right-click to bring understanding closer.",
+      "description_character_count": 99
+    },
+    "zh_CN": {
+      "name": "译见 AI · 随手翻译",
+      "short_description": "用你自己的 AI 服务翻译文本。选中文字，右键翻译，让理解少一点距离。",
+      "description_character_count": 35
+    },
+    "zh_TW": {
+      "name": "譯見 AI · 隨手翻譯",
+      "short_description": "用你自己的 AI 服務翻譯文字。選取文字，右鍵翻譯，讓理解少一點距離。",
+      "description_character_count": 35
+    }
+  },
+  "additional_listing_languages": [
+    "简体中文 (zh-CN)",
+    "繁體中文 (zh-TW)"
+  ]
+}

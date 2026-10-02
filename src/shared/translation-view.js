@@ -1,0 +1,214 @@
+// One controller for the toolbar popup and the isolated on-page translation view.
+// Adapters provide privileged operations; this file never accesses extension storage.
+(() => {
+  if (globalThis.TransightTranslationView) return;
+  const copyIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>';
+  const copiedIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>';
+  globalThis.TransightTranslationView = function (root, adapter, initialLocale, settings) {
+    const $ = id => root.querySelector(`#${id}`);
+    const container = root.querySelector('.translation-view') || root.documentElement;
+    let locale = initialLocale, busy = false, disposed = false, revision = 0;
+    let entries = [], statusState, configured = false;
+    let editVersion = 0;
+    const cardTemplate = $('result-card').cloneNode(true);
+    const resultsList = $('results-list');
+    const events = new AbortController();
+    const listen = (element, event, fn) => element.addEventListener(event, fn, { signal: events.signal });
+    const t = (key, substitutions = []) => {
+      const values = Array.isArray(substitutions) ? substitutions : [substitutions];
+      return (locale.messages[key] || '').replace(/\$([1-9])/g, (_, n) => String(values[Number(n) - 1] ?? ''));
+    };
+    const languageKeys = { 'zh-CN': 'langZhCN', 'zh-TW': 'langZhTW', en: 'langEn', ja: 'langJa', ko: 'langKo', fr: 'langFr', de: 'langDe', es: 'langEs', ru: 'langRu', pt: 'langPt' };
+    const languageName = code => t(languageKeys[code]) || code;
+    function status(text, error = false) {
+      statusState = null;
+      $('status').textContent = text;
+      $('status').className = `status${error ? ' error' : ''}`;
+    }
+    function statusKey(key, error = false) { status(t(key), error); statusState = { key, error }; }
+    function localize(scope = root) {
+      for (const el of scope.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
+      for (const attr of ['placeholder', 'aria-label', 'title']) {
+        for (const el of scope.querySelectorAll(`[data-i18n-${attr}]`)) el.setAttribute(attr, t(el.getAttribute(`data-i18n-${attr}`)));
+      }
+    }
+    function setBusy(value) {
+      busy = value;
+      for (const id of ['translate', 'source', 'target', 'clear']) $(id).disabled = value;
+      resultsList.setAttribute('aria-busy', String(value));
+      $('translate-label').textContent = t(value ? 'loading' : 'translate');
+      $('translate-icon').classList.toggle('spinner', value);
+    }
+    function count() { $('count').textContent = `${$('source').value.length.toLocaleString('en-US')} / 12,000`; }
+    function modelIds() { return settings.models ?? (settings.model ? [settings.model] : []); }
+    function renderCopy(entry) {
+      const button = entry.card.querySelector('.copy-result');
+      button.disabled = entry.state !== 'success';
+      // Packaged static icons only; translation text is never parsed as markup.
+      button.innerHTML = entry.copied ? copiedIcon : copyIcon;
+      button.dataset.copied = String(Boolean(entry.copied));
+      button.title = t('copy');
+      const label = t(entry.copied ? 'copied' : 'copy');
+      button.setAttribute('aria-label', entry.model ? `${label} · ${entry.model}` : label);
+    }
+    function clearCopyTimers() { for (const entry of entries) clearTimeout(entry.copyTimer); }
+    function renderEntry(entry) {
+      const { card, model, state, result, error } = entry;
+      const title = card.querySelector('h3');
+      title.textContent = model || t('translation'); title.title = model;
+      card.dataset.state = state;
+      card.setAttribute('aria-busy', String(state === 'loading'));
+      const content = card.querySelector('.result');
+      renderCopy(entry);
+      const meta = card.querySelector('.result-meta');
+      meta.hidden = state === 'idle';
+      if (state === 'idle') { localize(content); return; }
+      if (state === 'loading') { content.textContent = t('waiting'); meta.textContent = t('loading'); }
+      else if (state === 'success') { content.textContent = result.text; meta.textContent = `${languageName(result.targetLanguage)} · ${t('complete')}`; }
+      else {
+        content.textContent = error;
+        const retry = document.createElement('button');
+        retry.type = 'button'; retry.className = 'retry-result'; retry.textContent = t('retryTranslation');
+        retry.setAttribute('aria-label', `${t('retryTranslation')} · ${model}`);
+        const [before, after = ''] = t('translationFailed').split(t('retryTranslation'));
+        meta.replaceChildren(before, retry, after);
+      }
+    }
+    function resetResult(state = 'idle') {
+      clearCopyTimers();
+      resultsList.replaceChildren();
+      entries = (modelIds().length ? modelIds() : ['']).map((model, index) => {
+        const card = cardTemplate.cloneNode(true);
+        if (index) { card.removeAttribute('id'); for (const node of card.querySelectorAll('[id]')) node.removeAttribute('id'); }
+        card.querySelector('h3').removeAttribute('data-i18n');
+        card.dataset.model = model;
+        const entry = { model, card, state };
+        resultsList.append(card); renderEntry(entry); return entry;
+      });
+    }
+    function cancel() { revision++; adapter.cancel?.(); setBusy(false); }
+    function updateBatchStatus() {
+      const pending = entries.some(entry => entry.state === 'loading');
+      setBusy(pending);
+      if (pending) { statusKey('waiting'); return; }
+      const failures = entries.filter(entry => entry.state === 'error');
+      if (!failures.length) statusKey('complete');
+      else if (entries.length === 1) status(failures[0].error, true);
+      else statusKey(failures.length === entries.length ? 'allModelsFailed' : 'partialModelsFailed', true);
+    }
+    async function translateEntry(entry, current) {
+      entry.state = 'loading'; entry.error = undefined;
+      renderEntry(entry); updateBatchStatus();
+      try {
+        const result = await adapter.translate(entry.request.text, entry.request.target, entry.model);
+        if (disposed || current !== revision) return;
+        if (!result?.ok) throw new Error(result?.error || t('backgroundFailed'));
+        entry.result = result; entry.state = 'success';
+      } catch (error) {
+        if (disposed || current !== revision) return;
+        entry.error = error.message || t('backgroundFailed'); entry.state = 'error';
+      }
+      if (!disposed && current === revision) { renderEntry(entry); updateBatchStatus(); }
+    }
+    function retryEntry(entry) {
+      // Other models may still be loading: retry only this failed card, using the
+      // original request. Its synchronous state change prevents duplicate clicks.
+      if (disposed || entry.state !== 'error' || !entry.request) return;
+      return translateEntry(entry, revision);
+    }
+    async function translate() {
+      if (busy || disposed) return;
+      if (!configured) { statusKey('connectFirst', true); return; }
+      if (!$('source').value.trim()) { statusKey('enterText', true); $('source').focus(); return; }
+      if ($('source').value.length > 12000) { statusKey('selectionTooLong', true); return; }
+      const current = ++revision, text = $('source').value, target = $('target').value;
+      setBusy(true); resetResult('loading'); statusKey('waiting');
+      for (const entry of entries) entry.request = { text, target };
+      await Promise.all(entries.map(entry => translateEntry(entry, current)));
+    }
+    function closeMenu(focus = false) {
+      $('ui-language-menu').hidden = true;
+      $('ui-language').setAttribute('aria-expanded', 'false');
+      if (focus) $('ui-language').focus();
+    }
+    function setLocale(next) {
+      locale = next; container.lang = next.language;
+      localize();
+      const target = $('target').value || settings.targetLanguage;
+      $('target').replaceChildren();
+      for (const code of Object.keys(languageKeys)) {
+        const option = document.createElement('option'); option.value = code; option.textContent = languageName(code); $('target').append(option);
+      }
+      $('target').value = target;
+      setBusy(busy);
+      for (const button of root.querySelectorAll('[data-language]')) button.setAttribute('aria-pressed', String(button.dataset.language === next.preference));
+      entries.forEach(renderEntry);
+      if (statusState) statusKey(statusState.key, statusState.error);
+      adapter.localized?.(locale);
+    }
+    function applySettings(next, updateTarget = true) {
+      const changed = JSON.stringify(settings) !== JSON.stringify(next);
+      if (changed) cancel();
+      settings = next; configured = Boolean(modelIds().length && next.consent); $('setup').hidden = configured;
+      if (changed || !entries.length) { resetResult(); status(''); }
+      if (updateTarget && !busy) $('target').value = next.targetLanguage;
+    }
+    function input(text, auto = false) {
+      cancel(); editVersion++; $('source').value = text; count(); resetResult(); status('');
+      if (text.length > 12000) statusKey('selectionTooLong', true);
+      else if (auto) translate();
+    }
+    listen($('source'), 'input', () => { editVersion++; count(); resetResult(); status(''); });
+    listen($('target'), 'change', () => { resetResult(); status(''); if (adapter.autoTranslateTarget) translate(); });
+    listen($('clear'), 'click', () => { input(''); $('source').focus(); });
+    listen($('translate'), 'click', translate);
+    listen($('settings'), 'click', () => adapter.openSettings());
+    listen($('setup'), 'click', () => adapter.openSettings());
+    listen(resultsList, 'click', async event => {
+      const button = event.target.closest('.copy-result, .retry-result');
+      if (!button) return;
+      const entry = entries.find(item => item.card.contains(button));
+      if (entry && button.classList.contains('retry-result')) { await retryEntry(entry); return; }
+      if (!entry || entry.state !== 'success') return;
+      const current = revision, attempt = entry.copyAttempt = (entry.copyAttempt || 0) + 1;
+      const active = () => !disposed && current === revision && entries.includes(entry);
+      const valid = () => active() && attempt === entry.copyAttempt;
+      try {
+        await navigator.clipboard.writeText(entry.result.text);
+        if (!valid()) return;
+        clearTimeout(entry.copyTimer); entry.copied = true; renderCopy(entry);
+        entry.copyTimer = setTimeout(() => {
+          if (!active()) return;
+          entry.copied = false; renderCopy(entry);
+        }, 1500);
+      } catch {
+        if (!valid()) return;
+        clearTimeout(entry.copyTimer); entry.copied = false; renderCopy(entry); statusKey('copyFailed', true);
+      }
+    });
+    listen($('ui-language'), 'click', () => {
+      const open = $('ui-language-menu').hidden; $('ui-language-menu').hidden = !open;
+      $('ui-language').setAttribute('aria-expanded', String(open));
+      if (open) $('ui-language-menu').querySelector('[aria-pressed="true"]').focus();
+    });
+    listen($('ui-language-menu'), 'click', async event => {
+      const button = event.target.closest('[data-language]'); if (!button) return;
+      closeMenu(true);
+      try { const next = await adapter.setLanguage(button.dataset.language); if (!disposed && next) setLocale(next); }
+      catch { if (!disposed) statusKey('languageSaveFailed', true); }
+    });
+    listen(root, 'click', event => { if (!event.target.closest?.('.ui-language-control')) closeMenu(); });
+    listen(root, 'keydown', event => {
+      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); translate(); }
+      if (event.key === 'Escape') {
+        if (!$('ui-language-menu').hidden) { event.preventDefault(); event.stopPropagation(); closeMenu(true); }
+        else if (adapter.close) { event.preventDefault(); event.stopPropagation(); adapter.close(); }
+      }
+    });
+    $('close-view').hidden = !adapter.close;
+    if (adapter.close) listen($('close-view'), 'click', () => adapter.close());
+    setLocale(locale); applySettings(settings);
+    return { setLocale, applySettings, input, status, statusKey, cancel, get editVersion() { return editVersion; },
+      dispose() { disposed = true; clearCopyTimers(); cancel(); events.abort(); } };
+  };
+})();

@@ -1,0 +1,46 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { locales, getDictionary, localePath, type Locale } from '../../i18n';
+export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
+const locale = Astro.params.locale as Locale;
+const t = getDictionary(locale);
+const featureIcons = ['cursor', 'layers', 'sliders'] as const;
+---
+<SiteLayout locale={locale}>
+  <section class="hero container">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="status-dot" />{t.hero.eyebrow}</p>
+      <h1>{t.hero.title}<br /><em>{t.hero.accent}</em></h1>
+      <p class="hero-description">{t.hero.description}</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href={localePath(locale, 'guide')}>{t.hero.primary}<Icon name="arrow" size={18} /></a>
+        <a class="button button-text" href="#how-it-works">{t.hero.secondary}<span aria-hidden="true">↗</span></a>
+      </div>
+      <p class="hero-note"><Icon name="check" size={15} />{t.hero.note}</p>
+    </div>
+    <figure class="demo" aria-label={t.demo.label}>
+      <div class="demo-decoration" aria-hidden="true"><span>文</span><span>A</span></div>
+      <div class="translation-card">
+        <div class="card-toolbar"><span class="mini-brand"><img src="/favicon.svg" width="22" height="22" alt="" />{t.brand}</span><span class="window-dots" aria-hidden="true">···</span></div>
+        <div class="source-block"><p class="field-label">{t.demo.source}</p><blockquote lang="en">{t.demo.original.split('\n').map((line, index, lines) => <>{index > 0 && <br />}{index === lines.length - 1 ? <mark>{line}</mark> : line}</>)}</blockquote></div>
+        <div class="translation-divider"><span><Icon name="globe" size={16} /></span><i></i><span class="style-label">{t.demo.style}</span></div>
+        <div class="result-block"><p class="field-label">{t.demo.target}</p><p class="translated-text" lang={locale === 'zh-tw' ? 'zh-TW' : 'zh-CN'}>{t.demo.translation}</p></div>
+        <div class="card-caption"><span class="status-dot" />{t.demo.status}</div>
+      </div>
+      <figcaption><span aria-hidden="true">✳</span>{t.demo.badge}</figcaption>
+    </figure>
+  </section>
+  <section class="facts container">
+    {t.facts.map((fact) => <div class="fact"><strong>{fact.value}<span aria-hidden="true"> / </span></strong><span>{fact.label}</span></div>)}
+  </section>
+  <section class="section container" id="features">
+    <div class="section-heading"><p class="eyebrow">{t.features.eyebrow}</p><h2>{t.features.title}</h2><p>{t.features.description}</p></div>
+    <div class="feature-grid">{t.features.items.map((item, index) => <article class="feature-card"><span class="feature-icon"><Icon name={featureIcons[index]} size={24} /></span><h3>{item.title}</h3><p>{item.text}</p><span class="feature-index" aria-hidden="true">0{index + 1}</span></article>)}</div>
+  </section>
+  <section class="how-section" id="how-it-works"><div class="container how-layout">
+    <div class="section-heading"><p class="eyebrow">{t.how.eyebrow}</p><h2>{t.how.title}</h2><a class="text-link" href={localePath(locale, 'guide')}>{t.nav.guide}<Icon name="arrow" size={18} /></a></div>
+    <ol class="steps" role="list">{t.how.steps.map((step, index) => <li><span class="step-number">0{index + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></li>)}</ol>
+  </div></section>
+  <section class="cta container"><p class="eyebrow">{t.tagline}</p><h2>{t.cta.title}</h2><p>{t.cta.text}</p><a class="button button-primary" href={localePath(locale, 'guide')}>{t.cta.button}<Icon name="arrow" size={18} /></a></section>
+</SiteLayout>

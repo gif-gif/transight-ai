@@ -1,0 +1,41 @@
+---
+import { getDictionary, locales, localeInfo, localePath, type Locale, type Page } from '../i18n';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+interface Props { locale: Locale; page?: Page }
+const { locale, page = '' } = Astro.props;
+const t = getDictionary(locale);
+const title = page === 'guide' ? t.meta.guideTitle : t.meta.title;
+const description = page === 'guide' ? t.meta.guideDescription : t.meta.description;
+const canonical = Astro.site ? new URL(localePath(locale, page), Astro.site) : undefined;
+---
+<!doctype html>
+<html lang={localeInfo[locale].lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#126754" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={t.brand} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={locale === 'en' ? 'en_US' : localeInfo[locale].lang.replace('-', '_')} />
+    {canonical && <>
+      <link rel="canonical" href={canonical} />
+      <meta property="og:url" content={canonical} />
+      {locales.map((item) => <link rel="alternate" hreflang={localeInfo[item].lang} href={new URL(localePath(item, page), Astro.site)} />)}
+      <link rel="alternate" hreflang="x-default" href={new URL(localePath('en', page), Astro.site)} />
+    </>}
+    {!Astro.site && <meta name="robots" content="noindex, nofollow" />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t.nav.skip}</a>
+    <Header locale={locale} page={page} />
+    <main id="main"><slot /></main>
+    <Footer locale={locale} />
+  </body>
+</html>

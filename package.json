@@ -1,0 +1,18 @@
+{
+  "name": "yijian-ai-translator",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "译见 AI — 按需翻译的 Chrome 扩展",
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/check.mjs",
+    "package": "node scripts/package.mjs",
+    "test:browser": "npm run build && node scripts/browser-smoke.mjs",
+    "build": "node scripts/build.mjs",
+    "icons": "node scripts/generate-icons.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

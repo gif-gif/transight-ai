@@ -1,0 +1,33 @@
+Transight AI — Across languages. Closer in meaning.
+
+Translate text while you read, using your own AI service and models. Open Transight AI from the toolbar, click the translation icon after selecting webpage text, or use the right-click menu. Read and compare translations without leaving the page.
+
+YOUR MODELS, YOUR CHOICE
+• Connect a service compatible with the Chat Completions API using your API Base URL, API key, and model IDs.
+• Fetch your provider’s model list when supported, or enter model IDs manually.
+• Select up to 5 models and compare their translations in separate result cards.
+• Copy individual translations and retry failed results independently.
+
+STAY WITH YOUR READING
+• Translate typed, pasted, or selected text.
+• Use a shared on-page panel for selection and right-click translation.
+• Pin the current panel and drag its header to reposition it.
+• With one or two models, the panel adapts to its content. With more models, it shows two result cards and lets you scroll to the rest, subject to available screen space.
+• Choose natural, faithful, or professional translation styles.
+
+LANGUAGE SUPPORT
+• Translate into Simplified Chinese, Traditional Chinese, English, Japanese, Korean, French, German, Spanish, Russian, and Portuguese.
+• Simplified Chinese, Traditional Chinese, and English interface. The interface follows your browser language, falls back to English, and can be switched manually.
+
+GET STARTED
+1. Open Settings and enter your compatible AI service’s Base URL and API key, if required.
+2. Fetch the model list or enter your model IDs, then select your preferred models.
+3. Review the data-sharing notice, save your settings, and test the connection.
+4. Select text on an ordinary webpage and click the translation icon, use the right-click translation command, or paste text into the toolbar popup.
+
+IMPORTANT INFORMATION
+Transight AI does not include an AI subscription, API key, or translation credits. You need access to a compatible AI service. Provider charges may apply, and each selected model sends a separate request. Unauthenticated local services are also supported. Model-list availability depends on your provider.
+
+Text submitted for translation is sent to the AI endpoint you configure. Changing the target language in an active translation panel can send another request. Connection testing sends a short test request, and fetching models contacts your configured service. API keys and settings are stored locally in your browser, not through Chrome sync; local storage is not an encrypted vault. The extension does not include analytics or persistent translation history, and does not automatically scan and upload entire webpages.
+
+All-site access enables selection translation on ordinary HTTP/HTTPS pages and requests to your configured API. Chrome internal pages, the Chrome Web Store, and other protected pages may restrict on-page features. AI translations may be inaccurate; verify important information. Your provider’s data-processing terms apply to submitted content.

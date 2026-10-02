@@ -1,0 +1,440 @@
+{
+  "extensionName": {
+    "message": "译见 AI · 随手翻译"
+  },
+  "extensionDescription": {
+    "message": "用你自己的 AI 服务翻译文本。选中文字，右键翻译，让理解少一点距离。"
+  },
+  "brand": {
+    "message": "译见 AI"
+  },
+  "brandShort": {
+    "message": "译见"
+  },
+  "popupTitle": {
+    "message": "译见 AI · 随手翻译"
+  },
+  "optionsTitle": {
+    "message": "连接 AI 服务 · 译见 AI"
+  },
+  "tagline": {
+    "message": "让理解，少一点距离。读懂另一种语言，也读懂另一种表达。"
+  },
+  "openSettings": {
+    "message": "打开设置"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "setup": {
+    "message": "开始之前，连接你的 AI 服务"
+  },
+  "autoDetect": {
+    "message": "自动检测语言"
+  },
+  "targetLanguage": {
+    "message": "目标语言"
+  },
+  "source": {
+    "message": "原文"
+  },
+  "clear": {
+    "message": "清空"
+  },
+  "sourcePlaceholder": {
+    "message": "在这里输入或粘贴文字，\n让语言不再成为边界。"
+  },
+  "selectionHint": {
+    "message": "也可以选中网页文字后打开插件"
+  },
+  "translate": {
+    "message": "翻译文字"
+  },
+  "translation": {
+    "message": "译文"
+  },
+  "copy": {
+    "message": "复制译文"
+  },
+  "emptyTitle": {
+    "message": "好的翻译，不止于字面。"
+  },
+  "emptyHint": {
+    "message": "你的 AI 译文将在这里出现"
+  },
+  "privacyHint": {
+    "message": "仅在你主动翻译时发送文本"
+  },
+  "closer": {
+    "message": "让理解，少一点距离。"
+  },
+  "yourAI": {
+    "message": "你的 AI，你做主"
+  },
+  "makeYours": {
+    "message": "由你定义"
+  },
+  "connectHeading": {
+    "message": "连接你的翻译伙伴。"
+  },
+  "connectIntro": {
+    "message": "带上自己的 API，让每一种语言都触手可及。"
+  },
+  "service": {
+    "message": "AI 服务"
+  },
+  "compatible": {
+    "message": "支持 OpenAI 兼容的 Chat Completions 接口"
+  },
+  "baseHint": {
+    "message": "填写 API 基础地址，例如 https://你的服务地址/v1；不需要加 /chat/completions。"
+  },
+  "keyOptional": {
+    "message": "本地免认证服务可留空"
+  },
+  "keyPlaceholder": {
+    "message": "输入你的 API Key"
+  },
+  "show": {
+    "message": "显示"
+  },
+  "hide": {
+    "message": "隐藏"
+  },
+  "keyHint": {
+    "message": "仅保存在当前浏览器，不通过 Chrome 同步。不应在共享设备上保存敏感密钥。"
+  },
+  "model": {
+    "message": "模型 ID"
+  },
+  "modelPlaceholder": {
+    "message": "model-a, model-b"
+  },
+  "modelHint": {
+    "message": "可勾选最多 5 个支持 Chat Completions 的模型，也可用逗号分隔手动填写。每个模型独立请求，分别产生 API 调用费用。"
+  },
+  "preferences": {
+    "message": "翻译偏好"
+  },
+  "preferencesHint": {
+    "message": "用你习惯的方式，理解世界"
+  },
+  "defaultTarget": {
+    "message": "默认目标语言"
+  },
+  "style": {
+    "message": "表达风格"
+  },
+  "styleNatural": {
+    "message": "自然流畅"
+  },
+  "styleFaithful": {
+    "message": "忠实原文"
+  },
+  "styleProfessional": {
+    "message": "专业严谨"
+  },
+  "consent": {
+    "message": "我了解：翻译的文本会发送到上述 AI 服务，按该服务的政策处理，并可能产生 API 费用。"
+  },
+  "save": {
+    "message": "保存设置"
+  },
+  "test": {
+    "message": "测试已保存的连接"
+  },
+  "quickStart": {
+    "message": "快速开始"
+  },
+  "guideHeading": {
+    "message": "准备好了，就去阅读。"
+  },
+  "guideConnect": {
+    "message": "连接服务"
+  },
+  "guideConnectHint": {
+    "message": "填写接口地址、密钥和模型，保存设置。"
+  },
+  "guideSelect": {
+    "message": "选中一段文字"
+  },
+  "guideSelectHint": {
+    "message": "在普通网页选中文字，点击选区旁的地球与双向箭头翻译图标。"
+  },
+  "guideRead": {
+    "message": "让理解自然发生"
+  },
+  "guideReadHint": {
+    "message": "译文在网页浮窗中呈现；也可以打开工具栏插件，粘贴翻译。"
+  },
+  "noteHeading": {
+    "message": "少一点打扰，多一点安心。"
+  },
+  "note": {
+    "message": "不自动扫描网页，不保存翻译历史，没有分析追踪。只在你主动使用时工作。"
+  },
+  "versionBrand": {
+    "message": "译见 AI · v0.1.0"
+  },
+  "builtFor": {
+    "message": "为值得阅读的世界而造。"
+  },
+  "footer": {
+    "message": "每一种语言，都值得被理解。"
+  },
+  "loading": {
+    "message": "正在理解与翻译…"
+  },
+  "copied": {
+    "message": "译文已复制。"
+  },
+  "copyFailed": {
+    "message": "复制失败，请手动选择译文复制。"
+  },
+  "connectFirst": {
+    "message": "请先在设置页连接 AI 服务。"
+  },
+  "enterText": {
+    "message": "请输入或选中需要翻译的文本。"
+  },
+  "waiting": {
+    "message": "正在等待 AI 服务响应…"
+  },
+  "backgroundFailed": {
+    "message": "后台服务未响应，请重新打开插件。"
+  },
+  "complete": {
+    "message": "翻译完成"
+  },
+  "fallback": {
+    "message": "此页面不支持浮窗，已将选中文字带入；点击翻译继续。"
+  },
+  "selectionTooLong": {
+    "message": "选中文字超过 12,000 字符，请手动粘贴较短片段。"
+  },
+  "readConfigFailed": {
+    "message": "无法读取配置，请重新打开插件。"
+  },
+  "unsaved": {
+    "message": "有未保存的修改。"
+  },
+  "saved": {
+    "message": "已保存，可以开始翻译了。"
+  },
+  "saveFirst": {
+    "message": "请先保存当前配置，再测试连接。"
+  },
+  "testing": {
+    "message": "正在发送测试文本 “Hello, world!”（可能产生少量费用）…"
+  },
+  "backgroundNoResponse": {
+    "message": "后台服务未响应。"
+  },
+  "connectionSuccess": {
+    "message": "连接成功 · $1"
+  },
+  "readSettingsFailed": {
+    "message": "无法读取设置，请重新打开此页面。"
+  },
+  "invalidBase": {
+    "message": "请输入有效的 API Base URL。"
+  },
+  "httpsRequired": {
+    "message": "API 地址必须使用 HTTPS；仅本机 localhost / 127.0.0.1 允许 HTTP。"
+  },
+  "invalidUrlParts": {
+    "message": "API 地址不能包含账号、密码、查询参数或锚点。"
+  },
+  "invalidModel": {
+    "message": "请至少选择或填写一个模型 ID，每个 ID 不超过 200 个字符。"
+  },
+  "invalidKey": {
+    "message": "API Key 不能包含换行。"
+  },
+  "invalidTarget": {
+    "message": "请选择支持的目标语言。"
+  },
+  "invalidStyle": {
+    "message": "请选择支持的翻译风格。"
+  },
+  "consentRequired": {
+    "message": "请先同意将待翻译文本发送到你配置的 AI 服务。"
+  },
+  "emptyText": {
+    "message": "请先输入或选中需要翻译的文本。"
+  },
+  "textTooLong": {
+    "message": "文本过长，请控制在 $1 字符以内。"
+  },
+  "unsupportedTarget": {
+    "message": "不支持的目标语言。"
+  },
+  "http400": {
+    "message": "请求参数不被服务接受，请检查模型 ID 及 Chat Completions 兼容性。"
+  },
+  "http401": {
+    "message": "认证失败，请检查 API Key。"
+  },
+  "http403": {
+    "message": "服务拒绝访问，请检查 API Key 的权限。"
+  },
+  "http404": {
+    "message": "未找到接口或模型，请检查 Base URL 和模型 ID。"
+  },
+  "http429": {
+    "message": "请求过于频繁或额度不足，请稍后重试或检查服务余额。"
+  },
+  "httpError": {
+    "message": "AI 服务暂时不可用（HTTP $1），请稍后重试。"
+  },
+  "invalidJson": {
+    "message": "服务返回的不是有效 JSON，请确认地址是 API 接口。"
+  },
+  "truncated": {
+    "message": "译文超过服务输出限制，请拆分原文后重试。"
+  },
+  "filtered": {
+    "message": "服务商拦截了这段文本，无法提供译文。"
+  },
+  "missingTranslation": {
+    "message": "服务未返回译文，请检查模型是否支持 Chat Completions。"
+  },
+  "timeout": {
+    "message": "翻译超时（25 秒），请重试或选择响应更快的模型。"
+  },
+  "networkError": {
+    "message": "无法连接 AI 服务，请检查网络、API 地址和访问授权；不支持接口重定向。"
+  },
+  "contextMenu": {
+    "message": "用译见 AI 翻译选中文字"
+  },
+  "permissionMissing": {
+    "message": "无法访问 AI 服务，请在 Chrome 扩展详情中检查网站访问权限。"
+  },
+  "translationFailed": {
+    "message": "翻译失败，请重试。"
+  },
+  "panelLabel": {
+    "message": "译见 AI 翻译"
+  },
+  "closePanel": {
+    "message": "关闭翻译浮窗"
+  },
+  "closeEsc": {
+    "message": "关闭（Esc）"
+  },
+  "panelWarning": {
+    "message": "AI 翻译 · 请核对重要信息"
+  },
+  "panelCopied": {
+    "message": "已复制"
+  },
+  "panelCopyFailed": {
+    "message": "请手动选择复制"
+  },
+  "langZhCN": {
+    "message": "简体中文"
+  },
+  "langZhTW": {
+    "message": "繁體中文"
+  },
+  "langEn": {
+    "message": "英语"
+  },
+  "langJa": {
+    "message": "日语"
+  },
+  "langKo": {
+    "message": "韩语"
+  },
+  "langFr": {
+    "message": "法语"
+  },
+  "langDe": {
+    "message": "德语"
+  },
+  "langEs": {
+    "message": "西班牙语"
+  },
+  "langRu": {
+    "message": "俄语"
+  },
+  "langPt": {
+    "message": "葡萄牙语"
+  },
+  "displayLanguage": {
+    "message": "显示语言"
+  },
+  "followBrowser": {
+    "message": "跟随浏览器"
+  },
+  "languageSaveFailed": {
+    "message": "无法保存显示语言，请重试。"
+  },
+  "fetchModels": {
+    "message": "拉取模型列表"
+  },
+  "fetchingModels": {
+    "message": "正在拉取…"
+  },
+  "modelList": {
+    "message": "可用模型"
+  },
+  "chooseModel": {
+    "message": "选择模型"
+  },
+  "modelsLoaded": {
+    "message": "已拉取 $1 个模型，可勾选多个；保存后生效。"
+  },
+  "modelsEmpty": {
+    "message": "服务未返回可用模型，你仍可手动填写模型 ID。"
+  },
+  "modelsInvalid": {
+    "message": "服务返回的模型列表格式无效，请手动填写模型 ID 或检查 API 地址。"
+  },
+  "modelsUnsupported": {
+    "message": "当前服务地址不支持 GET /models，请手动填写模型 ID。"
+  },
+  "modelsTimeout": {
+    "message": "拉取模型列表超时，请重试或手动填写模型 ID。"
+  },
+  "modelsFailed": {
+    "message": "拉取模型列表失败，请重试或手动填写模型 ID。"
+  },
+  "modelFetchHint": {
+    "message": "使用当前填写的 Base URL 和 API Key 请求 /models，不发送原文，也不会自动保存设置。"
+  },
+  "selectionUnavailable": {
+    "message": "此页面暂不支持划词翻译。"
+  },
+  "selectionTranslate": {
+    "message": "翻译选中文字"
+  },
+  "selectionEditHint": {
+    "message": "可编辑原文，或切换目标语言重新翻译"
+  },
+  "tooManyModels": {
+    "message": "最多选择 $1 个模型。"
+  },
+  "modelNotConfigured": {
+    "message": "此模型不在已保存的模型列表中，请更新设置后重试。"
+  },
+  "partialModelsFailed": {
+    "message": "部分模型翻译失败，其他模型结果仍可正常查看。"
+  },
+  "allModelsFailed": {
+    "message": "所有模型翻译失败，请查看各卡片中的错误信息。"
+  },
+  "retryTranslation": {
+    "message": "请重试"
+  },
+  "pinTranslation": {
+    "message": "固定翻译浮窗"
+  },
+  "unpinTranslation": {
+    "message": "取消固定翻译浮窗"
+  },
+  "dragTranslation": {
+    "message": "拖动顶部移动浮窗；聚焦后也可使用方向键"
+  }
+}

@@ -1,0 +1,42 @@
+---
+import { locales, localeInfo, localePath, type Locale, type Page } from '../i18n';
+import Icon from './Icon.astro';
+interface Props { locale: Locale; page: Page; label: string }
+const { locale, page, label } = Astro.props;
+---
+<details class="language-switcher">
+  <summary aria-label={`${label}: ${localeInfo[locale].label}`}>
+    <Icon name="globe" size={18} />
+    <span lang={localeInfo[locale].lang}>{localeInfo[locale].label}</span>
+    <Icon name="chevron" size={14} />
+  </summary>
+  <nav class="language-options" aria-label={label}>
+    {locales.map((item) => (
+      <a href={localePath(item, page)} lang={localeInfo[item].lang} hreflang={localeInfo[item].lang}
+         aria-current={item === locale ? 'true' : undefined} data-locale={item}>
+        {localeInfo[item].label}{item === locale && <Icon name="check" size={16} />}
+      </a>
+    ))}
+  </nav>
+</details>
+<script>
+  const switcher = document.querySelector<HTMLDetailsElement>('.language-switcher');
+  switcher?.querySelectorAll<HTMLAnchorElement>('a[data-locale]').forEach((link) => {
+    // Keep the equivalent page section when switching languages, even in a new tab.
+    const updateHash = () => { link.hash = window.location.hash; };
+    updateHash();
+    window.addEventListener('hashchange', updateHash);
+    link.addEventListener('click', () => {
+      try { localStorage.setItem('yijian-site-locale', link.dataset.locale!); } catch { /* Storage may be blocked. */ }
+    });
+  });
+  document.addEventListener('click', (event) => {
+    if (switcher && event.target instanceof Node && !switcher.contains(event.target)) switcher.open = false;
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && switcher?.open) {
+      switcher.open = false;
+      switcher.querySelector('summary')?.focus();
+    }
+  });
+</script>

@@ -1,0 +1,160 @@
+{
+  "prepared_date": "2026-10-02",
+  "version": "0.1.0",
+  "archive": "package/transight-0.1.0.zip",
+  "checks": {
+    "manifest_at_zip_root": true,
+    "runtime_only": true,
+    "archive_source_match_except_store_icon": true,
+    "runtime_file_count": 26,
+    "description_limit_132": true,
+    "dimensions_and_image_modes_valid": true
+  },
+  "sources": {
+    "icon": "assets/icon-128.png",
+    "screenshots": [
+      "artifacts/screenshots/{en-US,zh-CN,zh-TW}/popup-multi.png",
+      "artifacts/screenshots/{en-US,zh-CN,zh-TW}/context-multi.png",
+      "artifacts/screenshots/{en-US,zh-CN,zh-TW}/options-multi.png"
+    ],
+    "promotions": "Original typography/layout reusing the existing Transight icon and colors"
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 8109,
+      "sha256": "439a4b758da7dbf1dc2dc8a3de214ebcc608885706a46bf86ee6dc47941d4b5a"
+    },
+    {
+      "path": "icons/icon-128.png",
+      "bytes": 6899,
+      "sha256": "98e2ac38121cd97501c5c8af1f8c5f1a1d2ec3d7417d3d624b75b5209b541bc4",
+      "width": 128,
+      "height": 128,
+      "mode": "RGBA"
+    },
+    {
+      "path": "listing/description.en.txt",
+      "bytes": 3066,
+      "sha256": "1ba93c69964dc523295af202ab7e1fa3e15d84eb3322a7bad1dae1db7e7f1bbf"
+    },
+    {
+      "path": "listing/description.zh-CN.txt",
+      "bytes": 2732,
+      "sha256": "fe4f436ca72175e106b1ba50d49de549699fc5e5b9d5f628ca6ad56563771870"
+    },
+    {
+      "path": "listing/description.zh-TW.txt",
+      "bytes": 2905,
+      "sha256": "705e6f6309802c6b9af81c0df8cb5910c6ae064baadb0bede9a81321ce88d047"
+    },
+    {
+      "path": "listing/metadata.json",
+      "bytes": 1185,
+      "sha256": "b823525bb1fe7d084e0d24cbe789c604bbe0fb9556693de1ec850f973798eed0"
+    },
+    {
+      "path": "package/transight-0.1.0.zip",
+      "bytes": 58330,
+      "sha256": "b7dbb6c031afaa001ae3116d23c95f3844486bfc7874643c992e40ed4512d6b8"
+    },
+    {
+      "path": "promo/marquee-1400x560.png",
+      "bytes": 106441,
+      "sha256": "80b3d4661df8e6ca43167621a2425aed2d09a549fce714ff2b637c6581f00a0d",
+      "width": 1400,
+      "height": 560,
+      "mode": "RGB"
+    },
+    {
+      "path": "promo/small-440x280.png",
+      "bytes": 39743,
+      "sha256": "b1880c79c096dca287eb4178d2ccf2423778df70acc27db61211ab11e813bef3",
+      "width": 440,
+      "height": 280,
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/en/01-multi-model.png",
+      "bytes": 96629,
+      "sha256": "56f4c0441b950f050a5e8f89d13ecd9d1f0d931dd43a8a9f560557b1c8c0fc77",
+      "width": 1280,
+      "height": 800,
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/en/02-on-page.png",
+      "bytes": 104186,
+      "sha256": "6cc39983cece0f744b5bd73820d86632fd44f7c1d9896dde1e8f81e8cb297863",
+      "width": 1280,
+      "height": 800,
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/en/03-settings.png",
+      "bytes": 135562,
+      "sha256": "a2b3cea07d0d022b40dc378bc85ec3689c27d0a945047ad67e8c9216a4df32bf",
+      "width": 1280,
+      "height": 800,
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/zh-CN/01-multi-model.png",
+      "bytes": 115371,
+      "sha256": "58c6ff23854795985c1d6d70a10c3fb2a029e0526e2f78fdaf66a8e03706cdf8",
+      "width": 1280,
+      "height": 800,
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/zh-CN/02-on-page.png",
+      "bytes": 127175,
+      "sha256": "07cee210ac9284f27df4c325a811a6fb17df12875fcd733aa5c83e528c29c548",
+      "width": 1280,
+      "height": 800,
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/zh-CN/03-settings.png",
+      "bytes": 156404,
+      "sha256": "810c1cb62a81df2fa1b80cec4d65fa7d73cce73c3cb2289e86a091f72a180bc6",
+      "width": 1280,
+      "height": 800,
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/zh-TW/01-multi-model.png",
+      "bytes": 120576,
+      "sha256": "79fe559598c2286ac5ddfcacd022552decd086b354661651e15f4597f7ed987e",
+      "width": 1280,
+      "height": 800,
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/zh-TW/02-on-page.png",
+      "bytes": 135745,
+      "sha256": "4e2c66c695853feba7a3163ba45237b53a13eef1dbab20c45afa0cc43620b58b",
+      "width": 1280,
+      "height": 800,
+      "mode": "RGB"
+    },
+    {
+      "path": "screenshots/zh-TW/03-settings.png",
+      "bytes": 160513,
+      "sha256": "a1c1e193440ad77f31f041789f722e851465ef66bc440ab11dbc6b3e5fb36c5c",
+      "width": 1280,
+      "height": 800,
+      "mode": "RGB"
+    },
+    {
+      "path": "tools/prepare-images.py",
+      "bytes": 9058,
+      "sha256": "b216749d9da199ea2839db97939fabbd0d58b1c889c200a98df6c3d6a962032b"
+    },
+    {
+      "path": "tools/validate.py",
+      "bytes": 3862,
+      "sha256": "3bee2867a13d02e9a22a163fc44c6fee283edf5a2dde89ca8415c2b94f3eb057"
+    }
+  ]
+}

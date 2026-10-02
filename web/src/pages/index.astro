@@ -1,0 +1,22 @@
+---
+import { locales, localeInfo, localePath } from '../i18n';
+import '../styles/global.css';
+---
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex, follow" /><link rel="icon" href="/favicon.svg" /><title>Yijian AI — Choose your language</title></head>
+  <body>
+    <main class="language-entry container">
+      <img src="/favicon.svg" width="64" height="64" alt="Yijian AI" />
+      <h1>Choose your language</h1><p>选择语言 · 選擇語言</p>
+      <nav aria-label="Languages">{locales.map((locale) => <a class="button button-primary" href={localePath(locale)} lang={localeInfo[locale].lang}>{localeInfo[locale].label}</a>)}</nav>
+    </main>
+    <script>
+      import { detectLocale, isLocale, localePath } from '../i18n/locales';
+      let saved: string | null = null;
+      try { saved = localStorage.getItem('yijian-site-locale'); } catch { /* Browsing with storage disabled is supported. */ }
+      const locale = isLocale(saved) ? saved : detectLocale(navigator.languages ?? [navigator.language]);
+      window.location.replace(localePath(locale) + window.location.search + window.location.hash);
+    </script>
+  </body>
+</html>

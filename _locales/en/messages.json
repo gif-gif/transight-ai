@@ -1,0 +1,440 @@
+{
+  "extensionName": {
+    "message": "Transight AI"
+  },
+  "extensionDescription": {
+    "message": "Translate text with your own AI service. Select text and right-click to bring understanding closer."
+  },
+  "brand": {
+    "message": "Transight AI"
+  },
+  "brandShort": {
+    "message": "Transight AI"
+  },
+  "popupTitle": {
+    "message": "Transight AI · Translate on Demand"
+  },
+  "optionsTitle": {
+    "message": "Connect an AI Service · Transight AI"
+  },
+  "tagline": {
+    "message": "A little closer. Understand another language, and another way of expressing it."
+  },
+  "openSettings": {
+    "message": "Open settings"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "setup": {
+    "message": "Connect your AI service to get started"
+  },
+  "autoDetect": {
+    "message": "Detect language"
+  },
+  "targetLanguage": {
+    "message": "Target language"
+  },
+  "source": {
+    "message": "Source"
+  },
+  "clear": {
+    "message": "Clear"
+  },
+  "sourcePlaceholder": {
+    "message": "Type or paste text here.\nLet language bring you closer."
+  },
+  "selectionHint": {
+    "message": "Or select text on a page, then open this popup"
+  },
+  "translate": {
+    "message": "Translate"
+  },
+  "translation": {
+    "message": "Translation"
+  },
+  "copy": {
+    "message": "Copy translation"
+  },
+  "emptyTitle": {
+    "message": "Good translation goes beyond words."
+  },
+  "emptyHint": {
+    "message": "Your AI translation will appear here"
+  },
+  "privacyHint": {
+    "message": "Text is sent only when you translate"
+  },
+  "closer": {
+    "message": "A LITTLE CLOSER."
+  },
+  "yourAI": {
+    "message": "Your AI, your choice"
+  },
+  "makeYours": {
+    "message": "MAKE IT YOURS"
+  },
+  "connectHeading": {
+    "message": "Meet your translation partner."
+  },
+  "connectIntro": {
+    "message": "Bring your own API and put every language within reach."
+  },
+  "service": {
+    "message": "AI service"
+  },
+  "compatible": {
+    "message": "Supports OpenAI-compatible Chat Completions APIs"
+  },
+  "baseHint": {
+    "message": "Enter the API base address, e.g. https://your-provider.example/v1, without /chat/completions."
+  },
+  "keyOptional": {
+    "message": "Optional for unauthenticated local services"
+  },
+  "keyPlaceholder": {
+    "message": "Enter your API key"
+  },
+  "show": {
+    "message": "Show"
+  },
+  "hide": {
+    "message": "Hide"
+  },
+  "keyHint": {
+    "message": "Stored only in this browser, without Chrome sync. Do not save sensitive keys on shared devices."
+  },
+  "model": {
+    "message": "Model IDs"
+  },
+  "modelPlaceholder": {
+    "message": "model-a, model-b"
+  },
+  "modelHint": {
+    "message": "Select up to 5 Chat Completions models, or enter IDs separated by commas. Each model sends a separate request and may incur API charges."
+  },
+  "preferences": {
+    "message": "Translation preferences"
+  },
+  "preferencesHint": {
+    "message": "Understand the world in your own way"
+  },
+  "defaultTarget": {
+    "message": "Default target language"
+  },
+  "style": {
+    "message": "Translation style"
+  },
+  "styleNatural": {
+    "message": "Natural and fluent"
+  },
+  "styleFaithful": {
+    "message": "Faithful to the original"
+  },
+  "styleProfessional": {
+    "message": "Professional and precise"
+  },
+  "consent": {
+    "message": "I understand that text will be sent to this AI service, processed under its policies, and may incur API charges."
+  },
+  "save": {
+    "message": "Save settings"
+  },
+  "test": {
+    "message": "Test saved connection"
+  },
+  "quickStart": {
+    "message": "QUICK START"
+  },
+  "guideHeading": {
+    "message": "You’re ready to start reading."
+  },
+  "guideConnect": {
+    "message": "Connect your service"
+  },
+  "guideConnectHint": {
+    "message": "Enter the endpoint, key, and model, then save your settings."
+  },
+  "guideSelect": {
+    "message": "Select some text"
+  },
+  "guideSelectHint": {
+    "message": "Select text on any ordinary webpage, then click the nearby globe-and-arrows translation icon."
+  },
+  "guideRead": {
+    "message": "Let understanding follow"
+  },
+  "guideReadHint": {
+    "message": "Read the translation in the on-page panel, or paste text into the toolbar popup."
+  },
+  "noteHeading": {
+    "message": "Less distraction. More peace of mind."
+  },
+  "note": {
+    "message": "No automatic page scanning, translation history, or analytics. It works only when you ask."
+  },
+  "versionBrand": {
+    "message": "Transight AI · v0.1.0"
+  },
+  "builtFor": {
+    "message": "Built for a world worth reading."
+  },
+  "footer": {
+    "message": "Every language deserves to be understood."
+  },
+  "loading": {
+    "message": "Translating…"
+  },
+  "copied": {
+    "message": "Translation copied."
+  },
+  "copyFailed": {
+    "message": "Copy failed. Please select and copy the translation manually."
+  },
+  "connectFirst": {
+    "message": "Please connect an AI service in Settings first."
+  },
+  "enterText": {
+    "message": "Enter or select text to translate."
+  },
+  "waiting": {
+    "message": "Waiting for the AI service…"
+  },
+  "backgroundFailed": {
+    "message": "The background service did not respond. Reopen the extension."
+  },
+  "complete": {
+    "message": "Translation complete"
+  },
+  "fallback": {
+    "message": "This page does not support the panel. Your selection is ready; click Translate to continue."
+  },
+  "selectionTooLong": {
+    "message": "The selection exceeds 12,000 characters. Please paste a shorter passage."
+  },
+  "readConfigFailed": {
+    "message": "Could not read settings. Reopen the extension."
+  },
+  "unsaved": {
+    "message": "You have unsaved changes."
+  },
+  "saved": {
+    "message": "Saved. You’re ready to translate."
+  },
+  "saveFirst": {
+    "message": "Save the current settings before testing the connection."
+  },
+  "testing": {
+    "message": "Sending “Hello, world!” (a small API charge may apply)…"
+  },
+  "backgroundNoResponse": {
+    "message": "The background service did not respond."
+  },
+  "connectionSuccess": {
+    "message": "Connected · $1"
+  },
+  "readSettingsFailed": {
+    "message": "Could not read settings. Reopen this page."
+  },
+  "invalidBase": {
+    "message": "Enter a valid API Base URL."
+  },
+  "httpsRequired": {
+    "message": "The API URL must use HTTPS. HTTP is allowed only for localhost / 127.0.0.1."
+  },
+  "invalidUrlParts": {
+    "message": "The API URL must not contain credentials, query parameters, or a fragment."
+  },
+  "invalidModel": {
+    "message": "Enter at least one model ID; each ID must be no more than 200 characters."
+  },
+  "invalidKey": {
+    "message": "The API key must not contain line breaks."
+  },
+  "invalidTarget": {
+    "message": "Choose a supported target language."
+  },
+  "invalidStyle": {
+    "message": "Choose a supported translation style."
+  },
+  "consentRequired": {
+    "message": "Please agree to send text to your configured AI service first."
+  },
+  "emptyText": {
+    "message": "Enter or select text to translate first."
+  },
+  "textTooLong": {
+    "message": "Text is too long. Keep it within $1 characters."
+  },
+  "unsupportedTarget": {
+    "message": "Unsupported target language."
+  },
+  "http400": {
+    "message": "The service rejected the request. Check the model ID and Chat Completions compatibility."
+  },
+  "http401": {
+    "message": "Authentication failed. Check your API key."
+  },
+  "http403": {
+    "message": "Access denied. Check your API key permissions."
+  },
+  "http404": {
+    "message": "Endpoint or model not found. Check the Base URL and model ID."
+  },
+  "http429": {
+    "message": "Rate limit or quota exceeded. Try again later or check your balance."
+  },
+  "httpError": {
+    "message": "The AI service is temporarily unavailable (HTTP $1). Try again later."
+  },
+  "invalidJson": {
+    "message": "The service returned invalid JSON. Check that the address is an API endpoint."
+  },
+  "truncated": {
+    "message": "The translation exceeded the service output limit. Split the source text and try again."
+  },
+  "filtered": {
+    "message": "The provider blocked this text and cannot supply a translation."
+  },
+  "missingTranslation": {
+    "message": "No translation was returned. Check whether the model supports Chat Completions."
+  },
+  "timeout": {
+    "message": "Translation timed out (25 seconds). Try again or choose a faster model."
+  },
+  "networkError": {
+    "message": "Could not connect to the AI service. Check your network, API URL, and access permission. Redirects are not supported."
+  },
+  "contextMenu": {
+    "message": "Translate selection with Transight AI"
+  },
+  "permissionMissing": {
+    "message": "Access to the AI service is blocked. Check this extension’s site access permissions in Chrome."
+  },
+  "translationFailed": {
+    "message": "Translation failed. Try again."
+  },
+  "panelLabel": {
+    "message": "Transight AI translation"
+  },
+  "closePanel": {
+    "message": "Close translation panel"
+  },
+  "closeEsc": {
+    "message": "Close (Esc)"
+  },
+  "panelWarning": {
+    "message": "AI translation · Verify important information"
+  },
+  "panelCopied": {
+    "message": "Copied"
+  },
+  "panelCopyFailed": {
+    "message": "Select and copy manually"
+  },
+  "langZhCN": {
+    "message": "Simplified Chinese"
+  },
+  "langZhTW": {
+    "message": "Traditional Chinese"
+  },
+  "langEn": {
+    "message": "English"
+  },
+  "langJa": {
+    "message": "Japanese"
+  },
+  "langKo": {
+    "message": "Korean"
+  },
+  "langFr": {
+    "message": "French"
+  },
+  "langDe": {
+    "message": "German"
+  },
+  "langEs": {
+    "message": "Spanish"
+  },
+  "langRu": {
+    "message": "Russian"
+  },
+  "langPt": {
+    "message": "Portuguese"
+  },
+  "displayLanguage": {
+    "message": "Interface language"
+  },
+  "followBrowser": {
+    "message": "Follow browser"
+  },
+  "languageSaveFailed": {
+    "message": "Could not save the interface language. Please try again."
+  },
+  "fetchModels": {
+    "message": "Fetch models"
+  },
+  "fetchingModels": {
+    "message": "Fetching…"
+  },
+  "modelList": {
+    "message": "Available models"
+  },
+  "chooseModel": {
+    "message": "Select models"
+  },
+  "modelsLoaded": {
+    "message": "Loaded $1 models. Check one or more below; save to apply."
+  },
+  "modelsEmpty": {
+    "message": "No available models were returned. You can still enter a model ID manually."
+  },
+  "modelsInvalid": {
+    "message": "The service returned an invalid model list. Enter a model ID manually or check the API address."
+  },
+  "modelsUnsupported": {
+    "message": "This service does not support GET /models at this address. Enter a model ID manually."
+  },
+  "modelsTimeout": {
+    "message": "Fetching models timed out. Try again or enter a model ID manually."
+  },
+  "modelsFailed": {
+    "message": "Could not fetch models. Try again or enter a model ID manually."
+  },
+  "modelFetchHint": {
+    "message": "Uses the current Base URL and API key to request /models. No source text is sent and settings are not saved."
+  },
+  "selectionUnavailable": {
+    "message": "Selection translation is unavailable on this page."
+  },
+  "selectionTranslate": {
+    "message": "Translate selected text"
+  },
+  "selectionEditHint": {
+    "message": "Edit the source or choose another target language"
+  },
+  "tooManyModels": {
+    "message": "Select no more than $1 models."
+  },
+  "modelNotConfigured": {
+    "message": "This model is not in your saved model selection. Update settings and try again."
+  },
+  "partialModelsFailed": {
+    "message": "Some models failed. Other translations are ready below."
+  },
+  "allModelsFailed": {
+    "message": "All models failed. See each card for details."
+  },
+  "retryTranslation": {
+    "message": "Try again"
+  },
+  "pinTranslation": {
+    "message": "Pin translation window"
+  },
+  "unpinTranslation": {
+    "message": "Unpin translation window"
+  },
+  "dragTranslation": {
+    "message": "Drag to move; use arrow keys when focused"
+  }
+}
