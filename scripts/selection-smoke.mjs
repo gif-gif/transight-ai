@@ -44,6 +44,22 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
     }, text);
     await until(async () => !await ui('.selection-bubble', 'function(){return this.hidden}'));
   }
+  async function assertTailPosition(label) {
+    const expected = await sample.evaluate(() => {
+      const range = getSelection().getRangeAt(0);
+      const boxes = range.getClientRects();
+      const tail = boxes[boxes.length - 1];
+      return { right: tail.right, top: tail.top, bottom: tail.bottom,
+        viewportWidth: document.documentElement.clientWidth, viewportHeight: innerHeight };
+    });
+    const actual = await ui('.selection-bubble', 'function(){const r=this.getBoundingClientRect();return {left:r.left,top:r.top,width:r.width,height:r.height}}');
+    const left = Math.min(Math.max(8, expected.right), Math.max(8, expected.viewportWidth - actual.width - 8));
+    let top = expected.bottom + 8;
+    if (top + actual.height > expected.viewportHeight - 8 && expected.top - actual.height - 8 >= 8) top = expected.top - actual.height - 8;
+    top = Math.min(Math.max(8, top), Math.max(8, expected.viewportHeight - actual.height - 8));
+    assert.ok(Math.abs(actual.left - left) < 1, `${label}: trigger follows selection tail horizontally`);
+    assert.ok(Math.abs(actual.top - top) < 1, `${label}: trigger stays beside the last line and inside viewport`);
+  }
   const before = requests.length;
   // Real pointer selection must still work without waiting for a debounce.
   const textBox = await sample.locator('#sample').evaluate(element => {
@@ -56,9 +72,33 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
   await sample.mouse.move(textBox.right, textBox.y, { steps: 8 });
   await sample.mouse.up();
   await until(async () => !await ui('.selection-bubble', 'function(){return this.hidden}'));
+  await assertTailPosition('real pointer drag');
   assert.equal(requests.length, before);
   await sample.keyboard.press('Escape');
   assert.equal(await ui('.selection-bubble', 'function(){return this.hidden}'), true);
+  // Forward/backward and multiline selections use the text's final line,
+  // rather than the first line or the bounding rectangle of the whole range.
+  for (const scenario of ['single', 'reverse', 'multiline', 'nested', 'viewport-edge']) {
+    await sample.evaluate(scenario => {
+      const paragraph = document.getElementById('sample');
+      paragraph.textContent = 'A little understanding brings us closer.';
+      if (scenario === 'multiline') paragraph.style.width = '125px';
+      if (scenario === 'nested') paragraph.innerHTML = 'A little <strong>understanding</strong> brings us <em>closer.</em>';
+      if (scenario === 'viewport-edge') paragraph.style.cssText = 'position:fixed;right:8px;bottom:0;margin:0;white-space:nowrap';
+      const selection = getSelection(); selection.removeAllRanges();
+      if (scenario === 'reverse') selection.setBaseAndExtent(paragraph.firstChild, paragraph.firstChild.length, paragraph.firstChild, 0);
+      else { const range = document.createRange(); range.selectNodeContents(paragraph); selection.addRange(range); }
+      paragraph.dispatchEvent(new PointerEvent('pointerup', { bubbles:true }));
+    }, scenario);
+    await until(async () => !await ui('.selection-bubble', 'function(){return this.hidden}'));
+    await assertTailPosition(scenario);
+    assert.equal(requests.length, before, 'positioning does not send translation requests');
+    await sample.keyboard.press('Escape');
+    await sample.evaluate(() => {
+      const paragraph = document.getElementById('sample');
+      paragraph.removeAttribute('style'); paragraph.textContent = 'A little understanding brings us closer.';
+    });
+  }
   // The trigger is visible within two animation frames, not after a 160ms timer.
   for (const type of ['pointerup', 'keyup']) {
     const visible = await ui('.selection-bubble', `async function(type){
@@ -186,5 +226,5 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
   await other.close();
   assert.equal(await worker.evaluate(async () => (await chrome.storage.local.get('selectionOrigins')).selectionOrigins), undefined);
   await session.detach();
-  console.log('✓ Selection: automatic all-site injection, shared popup, next-paint pointer/keyboard trigger, compact trigger and 2.5s expiry/reset, no request on selection, editing/target, close/Esc/outside, cancellation, narrow screen, editable exclusion, persisted injection, second hostname, credential isolation');
+  console.log('✓ Selection: automatic all-site injection, shared popup, selection-tail positioning (pointer, reverse, multiline, nested and viewport edges), next-paint pointer/keyboard trigger, compact trigger and 2.5s expiry/reset, no request on selection, editing/target, close/Esc/outside, cancellation, narrow screen, editable exclusion, persisted injection, second hostname, credential isolation');
 }

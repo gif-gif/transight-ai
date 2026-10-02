@@ -190,7 +190,9 @@
       const box = boxes[boxes.length - 1] || selectedRange.getBoundingClientRect();
       if (!box.width || !box.height || box.bottom < 0 || box.top > innerHeight) { bubble.hidden = true; return; }
       selection = { text, rect: { left: box.left, top: box.top, bottom: box.bottom } };
-      bubble.hidden = false; place(bubble, selection.rect);
+      // Anchor the trigger to the final selected line's end, not its start.
+      // Keep the panel anchor unchanged; place() still handles viewport edges.
+      bubble.hidden = false; place(bubble, { ...selection.rect, left: box.right });
       // Each new selection gets its own lifetime; never dismiss the open panel.
       bubbleTimer = setTimeout(hideBubble, 2500);
     });
