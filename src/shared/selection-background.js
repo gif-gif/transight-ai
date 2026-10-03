@@ -1,5 +1,5 @@
 import { UI_LANGUAGES, t, localeSnapshot, setLanguagePreference, onLanguageChanged } from './i18n.js';
-import { getSettings, selectedModels } from './settings.js';
+import { getSettings, selectedModels, setTargetLanguage } from './settings.js';
 
 export function sitePattern(url) {
   try { const parsed = new URL(url); return /^https?:$/.test(parsed.protocol) ? `${parsed.protocol}//${parsed.hostname}/*` : null; }
@@ -71,6 +71,8 @@ export function installSelection(ready, runTranslation, vaultStatus = async () =
         case 'SELECTION_LANGUAGE':
           if (!UI_LANGUAGES.includes(message.value)) throw new Error(t('selectionUnavailable'));
           await setLanguagePreference(message.value); return { locale: localeSnapshot() };
+        case 'SELECTION_TARGET_LANGUAGE':
+          await setTargetLanguage(message.value); return {};
         case 'SELECTION_OPTIONS': await chrome.runtime.openOptionsPage(); return {};
         case 'SELECTION_CANCEL': return {};
         case 'SELECTION_TRANSLATE': {
@@ -86,7 +88,7 @@ export function installSelection(ready, runTranslation, vaultStatus = async () =
   chrome.permissions.onRemoved.addListener(() => serial(reconcile).catch(console.error));
   chrome.runtime.onStartup.addListener(() => serial(reconcile).catch(console.error));
   chrome.runtime.onInstalled.addListener(() => serial(reconcile).catch(console.error));
-  chrome.storage.onChanged.addListener((changes, area) => { if (area === 'local' && changes.settings) ready.then(async () => broadcast('SELECTION_SETTINGS', { settings: publicSettings(await getSettings()) })).catch(() => {}); });
+  chrome.storage.onChanged.addListener((changes, area) => { if (area === 'local' && (changes.settings || changes.targetLanguagePreference)) ready.then(async () => broadcast('SELECTION_SETTINGS', { settings: publicSettings(await getSettings()) })).catch(() => {}); });
   chrome.storage.onChanged.addListener((changes, area) => {
     if ((area === 'session' && changes.credentialSession) || (area === 'local' && (changes.credentialVault || changes.settings))) {
       ready.then(async () => broadcast('SELECTION_VAULT', { vault: await vaultStatus() })).catch(() => {});

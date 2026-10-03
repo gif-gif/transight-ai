@@ -51,6 +51,14 @@ test('global selection access, legacy migration, ordering and permission revocat
   assert.equal(data.selectionOrigins, undefined);
   assert.deepEqual([...registered.keys()], ['unrelated'], 'only obsolete selection registrations are removed');
   grants.add('https://reading.example/*');
+  const beforeTargetChange = structuredClone(data.settings);
+  assert.equal((await message({ type: 'SELECTION_TARGET_LANGUAGE', value: 'ko' })).ok, true);
+  assert.equal(data.targetLanguagePreference, 'ko');
+  assert.deepEqual(data.settings, beforeTargetChange, 'content may only update the target preference');
+  assert.equal((await message({ type: 'SELECTION_TARGET_LANGUAGE', value: '__proto__' })).ok, false);
+  assert.equal(await message({ type: 'SELECTION_TARGET_LANGUAGE', value: 'en' }, extension), null);
+  assert.equal(data.targetLanguagePreference, 'ko');
+
   assert.equal((await message({ type: 'SELECTION_SITE_SET', tabId: 7, enabled: false })).ok, false, 'old site-management messages are rejected');
   assert.equal((await message({ type: 'SELECTION_TRANSLATE', id: 'ok', text: 'hello', targetLanguage: 'ja' })).text, 'translated');
   const pending = message({ type: 'SELECTION_TRANSLATE', id: 'early-close', text: 'must never fetch' });

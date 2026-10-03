@@ -1,6 +1,6 @@
 import { t, localizePage, initI18n, onLanguageChanged } from '../shared/i18n.js';
 import { modelConnection } from '../shared/models.js';
-import { fillLanguages, getSettings, permissionOrigin, validateSettings, parseModelInput, MAX_MODELS } from '../shared/settings.js';
+import { fillLanguages, getSettings, setTargetLanguage, permissionOrigin, validateSettings, parseModelInput, MAX_MODELS } from '../shared/settings.js';
 await initI18n();
 localizePage();
 const $ = id => document.getElementById(id);
@@ -105,7 +105,12 @@ $('toggle-key').addEventListener('click', () => {
   $('toggle-key').textContent = visible ? t('hide') : t('show');
   $('toggle-key').setAttribute('aria-pressed', String(visible));
 });
-$('settings-form').addEventListener('input', () => { if (!busy) statusKey('unsaved'); });
+$('settings-form').addEventListener('input', event => { if (!busy && event.target.id !== 'target-language') statusKey('unsaved'); });
+$('target-language').addEventListener('change', async () => {
+  try {
+    await setTargetLanguage($('target-language').value);
+  } catch { statusKey('targetLanguageSaveFailed', 'error'); }
+});
 $('settings-form').addEventListener('submit', async event => {
   event.preventDefault();
   if (busy || fetching) return;
@@ -219,6 +224,13 @@ $('fetch-models').addEventListener('click', async () => {
 window.addEventListener('pagehide', () => modelController?.abort());
 
 chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && (changes.targetLanguagePreference || changes.settings)) {
+    getSettings().then(settings => {
+      // Sync only the target; preserve unsaved provider, model and credential fields.
+      $('target-language').value = settings.targetLanguage;
+      if (savedSettings) savedSettings.targetLanguage = settings.targetLanguage;
+    }).catch(() => statusKey('readSettingsFailed', 'error'));
+  }
   if ((area === 'local' && (changes.credentialVault || changes.settings)) || (area === 'session' && changes.credentialSession)) {
     refreshVault().catch(() => statusKey('vaultOperationFailed', 'error'));
   }

@@ -514,5 +514,14 @@
   },
   "vaultInlineUnlocked": {
     "message": "解除しました。翻訳を続けられます。"
+  },
+  "cancelTranslation": {
+    "message": "キャンセル"
+  },
+  "translationCancelled": {
+    "message": "翻訳をキャンセルしました。"
+  },
+  "targetLanguageSaveFailed": {
+    "message": "翻訳先の言語を保存できませんでした。もう一度選択してください。"
   }
 }

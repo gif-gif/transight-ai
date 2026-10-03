@@ -55,10 +55,20 @@ export function validateSettings(input) {
 }
 
 export async function getSettings() {
-  const { settings } = await chrome.storage.local.get('settings');
+  const [{ settings }, { targetLanguagePreference }] = await Promise.all([
+    chrome.storage.local.get('settings'), chrome.storage.local.get('targetLanguagePreference')
+  ]);
   const merged = { ...DEFAULT_SETTINGS, ...settings, apiKey: '' };
+  if (typeof targetLanguagePreference === 'string' && Object.hasOwn(LANGUAGES, targetLanguagePreference)) merged.targetLanguage = targetLanguagePreference;
   const models = selectedModels(merged);
   return { ...merged, models, model: models[0] || '' };
+}
+
+// Keep the remembered target separate so changing it never overwrites provider settings
+// or races with encrypted credential saves. Legacy settings remain the fallback.
+export async function setTargetLanguage(value) {
+  if (typeof value !== 'string' || !Object.hasOwn(LANGUAGES, value)) throw new Error(t('invalidTarget'));
+  await chrome.storage.local.set({ targetLanguagePreference: value });
 }
 
 const LANGUAGE_MESSAGES = Object.freeze({

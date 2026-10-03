@@ -47,3 +47,31 @@ test('reading legacy storage exposes a compatible multi-model selection', async 
     assert.deepEqual(settings.models, ['test-model']); assert.equal(settings.model, 'test-model');
   } finally { chrome.storage = original; }
 });
+
+test('target preference persists independently, falls back to legacy settings and validates input', async () => {
+  const { getSettings, setTargetLanguage } = await import('../src/shared/settings.js');
+  const originalStorage = chrome.storage;
+  const data = { settings: { ...config, targetLanguage: 'ja' }, credentialVault: { ciphertext: 'untouched' } };
+  const original = structuredClone(data);
+  chrome.storage = { local: {
+    get: async key => ({ [key]: data[key] }),
+    set: async values => Object.assign(data, values)
+  } };
+  try {
+    assert.equal((await getSettings()).targetLanguage, 'ja');
+    for (const target of ['en', 'ko', 'zh-TW']) {
+      await setTargetLanguage(target);
+      assert.equal((await getSettings()).targetLanguage, target);
+    }
+    assert.deepEqual(data.settings, original.settings);
+    assert.deepEqual(data.credentialVault, original.credentialVault);
+    for (const target of ['invalid', '__proto__', null, ['en']]) await assert.rejects(setTargetLanguage(target));
+    assert.equal(data.targetLanguagePreference, 'zh-TW');
+    data.settings = { ...data.settings, model: 'new-model', targetLanguage: 'fr' };
+    assert.equal((await getSettings()).targetLanguage, 'zh-TW', 'provider saves cannot overwrite remembered target');
+    data.targetLanguagePreference = 'invalid';
+    assert.equal((await getSettings()).targetLanguage, 'fr');
+    delete data.settings;
+    assert.equal((await getSettings()).targetLanguage, DEFAULT_SETTINGS.targetLanguage);
+  } finally { chrome.storage = originalStorage; }
+});

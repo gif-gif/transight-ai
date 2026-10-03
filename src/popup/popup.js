@@ -1,5 +1,5 @@
 import { initI18n, onLanguageChanged, localeSnapshot, setLanguagePreference } from '../shared/i18n.js';
-import { getSettings, MAX_TEXT_LENGTH } from '../shared/settings.js';
+import { getSettings, setTargetLanguage, MAX_TEXT_LENGTH } from '../shared/settings.js';
 const standalone = new URLSearchParams(location.search).has('fallback');
 document.documentElement.classList.toggle('standalone', standalone);
 await initI18n();
@@ -21,6 +21,7 @@ const view = new TransightTranslationView(document, {
     for (const id of requestIds) chrome.runtime.sendMessage({ type: 'CANCEL_TRANSLATE', id }).catch(() => {});
     requestIds.clear();
   },
+  setTargetLanguage,
   openSettings: () => chrome.runtime.openOptionsPage(),
   async setLanguage(value) { await setLanguagePreference(value); return localeSnapshot(); },
   localized: () => { document.documentElement.lang = localeSnapshot().language; }
@@ -28,7 +29,7 @@ const view = new TransightTranslationView(document, {
 onLanguageChanged(() => view.setLocale(localeSnapshot()));
 chrome.storage.onChanged.addListener((changes, area) => {
   if ((area === 'session' && changes.credentialSession) || (area === 'local' && (changes.credentialVault || changes.settings))) getVaultStatus().then(vault => view.setVault(vault)).catch(() => {});
-  if (area === 'local' && changes.settings) getSettings().then(settings => view.applySettings(settings)).catch(() => view.statusKey('readConfigFailed', true));
+  if (area === 'local' && (changes.settings || changes.targetLanguagePreference)) getSettings().then(settings => view.applySettings(settings)).catch(() => view.statusKey('readConfigFailed', true));
 });
 async function init() {
   const version = view.editVersion;

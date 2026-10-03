@@ -228,6 +228,10 @@
         finally { requestIds.delete(id); }
       },
       cancel, close,
+      async setTargetLanguage(value) {
+        const response = await send({ type: 'SELECTION_TARGET_LANGUAGE', value });
+        if (!response?.ok) throw new Error();
+      },
       openSettings: () => send({ type: 'SELECTION_OPTIONS' }).catch(() => {}),
       async setLanguage(value) { const response = await send({ type: 'SELECTION_LANGUAGE', value }); if (!response?.ok) throw new Error(); return response.locale; },
       localized: updatePinLocale,

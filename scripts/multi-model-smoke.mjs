@@ -44,6 +44,35 @@ export async function multiModelSmoke({ context, worker, page, sample, tabId, re
   await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('complete'));
   assert.equal(await page.locator('.result-card[data-state="success"]').count(), 2);
   assert.equal(await page.locator('.result-card[data-model="z-model"] .result').innerText(), '多一分理解，拉近彼此距离。');
+  // User cancellation preserves finished cards and cancels only pending work.
+  let releaseCancelled;
+  modelBehaviors.set('z-model', { wait: new Promise(resolve => { releaseCancelled = resolve; }), text: 'LATE CANCELLED RESPONSE' });
+  await page.locator('#translate').click();
+  await page.locator('.result-card[data-model="mock-translator"][data-state="success"]').waitFor();
+  await page.locator('#cancel-translation:visible').waitFor();
+  const actionBoxes = await page.locator('.translation-actions').evaluate(el => {
+    const a = el.querySelector('#translate').getBoundingClientRect(), b = el.querySelector('#cancel-translation').getBoundingClientRect();
+    return { aligned: Math.abs(a.top - b.top) < 1, beside: b.left >= a.right, fits: el.scrollWidth === el.clientWidth };
+  });
+  assert.deepEqual(actionBoxes, { aligned: true, beside: true, fits: true });
+  assert.equal(await page.locator('#cancel-translation').innerText(), msg('cancelTranslation'));
+  await page.screenshot({ path: path.join(screenshotDir, 'popup-translating-cancel.png'), fullPage: true });
+  await page.locator('.result-card[data-state="success"] .copy-result').click();
+  await page.locator('.copy-result[data-copied="true"]').waitFor();
+  await page.locator('#cancel-translation').click();
+  assert.equal(await page.locator('.copy-result[data-copied="true"]').count(), 0, 'cancel does not strand a copied checkmark');
+  assert.equal(await page.locator('#status').innerText(), msg('translationCancelled'));
+  assert.equal(await page.locator('.result-card[data-state="success"]').count(), 1);
+  assert.equal(await page.locator('.result-card[data-state="cancelled"]').count(), 1);
+  assert.equal(await page.locator('#translate').isEnabled(), true);
+  assert.equal(await page.locator('#target').isEnabled(), true);
+  assert.equal(await page.locator('#cancel-translation').isHidden(), true);
+  await page.screenshot({ path: path.join(screenshotDir, 'popup-cancelled.png'), fullPage: true });
+  releaseCancelled(); modelBehaviors.clear();
+  await page.waitForTimeout(150);
+  assert.equal(await page.locator('.result-card[data-state="cancelled"]').count(), 1, 'late response cannot overwrite cancelled state');
+  await page.locator('#translate').click();
+  await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('complete'));
   await page.evaluate(() => { const write = navigator.clipboard.writeText.bind(navigator.clipboard); navigator.clipboard.writeText = async text => { await write(text); window.__copiedText = text; }; });
   await page.locator('.result-card[data-model="z-model"] .copy-result').click();
   const copyButton = page.locator('.result-card[data-model="z-model"] .copy-result');
@@ -199,6 +228,9 @@ export async function multiModelSmoke({ context, worker, page, sample, tabId, re
   const oldBefore = requests.length;
   await openSelection('Old multi-model batch');
   await until(async () => requests.length === oldBefore + 2);
+  await ui('function(){this.querySelector("#cancel-translation").click()}');
+  assert.equal(await ui('function(){return this.querySelectorAll(".result-card[data-state=cancelled]").length}'), 2);
+  assert.equal(await ui('function(){return this.querySelector("#status").textContent}'), msg('translationCancelled'));
   await ui('function(){this.querySelector("#close-view").click()}');
   modelBehaviors.clear();
   await openSelection('New multi-model batch');

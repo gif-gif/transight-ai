@@ -225,6 +225,67 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
   assert.equal(requests.length, count);
   await other.close();
   assert.equal(await worker.evaluate(async () => (await chrome.storage.local.get('selectionOrigins')).selectionOrigins), undefined);
+  // Every surface shares one persisted target without saving provider settings.
+  const popup = await context.newPage(), options = await context.newPage();
+  const extensionOrigin = `chrome-extension://${new URL(worker.url()).host}`;
+  const storedBefore = await worker.evaluate(() => chrome.storage.local.get(['settings', 'credentialVault', 'targetLanguagePreference']));
+  try {
+    await popup.goto(`${extensionOrigin}/src/popup/popup.html`);
+    await popup.locator('#target option[value="ja"]').waitFor({ state: 'attached' });
+    await options.goto(`${extensionOrigin}/src/options/options.html`);
+    await options.locator('#save:enabled').waitFor();
+    await options.locator('#model').fill('unsaved-model-draft');
+    await options.locator('#api-key').fill('unsaved-key-draft');
+    await select('Remember the target'); await click('.selection-bubble');
+    await until(async () => (await ui('#status')) === msg('complete'));
+    await popup.locator('#target').selectOption('ko');
+    await until(async () => (await ui('#target', 'function(){return this.value}')) === 'ko');
+    await options.waitForFunction(() => document.querySelector('#target-language').value === 'ko');
+    assert.equal(await options.locator('#model').inputValue(), 'unsaved-model-draft');
+    assert.equal(await options.locator('#api-key').inputValue(), 'unsaved-key-draft');
+    await ui('#target', 'function(){this.value="ja";this.dispatchEvent(new Event("change",{bubbles:true}))}');
+    await until(async () => (await ui('#status')) === msg('complete'));
+    await popup.waitForFunction(() => document.querySelector('#target').value === 'ja');
+    await options.waitForFunction(() => document.querySelector('#target-language').value === 'ja');
+    assert.ok(requests.at(-1).body.messages[0].content.includes('(ja)'));
+    await options.locator('#target-language').selectOption('fr');
+    await popup.waitForFunction(() => document.querySelector('#target').value === 'fr');
+    await until(async () => (await ui('#target', 'function(){return this.value}')) === 'fr');
+    await popup.reload();
+    await popup.waitForFunction(() => document.querySelector('#target').value === 'fr');
+    await options.reload();
+    await options.waitForFunction(() => document.querySelector('#target-language').value === 'fr');
+    await click('#close-view'); await select('Reopen with remembered target'); await click('.selection-bubble');
+    await until(async () => (await ui('#status')) === msg('complete'));
+    assert.equal(await ui('#target', 'function(){return this.value}'), 'fr');
+    assert.ok(requests.at(-1).body.messages[0].content.includes('(fr)'));
+    const storedAfter = await worker.evaluate(() => chrome.storage.local.get(['settings', 'credentialVault']));
+    assert.deepEqual(storedAfter.settings, storedBefore.settings);
+    assert.deepEqual(storedAfter.credentialVault, storedBefore.credentialVault);
+    // Explicit cancel leaves the panel open and ignores a delayed server response.
+    setMode('slow');
+    await ui('#source', 'function(){this.value="Cancel this translation";this.dispatchEvent(new Event("input",{bubbles:true}))}');
+    const beforeCancel = requests.length;
+    await click('#translate');
+    await until(async () => requests.length > beforeCancel);
+    assert.equal(await ui('#cancel-translation', 'function(){return this.hidden}'), false);
+    await click('#cancel-translation');
+    assert.equal(await ui('#status'), msg('translationCancelled'));
+    assert.equal(await ui('#cancel-translation', 'function(){return this.hidden}'), true);
+    assert.equal(await ui('#source', 'function(){return this.disabled}'), false);
+    await new Promise(resolve => setTimeout(resolve, 750));
+    assert.equal(await ui('#result-card', 'function(){return this.dataset.state}'), 'cancelled');
+    setMode('success'); await click('#translate');
+    await until(async () => (await ui('#status')) === msg('complete'));
+    await click('#close-view');
+  } finally {
+    setMode('success'); await popup.close(); await options.close();
+    await worker.evaluate(async value => {
+      if (value === undefined) await chrome.storage.local.remove('targetLanguagePreference');
+      else await chrome.storage.local.set({ targetLanguagePreference: value });
+    }, storedBefore.targetLanguagePreference);
+  }
+  console.log('✓ Remembered target: popup/page/options live sync, reopen persistence, draft and credential isolation; explicit floating cancel and retranslate');
   await session.detach();
   console.log('✓ Selection: automatic all-site injection, shared popup, selection-tail positioning (pointer, reverse, multiline, nested and viewport edges), next-paint pointer/keyboard trigger, compact trigger and 2.5s expiry/reset, no request on selection, editing/target, close/Esc/outside, cancellation, narrow screen, editable exclusion, persisted injection, second hostname, credential isolation');
 }

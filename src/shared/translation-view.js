@@ -45,6 +45,7 @@
     function setBusy(value) {
       busy = value;
       for (const id of ['translate', 'source', 'target', 'clear']) $(id).disabled = value;
+      $('cancel-translation').hidden = !value;
       resultsList.setAttribute('aria-busy', String(value));
       $('translate-label').textContent = t(value ? 'loading' : 'translate');
       $('translate-icon').classList.toggle('spinner', value);
@@ -74,6 +75,7 @@
       meta.hidden = state === 'idle';
       if (state === 'idle') { localize(content); return; }
       if (state === 'loading') { content.textContent = t('waiting'); meta.textContent = t('loading'); }
+      else if (state === 'cancelled') { content.textContent = t('translationCancelled'); meta.textContent = t('translationCancelled'); }
       else if (state === 'success') { content.textContent = result.text; meta.textContent = `${languageName(result.targetLanguage)} · ${t('complete')}`; }
       else {
         content.textContent = error;
@@ -97,6 +99,17 @@
       });
     }
     function cancel() { revision++; waitingForUnlock = false; pendingRetry = null; adapter.cancel?.(); setBusy(false); }
+    function cancelTranslation() {
+      if (!busy) return;
+      cancel(); clearCopyTimers();
+      for (const entry of entries) {
+        entry.copied = false;
+        if (entry.state === 'loading') entry.state = 'cancelled';
+        renderEntry(entry);
+      }
+      statusKey('translationCancelled');
+      $('translate').focus();
+    }
     function setVault(next) {
       if (disposed || !next) return;
       const previous = vaultState;
@@ -131,7 +144,8 @@
       setBusy(pending);
       if (pending) { statusKey('waiting'); return; }
       const failures = entries.filter(entry => entry.state === 'error');
-      if (!failures.length) statusKey('complete');
+      if (entries.some(entry => entry.state === 'cancelled')) statusKey('translationCancelled');
+      else if (!failures.length) statusKey('complete');
       else if (entries.length === 1) status(failures[0].error, true);
       else statusKey(failures.length === entries.length ? 'allModelsFailed' : 'partialModelsFailed', true);
     }
@@ -231,9 +245,18 @@
       else if (auto) translate();
     }
     listen($('source'), 'input', () => { cancel(); editVersion++; count(); resetResult(); status(''); });
-    listen($('target'), 'change', () => { cancel(); resetResult(); status(''); if (adapter.autoTranslateTarget) translate(); });
+    listen($('target'), 'change', async () => {
+      cancel(); resetResult(); status('');
+      const current = revision, target = $('target').value;
+      // Update before saving: our own storage broadcast must not cancel the new batch.
+      settings = { ...settings, targetLanguage: target };
+      try { await adapter.setTargetLanguage(target); }
+      catch { if (!disposed && current === revision) statusKey('targetLanguageSaveFailed', true); return; }
+      if (!disposed && current === revision && adapter.autoTranslateTarget) translate();
+    });
     listen($('clear'), 'click', () => { input(''); $('source').focus(); });
     listen($('translate'), 'click', translate);
+    listen($('cancel-translation'), 'click', cancelTranslation);
     listen($('settings'), 'click', () => adapter.openSettings());
     listen($('setup'), 'click', () => adapter.openSettings());
     listen(resultsList, 'click', async event => {
