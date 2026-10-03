@@ -7,7 +7,7 @@ const manifest = JSON.parse(await readFile(new URL('manifest.json', root), 'utf8
 if (manifest.manifest_version !== 3) throw new Error('Expected Manifest V3');
 if (manifest.default_locale !== 'en') throw new Error('Expected English fallback locale');
 const catalogs = {};
-for (const locale of ['en', 'zh_CN', 'zh_TW']) {
+for (const locale of ['en', 'zh_CN', 'zh_TW', 'ja', 'ko']) {
   catalogs[locale] = JSON.parse(await readFile(new URL(`_locales/${locale}/messages.json`, root), 'utf8'));
   if (Object.keys(catalogs[locale]).sort().join() !== Object.keys(catalogs.en).sort().join()) throw new Error(`Locale keys differ: ${locale}`);
   for (const [key, value] of Object.entries(catalogs[locale])) {

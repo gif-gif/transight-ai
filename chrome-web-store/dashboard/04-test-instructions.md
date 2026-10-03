@@ -1,6 +1,6 @@
 # Test instructions / 测试说明
 
-核对日期：2026-10-02 · 版本：0.1.0。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
+核对日期：2026-10-02 · 版本：0.1.1。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
 
 ## 提交前必须补齐
 
@@ -17,7 +17,7 @@
 ## 可粘贴的英文审核说明
 
 ```text
-Transight AI 0.1.0 — reviewer instructions
+Transight AI 0.1.1 — reviewer instructions
 
 Purpose: translate user-provided text using the user's configured AI service. No Transight AI account or extension login is required. AI service access is needed for successful translations.
 
@@ -30,7 +30,7 @@ Service availability / expiry: <REVIEW_ACCESS_WINDOW>
 Quota and rate limits: <REVIEW_QUOTA_DETAILS>
 Support contact: <REVIEW_SUPPORT_CONTACT>
 
-1. Install the submitted extension in Chrome 114 or later. Pin it to the toolbar if desired. Open the toolbar popup and click the Settings gear. The globe button beside Settings lets you choose English for these instructions; Simplified and Traditional Chinese are also available.
+1. Install the submitted extension in Chrome 114 or later. Pin it to the toolbar if desired. Open the toolbar popup and click the Settings gear. The globe button beside Settings lets you choose English for these instructions; Simplified Chinese, Traditional Chinese, Japanese, and Korean are also available.
 
 2. Enter the Base URL and API key above. Do not append /chat/completions. Click Fetch models if the service supports GET /models; otherwise enter the exact model ID manually. Choose one or two of the provided models (maximum supported: five). If using an API key, create and confirm a local unlock password of at least 6 characters before saving. This password is separate from the API key and is not sent to the AI service. Unauthenticated services do not need a password. Review and accept the data-sharing notice, select a target language and translation style, and save the settings. Fetching models itself contacts the configured service with the API key, but does not send source text.
 
@@ -42,7 +42,7 @@ Support contact: <REVIEW_SUPPORT_CONTACT>
 
 6. Select text again and use the right-click command 'Translate selection with Transight AI'. Expect the same shared floating translation layout. Pin the panel, click elsewhere on the page, and verify it stays open. Drag its top header to reposition it. Close it with the close button or Esc.
 
-7. In an active on-page panel, change the target language; this requests new translations. Change interface language via the globe menu to Traditional Chinese, then back to English. The interface language changes without changing the selected translation target or existing translations.
+7. In an active on-page panel, change the target language; this requests new translations. Change interface language via the globe menu to Japanese, Korean, and Traditional Chinese, then back to English. The interface language changes without changing the selected translation target or existing translations. Choose Follow browser to restore automatic detection: ja/ja-JP selects Japanese, ko/ko-KR selects Korean, Chinese variants select the matching script, and unsupported languages fall back to English. The compact unlock form and any open Settings page also follow the chosen interface language.
 
 8. Optional multi-model check: if two valid model IDs were provided, select both and save. Expect independent result cards for the same source text. With three or more configured models, results beyond the first two are scrollable, subject to available viewport space.
 

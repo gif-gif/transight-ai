@@ -81,7 +81,7 @@ try {
   assert.equal(uiLocale.toLowerCase().split('-')[0], requestedLocale.toLowerCase().split('-')[0]);
   const displayLanguage = resolveBrowserLanguage(uiLocale);
   const chinese = displayLanguage.startsWith('zh');
-  const catalog = JSON.parse(await readFile(path.join(root, '_locales', displayLanguage === 'zh-TW' ? 'zh_TW' : chinese ? 'zh_CN' : 'en', 'messages.json')));
+  const catalog = JSON.parse(await readFile(path.join(root, '_locales', displayLanguage.replace('-', '_'), 'messages.json')));
   const msg = (key, value) => catalog[key].message.replace('$1', value ?? '');
   assert.equal(await worker.evaluate(() => chrome.i18n.getMessage('translate')), msg('translate'));
   assert.equal(await worker.evaluate(() => chrome.runtime.getManifest().name), msg('extensionName'));
@@ -238,6 +238,8 @@ try {
   const en = JSON.parse(await readFile(path.join(root, '_locales/en/messages.json'), 'utf8'));
   const tw = JSON.parse(await readFile(path.join(root, '_locales/zh_TW/messages.json'), 'utf8'));
   const zh = JSON.parse(await readFile(path.join(root, '_locales/zh_CN/messages.json'), 'utf8'));
+  const ja = JSON.parse(await readFile(path.join(root, '_locales/ja/messages.json'), 'utf8'));
+  const ko = JSON.parse(await readFile(path.join(root, '_locales/ko/messages.json'), 'utf8'));
   const options = await context.newPage();
   await options.goto(`chrome-extension://${id}/src/options/options.html`);
   await options.waitForFunction(() => document.querySelector('#model').value === 'mock-translator');
@@ -248,7 +250,7 @@ try {
     await page.locator(`[data-language="${language}"]`).click();
     await page.waitForFunction(expected => document.querySelector('#translate-label').textContent === expected, expected);
   };
-  for (const [language, catalog] of [['en', en], ['zh-CN', zh], ['zh-TW', tw]]) {
+  for (const [language, catalog] of [['ja', ja], ['ko', ko], ['en', en], ['zh-CN', zh], ['zh-TW', tw]]) {
     await switchLanguage(language, catalog.translate.message);
     await options.waitForFunction(expected => document.querySelector('#toggle-key').textContent === expected, catalog.hide.message);
     assert.equal(await options.locator('#model').inputValue(), 'unsaved-model');

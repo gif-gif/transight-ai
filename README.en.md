@@ -1,12 +1,12 @@
 # Transight AI · Translate on Demand
 
-[简体中文](README.md) | **English**
+[简体中文](README.md) | **English** | [日本語](README.ja.md) | [한국어](README.ko.md)
 
 An AI translation Chrome extension MVP built with **Manifest V3 and vanilla JavaScript / HTML / CSS**. It has no runtime dependencies or embedded API keys. Run `npm run build` to generate an unpacked extension in `dist/`, ready to load into Chrome. No ZIP is generated.
 
 ## Features
 
-- **Simplified Chinese, Traditional Chinese, and English UI**: follows Chrome’s UI language automatically, with English as the fallback for unsupported languages.
+- **Simplified Chinese, Traditional Chinese, English, Japanese, and Korean UI**: follows Chrome’s UI language automatically, with English as the fallback for unsupported languages.
 
 - **Toolbar translation**: automatically detect the source language, type or paste text, choose a target language, translate, and copy the result.
 - **Selected text**: select text on a webpage before opening the extension to populate the source field. The text is not sent automatically.
@@ -71,9 +71,10 @@ The minimum Chrome version is set to 114 in `manifest.json`. After changing the 
 
 ## Interface Language
 
-By default, the extension follows Chrome’s **UI language**, not the current webpage. Click the **globe icon (Interface language)** next to Settings in the popup to choose **Follow browser / 简体中文 / 繁體中文 / English**. Your selection is saved for future sessions.
+By default, the extension follows Chrome’s **UI language**, not the current webpage. Click the **globe icon (Interface language)** next to Settings in the popup to choose **Follow browser / 简体中文 / 繁體中文 / English / 日本語 / 한국어**. Your selection is saved for future sessions.
 
 - Simplified Chinese browsers (`zh-CN`, `zh-SG`, `zh-Hans`): Simplified Chinese UI.
+- Japanese browsers (`ja`, `ja-JP`): Japanese UI; Korean browsers (`ko`, `ko-KR`): Korean UI.
 - Traditional Chinese browsers (`zh-TW`, `zh-HK`, `zh-MO`, `zh-Hant`): Traditional Chinese UI. Explicit `Hans` / `Hant` script tags take precedence over region tags.
 - Manual changes synchronize the toolbar, settings, context menu and open on-page panels without clearing translations or changing translation targets or model settings.
 - English browsers: English UI.
@@ -227,6 +228,8 @@ Set `TEST_BROWSER_LOCALE` to verify different browser languages:
 ```sh
 TEST_BROWSER_LOCALE=zh-CN npm run test:browser
 TEST_BROWSER_LOCALE=zh-TW npm run test:browser
+TEST_BROWSER_LOCALE=ja-JP npm run test:browser
+TEST_BROWSER_LOCALE=ko-KR npm run test:browser
 TEST_BROWSER_LOCALE=en-US npm run test:browser
 TEST_BROWSER_LOCALE=fr-FR npm run test:browser  # Verify English fallback
 ```
@@ -240,7 +243,7 @@ Manual verification is still needed for installation/update permission warnings 
 ```text
 manifest.json                 Extension manifest
 assets/                       16 / 32 / 48 / 128px icons
-_locales/                     en / zh_CN / zh_TW messages; English fallback
+_locales/                     en / zh_CN / zh_TW / ja / ko messages; English fallback
 src/
   background.js               Message validation, context menu, background translation
   shared/settings.js          Settings, languages, endpoint normalization and validation
@@ -273,7 +276,7 @@ Full-page bilingual translation, streaming output, translation history, account 
 
 ## Chrome Web Store submission
 
-The store ZIP, trilingual listing copy, icon, screenshots, and promotional images are kept separately in [chrome-web-store/](chrome-web-store/README.md), never in `dist/`. Run `npm run package` to rebuild the archive in `chrome-web-store/package/`. `npm run build` still produces only the unpacked developer-mode directory, without a ZIP.
+The store ZIP, five-language listing copy, icon, screenshots, and promotional images are kept separately in [chrome-web-store/](chrome-web-store/README.md), never in `dist/`. Run `npm run package` to rebuild the archive in `chrome-web-store/package/`. `npm run build` still produces only the unpacked developer-mode directory, without a ZIP.
 
 ### Traditional Chinese interface
 
@@ -284,6 +287,10 @@ Inline unlocking in Traditional Chinese:
 <img src="docs/screenshots/zh-TW/selection-locked.png" alt="Compact inline unlock form in the Traditional Chinese translation panel" width="900">
 
 The store submission folder also includes Traditional Chinese listing copy and 4 localized screenshots.
+
+### Japanese and Korean interfaces
+
+See the [Japanese README](README.ja.md) and [Korean README](README.ko.md) for localized setup, security instructions, and actual UI screenshots. The store submission folder now includes five listing languages with 4 screenshots per language.
 
 ## License
 

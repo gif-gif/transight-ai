@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "primary_language": "English (en)",
   "recommended_category": "Productivity",
   "recommended_subcategory_if_available": "Tools",
@@ -22,10 +22,22 @@
       "name": "譯見 AI · 隨手翻譯",
       "short_description": "用你自己的 AI 服務翻譯文字。選取文字，右鍵翻譯，讓理解少一點距離。",
       "description_character_count": 35
+    },
+    "ja": {
+      "name": "Transight AI",
+      "short_description": "自分の AI サービスでテキストを翻訳。選択した文章をその場で翻訳し、言葉の壁を越えて理解を深めましょう。",
+      "description_character_count": 53
+    },
+    "ko": {
+      "name": "Transight AI",
+      "short_description": "직접 선택한 AI 서비스로 텍스트를 번역하세요. 웹페이지에서 글을 선택해 바로 번역하고, 언어의 장벽을 넘어 의미를 이해하세요.",
+      "description_character_count": 71
     }
   },
   "additional_listing_languages": [
     "简体中文 (zh-CN)",
-    "繁體中文 (zh-TW)"
+    "繁體中文 (zh-TW)",
+    "日本語 (ja)",
+    "한국어 (ko)"
   ]
 }

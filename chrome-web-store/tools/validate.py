@@ -12,13 +12,14 @@ OUT=Path(__file__).resolve().parents[1]
 ROOT=OUT.parent
 manifest=json.loads((ROOT/'manifest.json').read_text())
 metadata=json.loads((OUT/'listing/metadata.json').read_text())
+assert set(metadata['localizations']) == {p.name for p in (ROOT/'_locales').iterdir() if p.is_dir()}, 'Listing locales must match packaged locales'
 assert metadata['version']==manifest['version'], 'Update listing metadata after a version change'
 for locale, record in metadata['localizations'].items():
     strings=json.loads((ROOT/f'_locales/{locale}/messages.json').read_text())
     assert record['name']==strings['extensionName']['message']
     assert record['short_description']==strings['extensionDescription']['message']
     assert len(record['short_description'])==record['description_character_count']<=132
-for filename in ['description.en.txt','description.zh-CN.txt','description.zh-TW.txt']:
+for filename in ['description.en.txt','description.zh-CN.txt','description.zh-TW.txt','description.ja.txt','description.ko.txt']:
     assert (OUT/'listing'/filename).stat().st_size>0
 dashboard_docs=['01-store-listing.md','02-privacy-practices.md','03-distribution.md','04-test-instructions.md']
 for filename in dashboard_docs:
@@ -27,7 +28,7 @@ privacy=(OUT/'dashboard/02-privacy-practices.md').read_text()
 for permission in manifest['permissions'] + manifest['host_permissions']:
     assert permission in privacy, f'Missing permission explanation: {permission}'
 expected={'icons/icon-128.png':(128,128),'promo/small-440x280.png':(440,280),'promo/marquee-1400x560.png':(1400,560)}
-for locale in ['en','zh-CN','zh-TW']:
+for locale in ['en','zh-CN','zh-TW','ja','ko']:
     screenshots=sorted((OUT/'screenshots'/locale).glob('*.png'))
     assert 1<=len(screenshots)<=5
     expected.update({str(p.relative_to(OUT)):(1280,800) for p in screenshots})
@@ -74,9 +75,9 @@ report={'prepared_date':date.today().isoformat(),'version':manifest['version'],'
         'validation_mode':'assets-only' if args.assets_only else 'release',
         'archive_status':archive_status,'ready_to_upload_archive':source_matches,
         'archive_differences':{'missing':missing,'extra':extra,'changed':changed},
-        'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/context-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/options-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW}/selection-locked.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
+        'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/context-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/options-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-locked.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
 (OUT/'inventory.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-screenshot_count = sum(len(list((OUT/'screenshots'/locale).glob('*.png'))) for locale in ['en','zh-CN','zh-TW'])
+screenshot_count = sum(len(list((OUT/'screenshots'/locale).glob('*.png'))) for locale in ['en','zh-CN','zh-TW','ja','ko'])
 print(f'PASS: localized descriptions, padded icon, {screenshot_count} screenshots, 2 promotional tiles, 4 dashboard guides and permission explanations.')
 print('Archive:', archive_status)
 print('Inventory:',OUT/'inventory.json')

@@ -1,0 +1,518 @@
+{
+  "extensionName": {
+    "message": "Transight AI"
+  },
+  "extensionDescription": {
+    "message": "직접 선택한 AI 서비스로 텍스트를 번역하세요. 웹페이지에서 글을 선택해 바로 번역하고, 언어의 장벽을 넘어 의미를 이해하세요."
+  },
+  "brand": {
+    "message": "Transight AI"
+  },
+  "brandShort": {
+    "message": "Transight AI"
+  },
+  "popupTitle": {
+    "message": "Transight AI · 필요할 때 바로 번역"
+  },
+  "optionsTitle": {
+    "message": "AI 서비스 연결 · Transight AI"
+  },
+  "tagline": {
+    "message": "이해를 더 가까이. 다른 언어와 그 안의 표현까지 읽어 보세요."
+  },
+  "openSettings": {
+    "message": "설정 열기"
+  },
+  "settings": {
+    "message": "설정"
+  },
+  "setup": {
+    "message": "먼저 AI 서비스를 연결해 주세요"
+  },
+  "autoDetect": {
+    "message": "언어 자동 감지"
+  },
+  "targetLanguage": {
+    "message": "번역할 언어"
+  },
+  "source": {
+    "message": "원문"
+  },
+  "clear": {
+    "message": "지우기"
+  },
+  "sourcePlaceholder": {
+    "message": "텍스트를 입력하거나 붙여 넣으세요.\n언어를 통해 더 가까워지세요."
+  },
+  "selectionHint": {
+    "message": "페이지에서 글을 선택한 다음 이 팝업을 열어도 됩니다"
+  },
+  "translate": {
+    "message": "번역"
+  },
+  "translation": {
+    "message": "번역문"
+  },
+  "copy": {
+    "message": "번역문 복사"
+  },
+  "emptyTitle": {
+    "message": "좋은 번역은 단어 너머의 의미를 전합니다."
+  },
+  "emptyHint": {
+    "message": "AI 번역 결과가 여기에 표시됩니다"
+  },
+  "privacyHint": {
+    "message": "번역을 실행할 때만 텍스트를 전송합니다"
+  },
+  "closer": {
+    "message": "이해를 더 가까이."
+  },
+  "yourAI": {
+    "message": "나의 AI, 나의 선택"
+  },
+  "makeYours": {
+    "message": "나에게 맞게 설정"
+  },
+  "connectHeading": {
+    "message": "나만의 번역 파트너를 만나세요."
+  },
+  "connectIntro": {
+    "message": "사용 중인 API를 연결하고 다양한 언어를 가까이 만나 보세요."
+  },
+  "service": {
+    "message": "AI 서비스"
+  },
+  "compatible": {
+    "message": "OpenAI 호환 Chat Completions API 지원"
+  },
+  "baseHint": {
+    "message": "API 기본 주소(예: https://your-provider.example/v1)를 입력하세요. /chat/completions는 제외하세요."
+  },
+  "keyOptional": {
+    "message": "인증이 필요 없는 로컬 서비스에서는 생략 가능"
+  },
+  "keyPlaceholder": {
+    "message": "API 키 입력"
+  },
+  "show": {
+    "message": "표시"
+  },
+  "hide": {
+    "message": "숨기기"
+  },
+  "keyHint": {
+    "message": "잠금 해제 비밀번호로 암호화하며 Chrome 동기화는 하지 않습니다. 저장된 키를 유지하려면 비워 두세요. 비밀번호는 AI 서비스로 전송되지 않습니다."
+  },
+  "model": {
+    "message": "모델 ID"
+  },
+  "modelPlaceholder": {
+    "message": "model-a, model-b"
+  },
+  "modelHint": {
+    "message": "Chat Completions 모델을 최대 5개 선택하거나 ID를 쉼표로 구분해 입력하세요. 모델마다 별도의 요청을 보내므로 API 요금이 발생할 수 있습니다."
+  },
+  "preferences": {
+    "message": "번역 환경설정"
+  },
+  "preferencesHint": {
+    "message": "나만의 방식으로 세상을 이해하세요"
+  },
+  "defaultTarget": {
+    "message": "기본 번역 언어"
+  },
+  "style": {
+    "message": "번역 스타일"
+  },
+  "styleNatural": {
+    "message": "자연스럽고 유창하게"
+  },
+  "styleFaithful": {
+    "message": "원문에 충실하게"
+  },
+  "styleProfessional": {
+    "message": "전문적이고 정확하게"
+  },
+  "consent": {
+    "message": "텍스트가 이 AI 서비스로 전송되어 해당 서비스의 정책에 따라 처리되며, API 요금이 발생할 수 있음을 이해합니다."
+  },
+  "save": {
+    "message": "설정 저장"
+  },
+  "test": {
+    "message": "저장된 연결 테스트"
+  },
+  "quickStart": {
+    "message": "빠른 시작"
+  },
+  "guideHeading": {
+    "message": "이제 읽기 시작하세요."
+  },
+  "guideConnect": {
+    "message": "서비스 연결"
+  },
+  "guideConnectHint": {
+    "message": "주소, 키, 모델을 입력한 다음 설정을 저장하세요."
+  },
+  "guideSelect": {
+    "message": "텍스트 선택"
+  },
+  "guideSelectHint": {
+    "message": "일반 웹페이지에서 글을 선택한 다음 가까이에 표시되는 지구와 화살표 모양의 번역 아이콘을 클릭하세요."
+  },
+  "guideRead": {
+    "message": "그 자리에서 이해하기"
+  },
+  "guideReadHint": {
+    "message": "페이지 내 패널에서 번역문을 읽거나 도구 모음 팝업에 텍스트를 붙여 넣으세요."
+  },
+  "noteHeading": {
+    "message": "방해는 줄이고, 안심은 더하고."
+  },
+  "note": {
+    "message": "페이지 자동 스캔, 번역 기록, 사용 분석이 없습니다. 사용자가 요청할 때만 작동합니다."
+  },
+  "versionBrand": {
+    "message": "Transight AI · v0.1.1"
+  },
+  "builtFor": {
+    "message": "읽고 싶은 세상을 더 가까이."
+  },
+  "footer": {
+    "message": "모든 언어는 이해받을 가치가 있습니다."
+  },
+  "loading": {
+    "message": "번역 중…"
+  },
+  "copied": {
+    "message": "번역문을 복사했습니다."
+  },
+  "copyFailed": {
+    "message": "복사하지 못했습니다. 번역문을 선택해 직접 복사해 주세요."
+  },
+  "connectFirst": {
+    "message": "먼저 설정에서 AI 서비스를 연결해 주세요."
+  },
+  "enterText": {
+    "message": "번역할 텍스트를 입력하거나 선택하세요."
+  },
+  "waiting": {
+    "message": "AI 서비스의 응답을 기다리는 중…"
+  },
+  "backgroundFailed": {
+    "message": "백그라운드 서비스가 응답하지 않습니다. 확장 프로그램을 다시 여세요."
+  },
+  "complete": {
+    "message": "번역 완료"
+  },
+  "fallback": {
+    "message": "이 페이지에서는 패널을 사용할 수 없습니다. 선택한 텍스트가 준비되었습니다. 번역을 클릭해 계속하세요."
+  },
+  "selectionTooLong": {
+    "message": "선택한 텍스트가 12,000자를 초과합니다. 더 짧은 글을 붙여 넣으세요."
+  },
+  "readConfigFailed": {
+    "message": "설정을 읽지 못했습니다. 확장 프로그램을 다시 여세요."
+  },
+  "unsaved": {
+    "message": "저장하지 않은 변경 사항이 있습니다."
+  },
+  "saved": {
+    "message": "저장했습니다. 이제 번역할 수 있습니다."
+  },
+  "saveFirst": {
+    "message": "연결 테스트 전에 현재 설정을 저장하세요."
+  },
+  "testing": {
+    "message": "“Hello, world!” 전송 중(소액의 API 요금이 발생할 수 있음)…"
+  },
+  "backgroundNoResponse": {
+    "message": "백그라운드 서비스가 응답하지 않습니다."
+  },
+  "connectionSuccess": {
+    "message": "연결 성공 · $1"
+  },
+  "readSettingsFailed": {
+    "message": "설정을 읽지 못했습니다. 이 페이지를 다시 여세요."
+  },
+  "invalidBase": {
+    "message": "올바른 API 기본 URL을 입력하세요."
+  },
+  "httpsRequired": {
+    "message": "API URL은 HTTPS를 사용해야 합니다. HTTP는 localhost / 127.0.0.1에서만 허용됩니다."
+  },
+  "invalidUrlParts": {
+    "message": "API URL에는 인증 정보, 쿼리 매개변수, 프래그먼트를 포함할 수 없습니다."
+  },
+  "invalidModel": {
+    "message": "모델 ID를 하나 이상 입력하세요. 각 ID는 200자 이하여야 합니다."
+  },
+  "invalidKey": {
+    "message": "API 키에는 줄바꿈을 포함할 수 없습니다."
+  },
+  "invalidTarget": {
+    "message": "지원되는 번역 언어를 선택하세요."
+  },
+  "invalidStyle": {
+    "message": "지원되는 번역 스타일을 선택하세요."
+  },
+  "consentRequired": {
+    "message": "먼저 설정한 AI 서비스로 텍스트를 전송하는 데 동의해 주세요."
+  },
+  "emptyText": {
+    "message": "먼저 번역할 텍스트를 입력하거나 선택하세요."
+  },
+  "textTooLong": {
+    "message": "텍스트가 너무 깁니다. $1자 이내로 입력하세요."
+  },
+  "unsupportedTarget": {
+    "message": "지원되지 않는 번역 언어입니다."
+  },
+  "http400": {
+    "message": "서비스가 요청을 거부했습니다. 모델 ID와 Chat Completions 호환 여부를 확인하세요."
+  },
+  "http401": {
+    "message": "인증에 실패했습니다. API 키를 확인하세요."
+  },
+  "http403": {
+    "message": "접근이 거부되었습니다. API 키의 권한을 확인하세요."
+  },
+  "http404": {
+    "message": "주소 또는 모델을 찾을 수 없습니다. 기본 URL과 모델 ID를 확인하세요."
+  },
+  "http429": {
+    "message": "요청 속도 또는 사용 한도를 초과했습니다. 잠시 후 다시 시도하거나 잔액을 확인하세요."
+  },
+  "httpError": {
+    "message": "AI 서비스를 일시적으로 사용할 수 없습니다(HTTP $1). 나중에 다시 시도하세요."
+  },
+  "invalidJson": {
+    "message": "서비스가 잘못된 JSON을 반환했습니다. 주소가 API 엔드포인트인지 확인하세요."
+  },
+  "truncated": {
+    "message": "번역문이 서비스의 출력 한도를 초과했습니다. 원문을 나누어 다시 시도하세요."
+  },
+  "filtered": {
+    "message": "제공업체가 이 텍스트를 차단하여 번역할 수 없습니다."
+  },
+  "missingTranslation": {
+    "message": "번역문이 반환되지 않았습니다. 모델이 Chat Completions를 지원하는지 확인하세요."
+  },
+  "timeout": {
+    "message": "번역 시간이 초과되었습니다(25초). 다시 시도하거나 더 빠른 모델을 선택하세요."
+  },
+  "networkError": {
+    "message": "AI 서비스에 연결하지 못했습니다. 네트워크, API URL, 접근 권한을 확인하세요. 리디렉션은 지원하지 않습니다."
+  },
+  "contextMenu": {
+    "message": "선택한 텍스트를 Transight AI로 번역"
+  },
+  "permissionMissing": {
+    "message": "AI 서비스 접근이 차단되었습니다. Chrome에서 이 확장 프로그램의 사이트 접근 권한을 확인하세요."
+  },
+  "translationFailed": {
+    "message": "번역에 실패했습니다. 다시 시도하세요."
+  },
+  "panelLabel": {
+    "message": "Transight AI 번역"
+  },
+  "closePanel": {
+    "message": "번역 패널 닫기"
+  },
+  "closeEsc": {
+    "message": "닫기(Esc)"
+  },
+  "panelWarning": {
+    "message": "AI 번역 · 중요한 정보는 확인하세요"
+  },
+  "panelCopied": {
+    "message": "복사됨"
+  },
+  "panelCopyFailed": {
+    "message": "선택하여 직접 복사하세요"
+  },
+  "langZhCN": {
+    "message": "중국어(간체)"
+  },
+  "langZhTW": {
+    "message": "중국어(번체)"
+  },
+  "langEn": {
+    "message": "영어"
+  },
+  "langJa": {
+    "message": "일본어"
+  },
+  "langKo": {
+    "message": "한국어"
+  },
+  "langFr": {
+    "message": "프랑스어"
+  },
+  "langDe": {
+    "message": "독일어"
+  },
+  "langEs": {
+    "message": "스페인어"
+  },
+  "langRu": {
+    "message": "러시아어"
+  },
+  "langPt": {
+    "message": "포르투갈어"
+  },
+  "displayLanguage": {
+    "message": "표시 언어"
+  },
+  "followBrowser": {
+    "message": "브라우저 언어 따르기"
+  },
+  "languageSaveFailed": {
+    "message": "표시 언어를 저장하지 못했습니다. 다시 시도하세요."
+  },
+  "fetchModels": {
+    "message": "모델 가져오기"
+  },
+  "fetchingModels": {
+    "message": "가져오는 중…"
+  },
+  "modelList": {
+    "message": "사용 가능한 모델"
+  },
+  "chooseModel": {
+    "message": "모델 선택"
+  },
+  "modelsLoaded": {
+    "message": "모델 $1개를 불러왔습니다. 아래에서 하나 이상 선택하고 저장해 적용하세요."
+  },
+  "modelsEmpty": {
+    "message": "사용 가능한 모델이 반환되지 않았습니다. 모델 ID를 직접 입력할 수 있습니다."
+  },
+  "modelsInvalid": {
+    "message": "잘못된 모델 목록이 반환되었습니다. 모델 ID를 직접 입력하거나 API 주소를 확인하세요."
+  },
+  "modelsUnsupported": {
+    "message": "이 주소에서는 GET /models를 지원하지 않습니다. 모델 ID를 직접 입력하세요."
+  },
+  "modelsTimeout": {
+    "message": "모델 목록 요청 시간이 초과되었습니다. 다시 시도하거나 모델 ID를 직접 입력하세요."
+  },
+  "modelsFailed": {
+    "message": "모델을 가져오지 못했습니다. 다시 시도하거나 모델 ID를 직접 입력하세요."
+  },
+  "modelFetchHint": {
+    "message": "현재 기본 URL과 입력한 키(또는 잠금 해제된 저장 키)로 백그라운드에서 /models를 요청합니다. 원문을 전송하거나 설정을 저장하지 않습니다."
+  },
+  "selectionUnavailable": {
+    "message": "이 페이지에서는 선택한 텍스트를 번역할 수 없습니다."
+  },
+  "selectionTranslate": {
+    "message": "선택한 텍스트 번역"
+  },
+  "selectionEditHint": {
+    "message": "원문을 수정하거나 다른 번역 언어를 선택하세요"
+  },
+  "tooManyModels": {
+    "message": "모델은 최대 $1개까지 선택할 수 있습니다."
+  },
+  "modelNotConfigured": {
+    "message": "이 모델은 저장된 선택 목록에 없습니다. 설정을 변경하고 다시 시도하세요."
+  },
+  "partialModelsFailed": {
+    "message": "일부 모델에서 번역에 실패했습니다. 다른 번역 결과는 아래에 표시됩니다."
+  },
+  "allModelsFailed": {
+    "message": "모든 모델에서 번역에 실패했습니다. 각 카드의 자세한 내용을 확인하세요."
+  },
+  "retryTranslation": {
+    "message": "다시 시도"
+  },
+  "pinTranslation": {
+    "message": "번역 창 고정"
+  },
+  "unpinTranslation": {
+    "message": "번역 창 고정 해제"
+  },
+  "dragTranslation": {
+    "message": "드래그하여 이동하세요. 포커스가 있을 때는 방향키로 이동할 수 있습니다"
+  },
+  "vaultTitle": {
+    "message": "API 키 보호"
+  },
+  "vaultHint": {
+    "message": "저장된 키는 로컬 비밀번호로 암호화됩니다. Chrome을 다시 시작한 후 한 번 잠금을 해제하세요. 잊어버린 비밀번호는 복구할 수 없습니다."
+  },
+  "vaultUnlockPassword": {
+    "message": "잠금 해제 비밀번호"
+  },
+  "vaultUnlock": {
+    "message": "잠금 해제"
+  },
+  "vaultNewPassword": {
+    "message": "새 잠금 해제 비밀번호"
+  },
+  "vaultConfirmPassword": {
+    "message": "비밀번호 확인"
+  },
+  "vaultPasswordHint": {
+    "message": "6자 이상이어야 합니다. 새 키를 저장할 때 필요하며, 기존 비밀번호를 유지하려면 두 칸을 비워 두세요. API 키가 아닌 별도의 비밀번호를 사용하세요."
+  },
+  "vaultLock": {
+    "message": "지금 잠그기"
+  },
+  "vaultReset": {
+    "message": "비밀번호를 잊었나요? / 저장된 키 삭제"
+  },
+  "vaultResetConfirm": {
+    "message": "저장된 API 키와 잠금 해제 세션을 삭제할까요? 이 작업은 되돌릴 수 없습니다. 다른 설정은 유지됩니다. 인증이 필요한 서비스를 사용하려면 API 키를 다시 입력하세요."
+  },
+  "vaultEmpty": {
+    "message": "저장된 키가 없습니다. API 키 저장 시 비밀번호가 필요합니다. 인증 없는 서비스는 비밀번호가 필요 없습니다."
+  },
+  "vaultLocked": {
+    "message": "잠김 — 번역, 모델 가져오기, 저장된 키 편집 전에 잠금을 해제하세요."
+  },
+  "vaultUnlocked": {
+    "message": "현재 브라우저 세션에서 잠금이 해제되었습니다. 저장된 키는 이 양식에 표시되지 않습니다."
+  },
+  "vaultMigration": {
+    "message": "이전에 저장된 평문 키를 발견했습니다. 비밀번호를 설정하고 저장하여 암호화하세요. 암호화가 성공할 때까지 데이터 손실을 막기 위해 기존 키를 유지하며, 번역과 모델 요청은 차단됩니다."
+  },
+  "vaultLoading": {
+    "message": "키 보호 상태를 불러오는 중…"
+  },
+  "vaultPasswordLength": {
+    "message": "잠금 해제 비밀번호는 6~1024자로 입력하세요."
+  },
+  "vaultPasswordMismatch": {
+    "message": "비밀번호가 일치하지 않습니다."
+  },
+  "vaultUnlockFailed": {
+    "message": "비밀번호가 틀렸거나 키 데이터가 손상되었습니다. 다시 시도하거나 초기화 후 API 키를 다시 입력하세요."
+  },
+  "vaultLockedError": {
+    "message": "API 키가 잠겨 있습니다. 잠금 해제 비밀번호를 입력해 계속하세요."
+  },
+  "vaultMissing": {
+    "message": "암호화된 API 키가 없습니다. 비밀번호를 설정하기 전에 API 키를 입력하세요."
+  },
+  "vaultMigrationRequired": {
+    "message": "번역하기 전에 설정을 열고 비밀번호를 설정하여 이전 API 키를 암호화하세요."
+  },
+  "vaultEndpointChanged": {
+    "message": "API 주소가 변경되었습니다. 새 주소의 키를 입력하거나, 인증 없는 서비스라면 저장된 키를 삭제하세요."
+  },
+  "vaultOperationFailed": {
+    "message": "키 보호 설정을 변경하지 못했습니다. 다시 시도하세요."
+  },
+  "vaultInlineHint": {
+    "message": "여기서 잠금을 해제하고 번역을 계속하세요. 비밀번호는 확장 프로그램 안에서만 처리됩니다."
+  },
+  "vaultUnlocking": {
+    "message": "잠금 해제 중…"
+  },
+  "vaultInlineUnlocked": {
+    "message": "잠금이 해제되었습니다. 번역을 계속할 수 있습니다."
+  }
+}

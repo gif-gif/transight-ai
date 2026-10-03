@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-const catalogs = Object.fromEntries(['en', 'zh_CN', 'zh_TW'].map(locale => [locale,
+const catalogs = Object.fromEntries(['en', 'zh_CN', 'zh_TW', 'ja', 'ko'].map(locale => [locale,
   JSON.parse(readFileSync(new URL(`../_locales/${locale}/messages.json`, import.meta.url), 'utf8'))
 ]));
 // Model Chrome's exact locale -> base locale -> default locale lookup in unit tests.

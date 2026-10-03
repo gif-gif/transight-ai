@@ -29,6 +29,14 @@ test('UI preference persists independently, reloads, falls back, and syncs acros
     assert.equal(first.t('translate'), catalogs.en.translate.message);
     let changes = 0;
     first.onLanguageChanged(() => changes++);
+    for (const language of ['ja', 'ko']) {
+      await first.setLanguagePreference(language);
+      assert.equal(store.uiLanguage, language);
+      assert.equal(first.t('translate'), catalogs[language].translate.message);
+      assert.equal(first.localeSnapshot().language, language);
+      assert.deepEqual(store.settings, settings);
+    }
+    changes = 0;
     await first.setLanguagePreference('zh-CN');
     assert.equal(store.uiLanguage, 'zh-CN');
     assert.equal(first.t('translate'), catalogs.zh_CN.translate.message);

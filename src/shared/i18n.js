@@ -3,10 +3,11 @@ let preference = 'auto';
 let catalogs;
 let ready;
 const listeners = new Set();
-export const UI_LANGUAGES = Object.freeze(['auto', 'en', 'zh-CN', 'zh-TW']);
+export const UI_LANGUAGES = Object.freeze(['auto', 'en', 'zh-CN', 'zh-TW', 'ja', 'ko']);
 export const normalizeLanguage = value => UI_LANGUAGES.includes(value) ? value : 'auto';
 export function resolveBrowserLanguage(value) {
   const parts = String(value).toLowerCase().replaceAll('_', '-').split('-');
+  if (['ja', 'ko'].includes(parts[0])) return parts[0];
   if (parts[0] !== 'zh') return 'en';
   // Explicit script takes precedence over region (e.g. zh-Hans-HK).
   if (parts.includes('hant')) return 'zh-TW';
@@ -34,7 +35,7 @@ export function onLanguageChanged(listener) {
 }
 export function initI18n() {
   if (!ready) ready = (async () => {
-    const entries = await Promise.all([['en', 'en'], ['zh-CN', 'zh_CN'], ['zh-TW', 'zh_TW']].map(async ([language, directory]) => {
+    const entries = await Promise.all([['en', 'en'], ['zh-CN', 'zh_CN'], ['zh-TW', 'zh_TW'], ['ja', 'ja'], ['ko', 'ko']].map(async ([language, directory]) => {
       const response = await fetch(chrome.runtime.getURL(`_locales/${directory}/messages.json`));
       if (!response.ok) throw new Error('Cannot load interface translations');
       return [language, await response.json()];

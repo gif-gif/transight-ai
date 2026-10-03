@@ -1,12 +1,12 @@
 # 译见 AI · 随手翻译
 
-**简体中文** | [English](README.en.md)
+**简体中文** | [English](README.en.md) | [日本語](README.ja.md) | [한국어](README.ko.md)
 
 一个可以直接加载到 Chrome 的 AI 翻译插件 MVP。使用 **Manifest V3 + 原生 JavaScript / HTML / CSS**，无运行时依赖、不包含预置密钥；通过 `npm run build` 生成可直接加载的 `dist/` 目录，不生成 ZIP。
 
 ## 已实现
 
-- **三种显示语言**：支持简体中文、繁體中文和 English；自动匹配 Chrome 界面语言，未支持语言使用英文兜底。
+- **五种显示语言**：支持简体中文、繁體中文、English、日本語和 한국어；自动匹配 Chrome 界面语言，未支持语言使用英文兜底。
 
 - **工具栏翻译**：自动检测源语言，输入或粘贴文字，选择目标语言，一键翻译与复制。
 - **选中文字**：先在网页选中文字，再打开插件；原文自动带入，不自动发送。
@@ -72,9 +72,10 @@ npm run build
 
 ## 界面语言
 
-默认跟随 Chrome 的**界面语言**，而不是当前网页语言。点击弹出框右上角、设置按钮旁的 **地球图标（显示语言）** 按钮，可选择 **跟随浏览器 / 简体中文 / 繁體中文 / English**；选择会自动保存，下次打开仍然有效。
+默认跟随 Chrome 的**界面语言**，而不是当前网页语言。点击弹出框右上角、设置按钮旁的 **地球图标（显示语言）** 按钮，可选择 **跟随浏览器 / 简体中文 / 繁體中文 / English / 日本語 / 한국어**；选择会自动保存，下次打开仍然有效。
 
 - 简体中文浏览器（`zh-CN`、`zh-SG`、`zh-Hans`）：简体中文界面。
+- 日语浏览器（`ja`、`ja-JP`）：日本語界面；韩语浏览器（`ko`、`ko-KR`）：한국어界面。
 - 繁体中文浏览器（`zh-TW`、`zh-HK`、`zh-MO`、`zh-Hant`）：繁體中文界面。显式指定 `Hans` / `Hant` 时优先于地区匹配。
 - 手动切换会同步工具栏、设置页、右键菜单和已打开的页面浮窗，不清空译文，不改变翻译目标语言或模型设置。
 - 英文浏览器：显示英文界面。
@@ -226,6 +227,8 @@ npm run test:browser
 ```sh
 TEST_BROWSER_LOCALE=zh-CN npm run test:browser
 TEST_BROWSER_LOCALE=zh-TW npm run test:browser
+TEST_BROWSER_LOCALE=ja-JP npm run test:browser
+TEST_BROWSER_LOCALE=ko-KR npm run test:browser
 TEST_BROWSER_LOCALE=en-US npm run test:browser
 TEST_BROWSER_LOCALE=fr-FR npm run test:browser  # 验证英文兜底
 ```
@@ -239,7 +242,7 @@ TEST_BROWSER_LOCALE=fr-FR npm run test:browser  # 验证英文兜底
 ```text
 manifest.json                 扩展声明
 assets/                       16 / 32 / 48 / 128px 图标
-_locales/                     en / zh_CN / zh_TW 文案，英文兜底
+_locales/                     en / zh_CN / zh_TW / ja / ko 文案，英文兜底
 src/
   background.js               消息校验、右键菜单、后台翻译任务
   shared/settings.js          配置、语言、地址规范化与校验
@@ -283,6 +286,10 @@ tests/                        Node.js 自动化测试
 <img src="docs/screenshots/zh-TW/selection-locked.png" alt="繁體中文翻譯浮動視窗中的緊湊解鎖表單" width="900">
 
 商店材料已补充繁体中文详细介绍及 4 张繁体界面截图，见 `chrome-web-store/`。
+
+### 日语与韩语界面
+
+新增 [日本語 README](README.ja.md) 和 [한국어 README](README.ko.md)，包含对应语言的实际界面截图、配置和安全说明。商店材料现包含五种语言文案与每种语言 4 张截图。
 
 ## 许可证
 

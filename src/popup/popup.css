@@ -9,7 +9,7 @@ html.standalone body{width:400px;max-width:100%}
 
 .header-actions{display:flex;align-items:center;gap:4px;flex-shrink:0}.ui-language-control{position:relative}#ui-language{width:40px}.ui-language-menu{position:absolute;right:0;top:calc(100% + 6px);z-index:10;min-width:170px;padding:5px;border:1px solid var(--line);border-radius:10px;background:var(--surface);box-shadow:0 8px 24px #18312820}.ui-language-menu button{display:block;width:100%;min-height:36px;padding:7px 28px 7px 10px;text-align:left;font-size:12px;color:var(--ink);background:transparent;border-radius:6px;position:relative}.ui-language-menu button:hover,.ui-language-menu button[aria-pressed="true"]{background:var(--tint);color:var(--accent)}.ui-language-menu button[aria-pressed="true"]::after{content:"✓";position:absolute;right:10px}
 
-.translation-view[lang="en"] .brand .ai{display:none}
+.translation-view:not([lang|="zh"]) .brand .ai{display:none}
 
 #close-view{min-width:30px}
 

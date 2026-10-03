@@ -1,0 +1,518 @@
+{
+  "extensionName": {
+    "message": "Transight AI"
+  },
+  "extensionDescription": {
+    "message": "自分の AI サービスでテキストを翻訳。選択した文章をその場で翻訳し、言葉の壁を越えて理解を深めましょう。"
+  },
+  "brand": {
+    "message": "Transight AI"
+  },
+  "brandShort": {
+    "message": "Transight AI"
+  },
+  "popupTitle": {
+    "message": "Transight AI · 必要なときに翻訳"
+  },
+  "optionsTitle": {
+    "message": "AI サービスに接続 · Transight AI"
+  },
+  "tagline": {
+    "message": "理解を、もっと身近に。別の言語と、その表現を読み解く。"
+  },
+  "openSettings": {
+    "message": "設定を開く"
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "setup": {
+    "message": "まず AI サービスに接続してください"
+  },
+  "autoDetect": {
+    "message": "言語を自動検出"
+  },
+  "targetLanguage": {
+    "message": "翻訳先の言語"
+  },
+  "source": {
+    "message": "原文"
+  },
+  "clear": {
+    "message": "クリア"
+  },
+  "sourcePlaceholder": {
+    "message": "テキストを入力または貼り付けてください。\n言葉を、もっと身近に。"
+  },
+  "selectionHint": {
+    "message": "ページの文章を選択してから、このポップアップを開くこともできます"
+  },
+  "translate": {
+    "message": "翻訳"
+  },
+  "translation": {
+    "message": "訳文"
+  },
+  "copy": {
+    "message": "訳文をコピー"
+  },
+  "emptyTitle": {
+    "message": "言葉の先にある意味まで。"
+  },
+  "emptyHint": {
+    "message": "AI による訳文がここに表示されます"
+  },
+  "privacyHint": {
+    "message": "翻訳を実行したときだけテキストを送信します"
+  },
+  "closer": {
+    "message": "理解を、もっと身近に。"
+  },
+  "yourAI": {
+    "message": "使う AI は、あなたが選ぶ"
+  },
+  "makeYours": {
+    "message": "自分に合った設定に"
+  },
+  "connectHeading": {
+    "message": "あなたの翻訳パートナーを。"
+  },
+  "connectIntro": {
+    "message": "お使いの API を接続して、あらゆる言語を身近に。"
+  },
+  "service": {
+    "message": "AI サービス"
+  },
+  "compatible": {
+    "message": "OpenAI 互換の Chat Completions API に対応"
+  },
+  "baseHint": {
+    "message": "API のベース URL（例：https://your-provider.example/v1）を入力してください。/chat/completions は不要です。"
+  },
+  "keyOptional": {
+    "message": "認証不要のローカルサービスでは省略できます"
+  },
+  "keyPlaceholder": {
+    "message": "API キーを入力"
+  },
+  "show": {
+    "message": "表示"
+  },
+  "hide": {
+    "message": "非表示"
+  },
+  "keyHint": {
+    "message": "解除パスワードで暗号化し、Chrome 同期は行いません。保存済みのキーを維持する場合は空欄にしてください。パスワードは AI サービスに送信されません。"
+  },
+  "model": {
+    "message": "モデル ID"
+  },
+  "modelPlaceholder": {
+    "message": "model-a, model-b"
+  },
+  "modelHint": {
+    "message": "Chat Completions 対応モデルを最大 5 個選択するか、ID をカンマ区切りで入力してください。モデルごとに個別のリクエストが送信され、API 料金が発生する場合があります。"
+  },
+  "preferences": {
+    "message": "翻訳設定"
+  },
+  "preferencesHint": {
+    "message": "自分に合った方法で世界を読み解く"
+  },
+  "defaultTarget": {
+    "message": "既定の翻訳先言語"
+  },
+  "style": {
+    "message": "翻訳スタイル"
+  },
+  "styleNatural": {
+    "message": "自然で読みやすく"
+  },
+  "styleFaithful": {
+    "message": "原文に忠実に"
+  },
+  "styleProfessional": {
+    "message": "専門的かつ正確に"
+  },
+  "consent": {
+    "message": "テキストがこの AI サービスに送信され、そのポリシーに従って処理されること、および API 料金が発生する場合があることを理解しました。"
+  },
+  "save": {
+    "message": "設定を保存"
+  },
+  "test": {
+    "message": "保存済みの接続をテスト"
+  },
+  "quickStart": {
+    "message": "クイックスタート"
+  },
+  "guideHeading": {
+    "message": "さあ、読み始めましょう。"
+  },
+  "guideConnect": {
+    "message": "サービスに接続"
+  },
+  "guideConnectHint": {
+    "message": "接続先、キー、モデルを入力して設定を保存します。"
+  },
+  "guideSelect": {
+    "message": "文章を選択"
+  },
+  "guideSelectHint": {
+    "message": "通常のウェブページで文章を選択し、近くに表示される地球と矢印の翻訳アイコンをクリックします。"
+  },
+  "guideRead": {
+    "message": "理解を、その場で"
+  },
+  "guideReadHint": {
+    "message": "ページ内のパネルで訳文を読むか、ツールバーのポップアップに文章を貼り付けます。"
+  },
+  "noteHeading": {
+    "message": "読書を妨げず、安心して。"
+  },
+  "note": {
+    "message": "ページの自動スキャン、翻訳履歴、アクセス解析はありません。操作したときだけ動作します。"
+  },
+  "versionBrand": {
+    "message": "Transight AI · v0.1.1"
+  },
+  "builtFor": {
+    "message": "読みたい世界を、もっと身近に。"
+  },
+  "footer": {
+    "message": "どの言語にも、伝わる価値がある。"
+  },
+  "loading": {
+    "message": "翻訳中…"
+  },
+  "copied": {
+    "message": "訳文をコピーしました。"
+  },
+  "copyFailed": {
+    "message": "コピーできませんでした。訳文を選択して手動でコピーしてください。"
+  },
+  "connectFirst": {
+    "message": "まず設定で AI サービスに接続してください。"
+  },
+  "enterText": {
+    "message": "翻訳する文章を入力または選択してください。"
+  },
+  "waiting": {
+    "message": "AI サービスの応答を待っています…"
+  },
+  "backgroundFailed": {
+    "message": "バックグラウンドサービスが応答しません。拡張機能を開き直してください。"
+  },
+  "complete": {
+    "message": "翻訳完了"
+  },
+  "fallback": {
+    "message": "このページではパネルを表示できません。選択した文章は入力済みです。「翻訳」をクリックして続行してください。"
+  },
+  "selectionTooLong": {
+    "message": "選択した文章が 12,000 文字を超えています。短くして貼り付けてください。"
+  },
+  "readConfigFailed": {
+    "message": "設定を読み込めませんでした。拡張機能を開き直してください。"
+  },
+  "unsaved": {
+    "message": "未保存の変更があります。"
+  },
+  "saved": {
+    "message": "保存しました。翻訳を開始できます。"
+  },
+  "saveFirst": {
+    "message": "接続テストの前に現在の設定を保存してください。"
+  },
+  "testing": {
+    "message": "「Hello, world!」を送信中（少額の API 料金が発生する場合があります）…"
+  },
+  "backgroundNoResponse": {
+    "message": "バックグラウンドサービスが応答しません。"
+  },
+  "connectionSuccess": {
+    "message": "接続成功 · $1"
+  },
+  "readSettingsFailed": {
+    "message": "設定を読み込めませんでした。このページを開き直してください。"
+  },
+  "invalidBase": {
+    "message": "有効な API ベース URL を入力してください。"
+  },
+  "httpsRequired": {
+    "message": "API URL には HTTPS が必要です。HTTP は localhost / 127.0.0.1 のみ使用できます。"
+  },
+  "invalidUrlParts": {
+    "message": "API URL に認証情報、クエリパラメーター、フラグメントは含められません。"
+  },
+  "invalidModel": {
+    "message": "モデル ID を 1 個以上入力してください。各 ID は 200 文字以内です。"
+  },
+  "invalidKey": {
+    "message": "API キーに改行は含められません。"
+  },
+  "invalidTarget": {
+    "message": "対応する翻訳先言語を選択してください。"
+  },
+  "invalidStyle": {
+    "message": "対応する翻訳スタイルを選択してください。"
+  },
+  "consentRequired": {
+    "message": "まず、設定した AI サービスへのテキスト送信に同意してください。"
+  },
+  "emptyText": {
+    "message": "まず翻訳する文章を入力または選択してください。"
+  },
+  "textTooLong": {
+    "message": "文章が長すぎます。$1 文字以内にしてください。"
+  },
+  "unsupportedTarget": {
+    "message": "対応していない翻訳先言語です。"
+  },
+  "http400": {
+    "message": "リクエストが拒否されました。モデル ID と Chat Completions への対応を確認してください。"
+  },
+  "http401": {
+    "message": "認証に失敗しました。API キーを確認してください。"
+  },
+  "http403": {
+    "message": "アクセスが拒否されました。API キーの権限を確認してください。"
+  },
+  "http404": {
+    "message": "接続先またはモデルが見つかりません。ベース URL とモデル ID を確認してください。"
+  },
+  "http429": {
+    "message": "レート制限または利用上限に達しました。しばらく待つか、残高を確認してください。"
+  },
+  "httpError": {
+    "message": "AI サービスを一時的に利用できません（HTTP $1）。後でもう一度お試しください。"
+  },
+  "invalidJson": {
+    "message": "サービスから無効な JSON が返されました。URL が API の接続先であることを確認してください。"
+  },
+  "truncated": {
+    "message": "訳文がサービスの出力上限を超えました。原文を分割して再試行してください。"
+  },
+  "filtered": {
+    "message": "サービス側でこの文章がブロックされたため、翻訳できません。"
+  },
+  "missingTranslation": {
+    "message": "訳文が返されませんでした。モデルが Chat Completions に対応しているか確認してください。"
+  },
+  "timeout": {
+    "message": "翻訳がタイムアウトしました（25 秒）。再試行するか、より高速なモデルを選択してください。"
+  },
+  "networkError": {
+    "message": "AI サービスに接続できませんでした。ネットワーク、API URL、アクセス権限を確認してください。リダイレクトには対応していません。"
+  },
+  "contextMenu": {
+    "message": "選択した文章を Transight AI で翻訳"
+  },
+  "permissionMissing": {
+    "message": "AI サービスへのアクセスがブロックされています。Chrome で拡張機能のサイトアクセス権限を確認してください。"
+  },
+  "translationFailed": {
+    "message": "翻訳に失敗しました。再試行してください。"
+  },
+  "panelLabel": {
+    "message": "Transight AI 翻訳"
+  },
+  "closePanel": {
+    "message": "翻訳パネルを閉じる"
+  },
+  "closeEsc": {
+    "message": "閉じる（Esc）"
+  },
+  "panelWarning": {
+    "message": "AI 翻訳 · 重要な情報は確認してください"
+  },
+  "panelCopied": {
+    "message": "コピー済み"
+  },
+  "panelCopyFailed": {
+    "message": "選択して手動でコピーしてください"
+  },
+  "langZhCN": {
+    "message": "中国語（簡体字）"
+  },
+  "langZhTW": {
+    "message": "中国語（繁体字）"
+  },
+  "langEn": {
+    "message": "英語"
+  },
+  "langJa": {
+    "message": "日本語"
+  },
+  "langKo": {
+    "message": "韓国語"
+  },
+  "langFr": {
+    "message": "フランス語"
+  },
+  "langDe": {
+    "message": "ドイツ語"
+  },
+  "langEs": {
+    "message": "スペイン語"
+  },
+  "langRu": {
+    "message": "ロシア語"
+  },
+  "langPt": {
+    "message": "ポルトガル語"
+  },
+  "displayLanguage": {
+    "message": "表示言語"
+  },
+  "followBrowser": {
+    "message": "ブラウザーに合わせる"
+  },
+  "languageSaveFailed": {
+    "message": "表示言語を保存できませんでした。もう一度お試しください。"
+  },
+  "fetchModels": {
+    "message": "モデルを取得"
+  },
+  "fetchingModels": {
+    "message": "取得中…"
+  },
+  "modelList": {
+    "message": "利用可能なモデル"
+  },
+  "chooseModel": {
+    "message": "モデルを選択"
+  },
+  "modelsLoaded": {
+    "message": "$1 個のモデルを取得しました。以下から選択し、保存して適用してください。"
+  },
+  "modelsEmpty": {
+    "message": "利用可能なモデルが返されませんでした。モデル ID を手動で入力できます。"
+  },
+  "modelsInvalid": {
+    "message": "無効なモデル一覧が返されました。モデル ID を手動で入力するか、API URL を確認してください。"
+  },
+  "modelsUnsupported": {
+    "message": "この接続先は GET /models に対応していません。モデル ID を手動で入力してください。"
+  },
+  "modelsTimeout": {
+    "message": "モデル取得がタイムアウトしました。再試行するか、モデル ID を手動で入力してください。"
+  },
+  "modelsFailed": {
+    "message": "モデルを取得できませんでした。再試行するか、モデル ID を手動で入力してください。"
+  },
+  "modelFetchHint": {
+    "message": "現在のベース URL と入力したキー（または解除済みの保存キー）で、バックグラウンドから /models をリクエストします。原文は送信せず、設定も保存しません。"
+  },
+  "selectionUnavailable": {
+    "message": "このページでは選択範囲を翻訳できません。"
+  },
+  "selectionTranslate": {
+    "message": "選択した文章を翻訳"
+  },
+  "selectionEditHint": {
+    "message": "原文を編集するか、翻訳先言語を変更してください"
+  },
+  "tooManyModels": {
+    "message": "モデルは $1 個まで選択できます。"
+  },
+  "modelNotConfigured": {
+    "message": "このモデルは保存済みの選択に含まれていません。設定を更新して再試行してください。"
+  },
+  "partialModelsFailed": {
+    "message": "一部のモデルで翻訳に失敗しました。成功した訳文は下に表示されています。"
+  },
+  "allModelsFailed": {
+    "message": "すべてのモデルで翻訳に失敗しました。各カードの詳細を確認してください。"
+  },
+  "retryTranslation": {
+    "message": "再試行"
+  },
+  "pinTranslation": {
+    "message": "翻訳ウィンドウを固定"
+  },
+  "unpinTranslation": {
+    "message": "翻訳ウィンドウの固定を解除"
+  },
+  "dragTranslation": {
+    "message": "ドラッグして移動。フォーカス時は矢印キーでも移動できます"
+  },
+  "vaultTitle": {
+    "message": "API キーの保護"
+  },
+  "vaultHint": {
+    "message": "保存するキーはローカルのパスワードで暗号化します。Chrome の再起動後に一度解除してください。忘れたパスワードは復元できません。"
+  },
+  "vaultUnlockPassword": {
+    "message": "解除パスワード"
+  },
+  "vaultUnlock": {
+    "message": "解除"
+  },
+  "vaultNewPassword": {
+    "message": "新しい解除パスワード"
+  },
+  "vaultConfirmPassword": {
+    "message": "パスワードの確認"
+  },
+  "vaultPasswordHint": {
+    "message": "6 文字以上。新規キーの保存時に必要です。既存のパスワードを維持するには両方を空欄にしてください。API キーではなく、専用のパスワードを使用してください。"
+  },
+  "vaultLock": {
+    "message": "今すぐロック"
+  },
+  "vaultReset": {
+    "message": "パスワードを忘れた場合 / 保存キーを削除"
+  },
+  "vaultResetConfirm": {
+    "message": "保存済みの API キーと解除済みセッションを削除しますか？この操作は元に戻せません。他の設定は保持されます。認証が必要なサービスを使うには API キーを再入力してください。"
+  },
+  "vaultEmpty": {
+    "message": "保存されたキーはありません。API キーの保存にはパスワードが必要です。認証不要のサービスには不要です。"
+  },
+  "vaultLocked": {
+    "message": "ロック中 — 翻訳、モデル取得、保存キーの編集には解除が必要です。"
+  },
+  "vaultUnlocked": {
+    "message": "このブラウザーセッションでは解除済みです。保存キーはこのフォームには表示されません。"
+  },
+  "vaultMigration": {
+    "message": "以前の平文キーが見つかりました。パスワードを設定して保存すると暗号化されます。暗号化が成功するまではデータ保護のため旧キーを保持し、翻訳とモデル取得を停止します。"
+  },
+  "vaultLoading": {
+    "message": "キーの保護状態を読み込み中…"
+  },
+  "vaultPasswordLength": {
+    "message": "解除パスワードは 6〜1024 文字にしてください。"
+  },
+  "vaultPasswordMismatch": {
+    "message": "パスワードが一致しません。"
+  },
+  "vaultUnlockFailed": {
+    "message": "パスワードが違うか、キーのデータが破損しています。再試行するか、リセットして API キーを再入力してください。"
+  },
+  "vaultLockedError": {
+    "message": "API キーはロックされています。解除パスワードを入力して続行してください。"
+  },
+  "vaultMissing": {
+    "message": "暗号化された API キーがありません。パスワードを設定する前に API キーを入力してください。"
+  },
+  "vaultMigrationRequired": {
+    "message": "翻訳の前に設定を開き、パスワードを設定して以前の API キーを暗号化してください。"
+  },
+  "vaultEndpointChanged": {
+    "message": "API の接続先が変更されました。新しい接続先のキーを入力するか、認証不要のサービスの場合は保存キーを削除してください。"
+  },
+  "vaultOperationFailed": {
+    "message": "キーの保護設定を更新できませんでした。もう一度お試しください。"
+  },
+  "vaultInlineHint": {
+    "message": "ここで解除して翻訳を続けられます。パスワードは拡張機能内でのみ扱われます。"
+  },
+  "vaultUnlocking": {
+    "message": "解除中…"
+  },
+  "vaultInlineUnlocked": {
+    "message": "解除しました。翻訳を続けられます。"
+  }
+}

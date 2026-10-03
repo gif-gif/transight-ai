@@ -6,7 +6,7 @@ import { t, localizePage, resolveBrowserLanguage, normalizeLanguage } from '../s
 import { languageName, DEFAULT_SETTINGS, validateSettings } from '../src/shared/settings.js';
 import { buildRequest, translate } from '../src/shared/translator.js';
 
-for (const [locale, label] of [['zh-CN', '翻译文字'], ['zh-TW', '翻譯文字'], ['en', 'Translate'], ['en-GB', 'Translate'], ['fr-FR', 'Translate'], ['ja', 'Translate']]) {
+for (const [locale, label] of [['zh-CN', '翻译文字'], ['zh-TW', '翻譯文字'], ['en', 'Translate'], ['en-GB', 'Translate'], ['fr-FR', 'Translate'], ['ja', '翻訳'], ['ja-JP', '翻訳'], ['ko', '번역'], ['ko-KR', '번역']]) {
   test(`UI messages follow ${locale}, with English fallback`, () => {
     mockChromeI18n(locale);
     assert.equal(t('translate'), label);
@@ -78,7 +78,7 @@ for (const [browser, expected] of [
   ['zh', 'zh-CN'], ['zh-CN', 'zh-CN'], ['zh-SG', 'zh-CN'], ['zh-Hans', 'zh-CN'],
   ['zh-TW', 'zh-TW'], ['zh-HK', 'zh-TW'], ['zh-MO', 'zh-TW'], ['zh-Hant', 'zh-TW'],
   ['zh_Hant_HK', 'zh-TW'], ['ZH_tw', 'zh-TW'], ['zh-Hans-HK', 'zh-CN'], ['zh-Hant-CN', 'zh-TW'],
-  ['en-US', 'en'], ['fr-FR', 'en'], ['ja', 'en']
+  ['en-US', 'en'], ['fr-FR', 'en'], ['ja', 'ja'], ['ja-JP', 'ja'], ['JA_jp', 'ja'], ['ko', 'ko'], ['ko-KR', 'ko'], ['KO_kr', 'ko']
 ]) {
   test(`browser language ${browser} resolves to ${expected}`, () => assert.equal(resolveBrowserLanguage(browser), expected));
 }
@@ -113,4 +113,22 @@ test('English brand consistently includes AI without renaming Chinese locales', 
   }
   assert.equal(catalogs.zh_CN.extensionName.message, '译见 AI · 随手翻译');
   assert.equal(catalogs.zh_TW.extensionName.message, '譯見 AI · 隨手翻譯');
+});
+
+for (const language of ['ja', 'ko']) {
+  test(`${language} supports manual preference and localized controls, errors and vault`, () => {
+    assert.equal(normalizeLanguage(language), language);
+    assert.equal(catalogs[language].extensionName.message, 'Transight AI');
+    for (const key of ['translate', 'settings', 'fetchModels', 'http401', 'vaultUnlock', 'retryTranslation', 'contextMenu']) {
+      assert.notEqual(catalogs[language][key].message, catalogs.en[key].message, key);
+    }
+  });
+}
+
+test('shared language menu exposes every supported manual preference in its native language', () => {
+  const html = readFileSync(new URL('../src/popup/popup.html', import.meta.url), 'utf8');
+  const codes = [...html.matchAll(/data-language="([^"]+)"/g)].map(match => match[1]).sort();
+  assert.deepEqual(codes, ['auto', 'en', 'ja', 'ko', 'zh-CN', 'zh-TW']);
+  assert.match(html, /data-language="ja"[^>]*>日本語</);
+  assert.match(html, /data-language="ko"[^>]*>한국어</);
 });
