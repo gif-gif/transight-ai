@@ -54,11 +54,11 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
     });
     const actual = await ui('.selection-bubble', 'function(){const r=this.getBoundingClientRect();return {left:r.left,top:r.top,width:r.width,height:r.height}}');
     const left = Math.min(Math.max(8, expected.right), Math.max(8, expected.viewportWidth - actual.width - 8));
-    let top = expected.bottom + 8;
-    if (top + actual.height > expected.viewportHeight - 8 && expected.top - actual.height - 8 >= 8) top = expected.top - actual.height - 8;
+    let top = expected.bottom + 3;
+    if (top + actual.height > expected.viewportHeight - 8 && expected.top - actual.height - 3 >= 8) top = expected.top - actual.height - 3;
     top = Math.min(Math.max(8, top), Math.max(8, expected.viewportHeight - actual.height - 8));
     assert.ok(Math.abs(actual.left - left) < 1, `${label}: trigger follows selection tail horizontally`);
-    assert.ok(Math.abs(actual.top - top) < 1, `${label}: trigger stays beside the last line and inside viewport`);
+    assert.ok(Math.abs(actual.top - top) < 1, `${label}: trigger stays 3px from the last line unless clamped by viewport`);
   }
   const before = requests.length;
   // Real pointer selection must still work without waiting for a debounce.

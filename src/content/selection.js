@@ -49,7 +49,7 @@
     const style = document.createElement('style');
     style.textContent = config.css + `
       :host{all:initial} [hidden]{display:none!important}
-      .selection-bubble{position:fixed;width:28px;height:28px;padding:0;border:1px solid #ffffffaa;border-radius:8px;background:#126754;color:white;font:400 14px/1 system-ui;box-shadow:0 3px 12px #18312833;cursor:pointer}
+      .selection-bubble{position:fixed;width:28px;height:28px;padding:0;border:0;border-radius:8px;background:#126754;color:white;font:400 14px/1 system-ui;box-shadow:0 3px 12px #18312833;cursor:pointer}
       .selection-bubble{display:grid;place-items:center}
       .selection-bubble svg{display:block;width:18px;height:18px;pointer-events:none}
       .selection-bubble:hover{background:#0a4b3d}
@@ -100,12 +100,12 @@
     }
     return { left: Math.max(8, document.documentElement.clientWidth - 408), top: 8, bottom: 8 };
   }
-  function place(element, rect) {
+  function place(element, rect, gap = 8) {
     const margin = 8, viewportWidth = document.documentElement.clientWidth, viewportHeight = window.innerHeight;
     const width = element.getBoundingClientRect().width, height = element.getBoundingClientRect().height;
     const left = Math.min(Math.max(margin, rect.left), Math.max(margin, viewportWidth - width - margin));
-    let top = rect.bottom + margin;
-    if (top + height > viewportHeight - margin && rect.top - height - margin >= margin) top = rect.top - height - margin;
+    let top = rect.bottom + gap;
+    if (top + height > viewportHeight - margin && rect.top - height - gap >= margin) top = rect.top - height - gap;
     top = Math.min(Math.max(margin, top), Math.max(margin, viewportHeight - height - margin));
     element.style.left = `${left}px`; element.style.top = `${top}px`;
   }
@@ -192,7 +192,7 @@
       selection = { text, rect: { left: box.left, top: box.top, bottom: box.bottom } };
       // Anchor the trigger to the final selected line's end, not its start.
       // Keep the panel anchor unchanged; place() still handles viewport edges.
-      bubble.hidden = false; place(bubble, { ...selection.rect, left: box.right });
+      bubble.hidden = false; place(bubble, { ...selection.rect, left: box.right }, 3);
       // Each new selection gets its own lifetime; never dismiss the open panel.
       bubbleTimer = setTimeout(hideBubble, 2500);
     });
