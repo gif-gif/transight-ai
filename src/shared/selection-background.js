@@ -81,7 +81,7 @@ export function installSelection(ready, runTranslation, vaultStatus = async () =
         }
         default: throw new Error(t('selectionUnavailable'));
       }
-    })().then(result => respond({ ok: true, ...result })).catch(error => respond({ ok: false, error: error.message || t('translationFailed') })).finally(() => { if (job && jobs.get(key) === job) jobs.delete(key); });
+    })().then(result => respond({ ok: true, ...result })).catch(error => respond({ ok: false, error: error.message || t('translationFailed'), ...(error.code === 'AUTH_REQUIRED' ? { code: 'AUTH_REQUIRED' } : {}) })).finally(() => { if (job && jobs.get(key) === job) jobs.delete(key); });
     return true;
   });
   chrome.tabs.onRemoved.addListener(tabId => { for (const [key, job] of jobs) if (key.startsWith(`${tabId}:`)) { job.controller.abort(); jobs.delete(key); } });

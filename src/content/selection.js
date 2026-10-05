@@ -232,6 +232,7 @@
         const response = await send({ type: 'SELECTION_TARGET_LANGUAGE', value });
         if (!response?.ok) throw new Error();
       },
+      settingsUrl: chrome.runtime.getURL('src/options/options.html'),
       openSettings: () => send({ type: 'SELECTION_OPTIONS' }).catch(() => {}),
       async setLanguage(value) { const response = await send({ type: 'SELECTION_LANGUAGE', value }); if (!response?.ok) throw new Error(); return response.locale; },
       localized: updatePinLocale,
@@ -249,6 +250,7 @@
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !own(event)) close();
   });
+  window.addEventListener('pagehide', () => close(false));
   window.addEventListener('blur', () => stopDrag());
   window.addEventListener('scroll', () => { cancelAnimationFrame(captureFrame); hideBubble(); }, true);
   window.addEventListener('resize', () => { cancelAnimationFrame(captureFrame); hideBubble(); positionPanel(); });

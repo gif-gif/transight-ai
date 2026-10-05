@@ -523,5 +523,23 @@
   },
   "targetLanguageSaveFailed": {
     "message": "翻訳先の言語を保存できませんでした。もう一度選択してください。"
+  },
+  "readTranslation": {
+    "message": "訳文を読み上げる"
+  },
+  "stopSpeech": {
+    "message": "読み上げを停止"
+  },
+  "speechNoLocalVoice": {
+    "message": "この言語のローカル音声が見つかりません。システム設定で音声をインストールしてください。"
+  },
+  "speechFailed": {
+    "message": "読み上げに失敗しました。もう一度お試しください。"
+  },
+  "configureApiKey": {
+    "message": "設定を開く"
+  },
+  "authSettingsPrompt": {
+    "message": "設定を開く。"
   }
 }

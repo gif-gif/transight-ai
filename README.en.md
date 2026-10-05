@@ -19,6 +19,12 @@ An AI translation Chrome extension MVP built with **Manifest V3 and vanilla Java
 - **Connection testing**, loading indicators, timeouts, and actionable authentication, rate-limit, and model error messages.
 - **All-site selection**: HTTP/HTTPS access is declared at installation/update, without per-site enable buttons. Only clicking the translate button sends the selected text.
 
+### Read translations aloud
+
+Each model card has a speaker button next to Copy. Click to read, click again to stop; translation never autoplays. Completed results can be read while other models are still translating. Only one result plays across the extension at a time. Another model or window takes over playback. Closing the owning view, navigating, clearing, or retranslating stops it; pinning, dragging, and copying do not.
+
+Chrome `tts` selects a voice explicitly reported as local for the result’s original target language. Long results are read in chunks. No translation API key or cloud speech service is used, and audio or additional speech text is not persisted. If no matching local voice is available, install one in your system settings; there is no remote or wrong-language fallback. Availability and voice quality depend on the system. Pause, speed, voice selection, and download controls are not included. Reload the extension and refresh open webpages after updating.
+
 ## Screenshots
 
 These screenshots are synced from the latest browser tests using a local mock API (October 2, 2026). They show the actual extension UI, not the translation quality of a real model. API keys are not displayed, and test unlock passwords are masked. The screenshots below show the English UI; Simplified and Traditional Chinese are also supported.
@@ -191,6 +197,7 @@ Input/password fields, editable regions, and the panel itself do not trigger sel
 | `contextMenus` | Add the selected-text translation command to the context menu |
 | `activeTab` | Temporarily access the current page after a user action |
 | `scripting` | Read selected text or inject the translation panel |
+| `tts` | Read translations on request with local voices and manage playback/stop events |
 | `host_permissions`: all HTTP/HTTPS sites | Inject selection controls and access the configured API. Chrome may show an all-site access warning at install/update |
 
 ## Development and Testing

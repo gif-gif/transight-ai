@@ -8,7 +8,8 @@
     "storage",
     "contextMenus",
     "activeTab",
-    "scripting"
+    "scripting",
+    "tts"
   ],
   "background": {
     "service_worker": "src/background.js",
@@ -46,6 +47,7 @@
         "https://*/*"
       ],
       "js": [
+        "src/shared/speech-client.js",
         "src/shared/translation-view.js",
         "src/content/selection.js"
       ],

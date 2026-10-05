@@ -286,6 +286,18 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
     }, storedBefore.targetLanguagePreference);
   }
   console.log('✓ Remembered target: popup/page/options live sync, reopen persistence, draft and credential isolation; explicit floating cancel and retranslate');
+  setMode('unauthorized');
+  await select('Authentication link in selection'); await click('.selection-bubble');
+  await until(async () => (await ui('#status')) === msg('http401') + msg('authSettingsPrompt'));
+  assert.equal(await ui('#result-card .settings-link'), msg('configureApiKey'));
+  const openedSettings = context.waitForEvent('page');
+  await click('#status .settings-link');
+  const authOptions = await openedSettings;
+  await authOptions.waitForURL('**/src/options/options.html');
+  await authOptions.locator('#save:enabled').waitFor();
+  await authOptions.close();
+  setMode('success'); await click('#close-view');
+  console.log('✓ Selection authentication settings link opens extension settings');
   await session.detach();
   console.log('✓ Selection: automatic all-site injection, shared popup, selection-tail positioning (pointer, reverse, multiline, nested and viewport edges), next-paint pointer/keyboard trigger, compact trigger and 2.5s expiry/reset, no request on selection, editing/target, close/Esc/outside, cancellation, narrow screen, editable exclusion, persisted injection, second hostname, credential isolation');
 }

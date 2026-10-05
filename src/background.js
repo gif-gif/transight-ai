@@ -1,3 +1,4 @@
+import { installSpeech } from './shared/speech.js';
 import { openContextTranslation } from './shared/context-menu.js';
 import { installSelection } from './shared/selection-background.js';
 import { t, initI18n, onLanguageChanged } from './shared/i18n.js';
@@ -8,6 +9,7 @@ import { fetchModels, modelConnection } from './shared/models.js';
 import { translate } from './shared/translator.js';
 
 // Prevent injected scripts from reading local API credentials.
+installSpeech();
 const credentials = createCredentialStore(chrome.storage);
 const storageReady = Promise.all([chrome.storage.local, chrome.storage.session].map(area =>
   area.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' }))).then(() => credentials.migrate());
@@ -106,7 +108,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.id) { popupJobs.get(key)?.abort(); popupJobs.set(key, controller); }
   runTranslation(message.text, message.targetLanguage, controller.signal, message.model)
     .then(result => sendResponse({ ok: true, ...result }))
-    .catch(error => sendResponse({ ok: false, error: error.message || t('translationFailed') }))
+    .catch(error => sendResponse({ ok: false, error: error.message || t('translationFailed'), ...(error.code === 'AUTH_REQUIRED' ? { code: 'AUTH_REQUIRED' } : {}) }))
     .finally(() => { if (popupJobs.get(key) === controller) popupJobs.delete(key); });
   return true;
 });

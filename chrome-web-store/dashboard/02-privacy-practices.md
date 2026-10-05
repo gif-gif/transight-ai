@@ -1,6 +1,6 @@
 # Privacy practices / 隐私权规范填写指南
 
-核对日期：2026-10-02 · 基于当前 manifest 与源码。英文代码块可粘贴至相应栏位；中文说明用于开发者核对，**不是已通过审核或合规保证**。实现改变后必须同步修改申报与隐私政策。
+核对日期：2026-10-04 · 基于当前 manifest 与源码。英文代码块可粘贴至相应栏位；中文说明用于开发者核对，**不是已通过审核或合规保证**。实现改变后必须同步修改申报与隐私政策。
 
 ## 1. Single purpose / 单一用途
 
@@ -10,7 +10,7 @@ Translate text that the user types, pastes, or selects, using the user's configu
 
 ## 2. Permission justification / 权限理由
 
-只填写实际 manifest 中列出的权限。不要为不存在的 `tabs`、`history`、`clipboardRead`、`clipboardWrite`、`tts`、`cookies` 权限编造理由；调用某个 API 不代表 manifest 一定声明了同名权限。
+只填写实际 manifest 中列出的权限。不要为不存在的 `tabs`、`history`、`clipboardRead`、`clipboardWrite`、`cookies` 权限编造理由；调用某个 API 不代表 manifest 一定声明了同名权限。
 
 ### storage
 
@@ -37,6 +37,14 @@ When the user opens the toolbar popup, access the active tab to read its current
 ```text
 Run a packaged selection-reading function when the toolbar popup is opened, and inject the packaged shared translation view into the selected frame for context-menu translation. Also remove legacy per-site content-script registrations during migration. No remotely downloaded scripts are injected.
 ```
+
+### tts
+
+```text
+Read a translated result aloud only when the user clicks its speaker button. The extension selects a matching voice explicitly reported by Chrome as local (remote=false), handles long text in chunks, and coordinates playback and stopping across its views. There is no automatic playback, remote-voice fallback, cloud speech API, microphone access, or stored audio. Translated text is passed to the selected local speech engine for playback and is not additionally persisted for this feature. If no matching local voice is available, the user is prompted to install one.
+```
+
+以上说明对应新增语音功能的源码；既有 package ZIP 尚未随本次功能重新生成，发布时需重新打包并同步线上隐私政策。
 
 ### Host permissions: https://*/* and http://*/*
 

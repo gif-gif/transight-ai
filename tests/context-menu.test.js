@@ -16,7 +16,7 @@ function setup(fail) {
 for (const frameId of [undefined, 4]) test(`context menu opens the shared floating view in frame ${frameId ?? 0}`, async () => {
   const calls = setup();
   await openContextTranslation({ menuItemId: 'yijian-translate', selectionText: '<img src=x> selected text', frameId }, { id: 8 });
-  assert.deepEqual(calls.injections, [{ target: { tabId: 8, frameIds: [frameId ?? 0] }, files: ['src/shared/translation-view.js', 'src/content/selection.js'] }]);
+  assert.deepEqual(calls.injections, [{ target: { tabId: 8, frameIds: [frameId ?? 0] }, files: ['src/shared/speech-client.js', 'src/shared/translation-view.js', 'src/content/selection.js'] }]);
   assert.deepEqual(calls.messages, [[8, { type: 'SELECTION_OPEN', text: '<img src=x> selected text' }, { frameId: frameId ?? 0 }]]);
   assert.deepEqual(calls.drafts, []); assert.deepEqual(calls.windows, []);
 });

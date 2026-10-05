@@ -41,7 +41,9 @@ export async function translate(text, settings, targetLanguage, { fetchImpl = fe
         404: t('http404'),
         429: t('http429')
       };
-      throw new Error(messages[response.status] || t('httpError', String(response.status)));
+      const error = new Error(messages[response.status] || t('httpError', String(response.status)));
+      if (response.status === 401) error.code = 'AUTH_REQUIRED';
+      throw error;
     }
     let data;
     try { data = await response.json(); } catch (error) {

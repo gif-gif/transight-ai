@@ -4,12 +4,26 @@
   if (globalThis.TransightTranslationView) return;
   const copyIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>';
   const copiedIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>';
+  const speakerIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m11 4-6 5H2v6h3l6 5V4Z"/><path d="M15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/></svg>';
+  const stopIcon = '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
   globalThis.TransightTranslationView = function (root, adapter, initialLocale, settings) {
     const $ = id => root.querySelector(`#${id}`);
     const container = root.querySelector('.translation-view') || root.documentElement;
     let locale = initialLocale, busy = false, disposed = false, revision = 0;
     let entries = [], statusState, configured = false;
     let editVersion = 0, vaultState, waitingForUnlock = false, pendingRetry = null;
+    let speakingEntry, speechId;
+    const speech = new TransightSpeechClient(message => {
+      if (disposed || message.id !== speechId || !speakingEntry) return;
+      if (['ended', 'stopped', 'error'].includes(message.state)) {
+        const entry = speakingEntry; speakingEntry = null; speechId = null; renderSpeech(entry);
+        if (message.state === 'error') statusKey(message.error === 'speechNoLocalVoice' ? 'speechNoLocalVoice' : 'speechFailed', true);
+      }
+    });
+    function stopSpeech() {
+      speech.stop(); const entry = speakingEntry; speakingEntry = null; speechId = null;
+      if (entry) renderSpeech(entry);
+    }
     const cardTemplate = $('result-card').cloneNode(true);
     const resultsList = $('results-list');
     const events = new AbortController();
@@ -35,7 +49,17 @@
       $('status').textContent = text;
       $('status').className = `status${error ? ' error' : ''}`;
     }
-    function statusKey(key, error = false) { status(t(key), error); statusState = { key, error }; }
+    function renderAuthError(element) {
+      const link = document.createElement('a');
+      link.className = 'settings-link'; link.href = adapter.settingsUrl;
+      link.textContent = t('configureApiKey');
+      const [before, after = ''] = t('authSettingsPrompt').split(t('configureApiKey'));
+      element.replaceChildren(t('http401'), before, link, after);
+    }
+    function statusKey(key, error = false) {
+      status(t(key), error); statusState = { key, error };
+      if (key === 'http401') renderAuthError($('status'));
+    }
     function localize(scope = root) {
       for (const el of scope.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
       for (const attr of ['placeholder', 'aria-label', 'title']) {
@@ -62,6 +86,16 @@
       const label = t(entry.copied ? 'copied' : 'copy');
       button.setAttribute('aria-label', entry.model ? `${label} · ${entry.model}` : label);
     }
+    function renderSpeech(entry) {
+      const button = entry.card.querySelector('.speak-result');
+      const active = speakingEntry === entry;
+      button.disabled = entry.state !== 'success' || !entry.result?.text?.trim();
+      button.innerHTML = active ? stopIcon : speakerIcon;
+      button.setAttribute('aria-pressed', String(active));
+      const label = t(active ? 'stopSpeech' : 'readTranslation');
+      button.title = label;
+      button.setAttribute('aria-label', entry.model ? `${label} · ${entry.model}` : label);
+    }
     function clearCopyTimers() { for (const entry of entries) clearTimeout(entry.copyTimer); }
     function renderEntry(entry) {
       const { card, model, state, result, error } = entry;
@@ -70,7 +104,7 @@
       card.dataset.state = state;
       card.setAttribute('aria-busy', String(state === 'loading'));
       const content = card.querySelector('.result');
-      renderCopy(entry);
+      renderCopy(entry); renderSpeech(entry);
       const meta = card.querySelector('.result-meta');
       meta.hidden = state === 'idle';
       if (state === 'idle') { localize(content); return; }
@@ -78,7 +112,8 @@
       else if (state === 'cancelled') { content.textContent = t('translationCancelled'); meta.textContent = t('translationCancelled'); }
       else if (state === 'success') { content.textContent = result.text; meta.textContent = `${languageName(result.targetLanguage)} · ${t('complete')}`; }
       else {
-        content.textContent = error;
+        if (entry.errorCode === 'AUTH_REQUIRED') renderAuthError(content);
+        else content.textContent = error;
         const retry = document.createElement('button');
         retry.type = 'button'; retry.className = 'retry-result'; retry.textContent = t('retryTranslation');
         retry.setAttribute('aria-label', `${t('retryTranslation')} · ${model}`);
@@ -87,7 +122,7 @@
       }
     }
     function resetResult(state = 'idle') {
-      clearCopyTimers();
+      stopSpeech(); clearCopyTimers();
       resultsList.replaceChildren();
       entries = (modelIds().length ? modelIds() : ['']).map((model, index) => {
         const card = cardTemplate.cloneNode(true);
@@ -146,20 +181,28 @@
       const failures = entries.filter(entry => entry.state === 'error');
       if (entries.some(entry => entry.state === 'cancelled')) statusKey('translationCancelled');
       else if (!failures.length) statusKey('complete');
-      else if (entries.length === 1) status(failures[0].error, true);
+      else if (entries.length === 1) {
+        if (failures[0].errorCode === 'AUTH_REQUIRED') statusKey('http401', true);
+        else status(failures[0].error, true);
+      }
       else statusKey(failures.length === entries.length ? 'allModelsFailed' : 'partialModelsFailed', true);
     }
     async function translateEntry(entry, current) {
-      entry.state = 'loading'; entry.error = undefined;
+      if (speakingEntry === entry) stopSpeech();
+      entry.state = 'loading'; entry.error = undefined; entry.errorCode = undefined;
       renderEntry(entry); updateBatchStatus();
       try {
         const result = await adapter.translate(entry.request.text, entry.request.target, entry.model);
         if (disposed || current !== revision) return;
-        if (!result?.ok) throw new Error(result?.error || t('backgroundFailed'));
+        if (!result?.ok) {
+          const error = new Error(result?.error || t('backgroundFailed'));
+          if (result?.code === 'AUTH_REQUIRED') error.code = result.code;
+          throw error;
+        }
         entry.result = result; entry.state = 'success';
       } catch (error) {
         if (disposed || current !== revision) return;
-        entry.error = error.message || t('backgroundFailed'); entry.state = 'error';
+        entry.error = error.message || t('backgroundFailed'); entry.errorCode = error.code; entry.state = 'error';
       }
       if (!disposed && current === revision) { renderEntry(entry); updateBatchStatus(); }
     }
@@ -184,6 +227,7 @@
     }
     async function translate() {
       if (busy || disposed) return;
+      stopSpeech();
       if (!configured) { statusKey('connectFirst', true); return; }
       if (!$('source').value.trim()) { statusKey('enterText', true); $('source').focus(); return; }
       if ($('source').value.length > 12000) { statusKey('selectionTooLong', true); return; }
@@ -257,14 +301,26 @@
     listen($('clear'), 'click', () => { input(''); $('source').focus(); });
     listen($('translate'), 'click', translate);
     listen($('cancel-translation'), 'click', cancelTranslation);
+    listen(root, 'click', event => {
+      if (!event.target.closest?.('.settings-link')) return;
+      event.preventDefault(); adapter.openSettings();
+    });
     listen($('settings'), 'click', () => adapter.openSettings());
     listen($('setup'), 'click', () => adapter.openSettings());
     listen(resultsList, 'click', async event => {
-      const button = event.target.closest('.copy-result, .retry-result');
+      const button = event.target.closest('.copy-result, .retry-result, .speak-result');
       if (!button) return;
       const entry = entries.find(item => item.card.contains(button));
       if (entry && button.classList.contains('retry-result')) { await retryEntry(entry); return; }
       if (!entry || entry.state !== 'success') return;
+      if (button.classList.contains('speak-result')) {
+        if (speakingEntry === entry) { stopSpeech(); return; }
+        stopSpeech(); speakingEntry = entry;
+        if (['speechFailed', 'speechNoLocalVoice'].includes(statusState?.key)) status('');
+        // A result keeps its request language even if interface preferences change.
+        speechId = speech.play(entry.result.text, entry.request.target);
+        renderSpeech(entry); return;
+      }
       const current = revision, attempt = entry.copyAttempt = (entry.copyAttempt || 0) + 1;
       const active = () => !disposed && current === revision && entries.includes(entry);
       const valid = () => active() && attempt === entry.copyAttempt;
@@ -304,6 +360,6 @@
     if (adapter.close) listen($('close-view'), 'click', () => adapter.close());
     setLocale(locale); applySettings(settings); setVault(adapter.vault);
     return { setLocale, applySettings, setVault, input, status, statusKey, cancel, get editVersion() { return editVersion; },
-      dispose() { $('inline-unlock').replaceChildren(); disposed = true; clearCopyTimers(); cancel(); events.abort(); } };
+      dispose() { stopSpeech(); speech.dispose(); $('inline-unlock').replaceChildren(); disposed = true; clearCopyTimers(); cancel(); events.abort(); } };
   };
 })();

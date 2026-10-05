@@ -523,5 +523,23 @@
   },
   "targetLanguageSaveFailed": {
     "message": "Could not save the target language. Please try again."
+  },
+  "readTranslation": {
+    "message": "Read translation aloud"
+  },
+  "stopSpeech": {
+    "message": "Stop reading"
+  },
+  "speechNoLocalVoice": {
+    "message": "No local voice is available for this language. Install a voice in your system settings."
+  },
+  "speechFailed": {
+    "message": "Could not read the translation aloud. Please try again."
+  },
+  "configureApiKey": {
+    "message": "Open settings"
+  },
+  "authSettingsPrompt": {
+    "message": " Open settings."
   }
 }

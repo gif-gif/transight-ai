@@ -22,6 +22,7 @@ const view = new TransightTranslationView(document, {
     requestIds.clear();
   },
   setTargetLanguage,
+  settingsUrl: chrome.runtime.getURL('src/options/options.html'),
   openSettings: () => chrome.runtime.openOptionsPage(),
   async setLanguage(value) { await setLanguagePreference(value); return localeSnapshot(); },
   localized: () => { document.documentElement.lang = localeSnapshot().language; }

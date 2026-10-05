@@ -1,3 +1,4 @@
+import { speechSmoke } from './speech-smoke.mjs';
 import { credentialSmoke } from './credential-smoke.mjs';
 import { resolveBrowserLanguage } from '../src/shared/i18n.js';
 import { contextMenuSmoke } from './context-menu-smoke.mjs';
@@ -283,7 +284,19 @@ try {
   assert.equal(await page.locator('#status').innerText(), msg('complete'));
   await page.locator('#copy[data-copied="false"]').waitFor();
   await page.locator('#source').fill('Again'); mode = 'unauthorized'; await page.locator('#translate').click();
-  await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('http401'));
+  const authPrompt = msg('http401') + msg('authSettingsPrompt');
+  await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, authPrompt);
+  const settingsLink = page.locator('#status .settings-link');
+  assert.equal(await settingsLink.textContent(), msg('configureApiKey'));
+  assert.equal(await page.locator('#result-card .settings-link').textContent(), msg('configureApiKey'));
+  assert.ok((await settingsLink.getAttribute('href')).endsWith('/src/options/options.html'));
+  const settingsOpened = context.waitForEvent('page');
+  await settingsLink.focus(); await page.keyboard.press('Enter');
+  const authOptions = await settingsOpened;
+  await authOptions.waitForURL('**/src/options/options.html');
+  await authOptions.locator('#save:enabled').waitFor();
+  await authOptions.close();
+  console.log('✓ Authentication settings link: localized prompt, result card, keyboard navigation');
   assert.equal(await page.locator('#copy').isDisabled(), true);
   assert.equal((await page.locator('body').innerText()).includes('must-not-be-rendered'), false);
   const sample = await context.newPage();
@@ -301,6 +314,7 @@ try {
   await multiModelSmoke({ context, worker, page, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
   await contextMenuSmoke({ context, worker, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
   assert.deepEqual(errors, []);
+  await speechSmoke({ context, worker, page, sample, tabId, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
   await credentialSmoke({ context, worker, page, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; },
     restart: async () => {
       await context.close(); context = await launch();

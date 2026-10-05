@@ -69,3 +69,18 @@ test('external cancellation aborts an in-flight translation fetch', async () => 
   }) });
   await ready; external.abort(); await assert.rejects(pending);
 });
+
+for (const apiKey of ['', 'invalid-key']) {
+  test(`authentication failures carry a settings-action code (${apiKey ? 'invalid' : 'missing'} key)`, async () => {
+    await assert.rejects(translate('hi', { ...config, apiKey }, 'en', {
+      fetchImpl: async () => new Response('private-provider-details', { status: 401 })
+    }), error => error.code === 'AUTH_REQUIRED' && !error.message.includes('private-provider-details'));
+  });
+}
+test('non-authentication failures do not carry a settings-action code', async () => {
+  for (const status of [400, 403, 429, 500]) {
+    await assert.rejects(translate('hi', config, 'en', {
+      fetchImpl: async () => new Response('', { status })
+    }), error => error.code === undefined);
+  }
+});

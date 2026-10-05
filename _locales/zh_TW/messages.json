@@ -523,5 +523,23 @@
   },
   "targetLanguageSaveFailed": {
     "message": "目標語言儲存失敗，請重新選擇。"
+  },
+  "readTranslation": {
+    "message": "朗讀譯文"
+  },
+  "stopSpeech": {
+    "message": "停止朗讀"
+  },
+  "speechNoLocalVoice": {
+    "message": "找不到此語言的本機語音，請在系統設定中安裝對應語音。"
+  },
+  "speechFailed": {
+    "message": "語音朗讀失敗，請重試。"
+  },
+  "configureApiKey": {
+    "message": "請設定"
+  },
+  "authSettingsPrompt": {
+    "message": "請設定。"
   }
 }
