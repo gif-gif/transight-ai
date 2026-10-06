@@ -99,5 +99,29 @@ export async function inlineUnlockSmoke({ context, worker, page, sample, tabId, 
   await popup.waitForFunction(model => [...document.querySelectorAll('.result-card')].some(card => card.dataset.model === model && card.dataset.state === 'success'), retryModel);
   assert.equal(requests.length, beforeRetry + 1);
   await popup.close();
+  // Simple has no Translate button: unlocking must automatically resume its first model.
+  const previousMode = (await worker.evaluate(() => chrome.storage.local.get('translationMode'))).translationMode;
+  await sample.mouse.click(5, 5);
+  await worker.evaluate(() => chrome.storage.local.set({ translationMode: 'simple' }));
+  await rpc('VAULT_LOCK');
+  const simpleStart = requests.length;
+  assert.equal((await worker.evaluate(tabId => chrome.tabs.sendMessage(tabId, { type: 'SELECTION_OPEN', text: 'Unlock Simple Translate automatically' }), tabId)).ok, true);
+  for (let i = 0; !attached() && i < 100; i++) await new Promise(resolve => setTimeout(resolve, 30));
+  const simpleFrame = attached(); assert.ok(simpleFrame);
+  await simpleFrame.locator('#unlock-password').waitFor();
+  assert.equal(requests.length, simpleStart);
+  await sample.screenshot({ path: path.join(screenshotDir, 'selection-simple-locked.png') });
+  await simpleFrame.locator('#unlock-password').fill(password);
+  await simpleFrame.locator('#unlock-password').press('Enter');
+  await page.locator('#test:enabled').waitFor();
+  for (let i = 0; requests.length === simpleStart && i < 100; i++) await new Promise(resolve => setTimeout(resolve, 30));
+  assert.equal(requests.length, simpleStart + 1);
+  assert.equal(requests.at(-1).auth, 'Bearer local-test-key');
+  await sample.mouse.click(5, 5);
+  await worker.evaluate(async previous => {
+    if (previous === undefined) await chrome.storage.local.remove('translationMode');
+    else await chrome.storage.local.set({ translationMode: previous });
+  }, previousMode);
+  console.log('✓ Simple inline unlock: no request while locked, Enter resumes exactly the first model');
   console.log('✓ Inline unlock: popup/page iframe, wrong password, Enter, auto-resume, cross-window sync, restricted RPC and keyboard isolation');
 }

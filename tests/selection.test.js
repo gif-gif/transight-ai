@@ -12,7 +12,7 @@ test('selection site grants are exact HTTP(S) host patterns, never privileged sc
   for (const url of ['chrome://extensions', 'file:///secret', 'about:blank', 'data:text/plain,hello', 'invalid']) assert.equal(sitePattern(url), null);
 });
 test('only explicitly whitelisted configuration crosses into a webpage', () => {
-  assert.deepEqual(publicSettings({ apiKey: 'SECRET', baseUrl: 'https://private.example', model: 'test', consent: true, targetLanguage: 'ja', futureSecret: 'SECRET', systemPrompt: 'PRIVATE TEMPLATE' }), { model: 'test', models: ['test'], consent: true, targetLanguage: 'ja', selectionEnabled: true });
+  assert.deepEqual(publicSettings({ apiKey: 'SECRET', baseUrl: 'https://private.example', model: 'test', consent: true, targetLanguage: 'ja', futureSecret: 'SECRET', systemPrompt: 'PRIVATE TEMPLATE' }), { model: 'test', models: ['test'], consent: true, targetLanguage: 'ja', selectionEnabled: true, translationMode: 'full' });
 });
 test('global selection access, legacy migration, ordering and permission revocation', async () => {
   const event = () => ({ listeners: [], addListener(fn) { this.listeners.push(fn); }, fire(...args) { this.listeners.forEach(fn => fn(...args)); } });
@@ -31,8 +31,8 @@ test('global selection access, legacy migration, ordering and permission revocat
     }
   });
   const ready = Promise.resolve();
-  installSelection(ready, async (text, targetLanguage, signal, model) => {
-    translations.push({ text, targetLanguage, signal, model });
+  installSelection(ready, async (text, targetLanguage, signal, model, context, images, sourceLanguage) => {
+    translations.push({ text, targetLanguage, signal, model, sourceLanguage });
     if (text === 'slow') await new Promise(resolve => signal.addEventListener('abort', resolve, { once: true }));
     return { text: 'translated', model: 'test', targetLanguage };
   });
@@ -52,6 +52,15 @@ test('global selection access, legacy migration, ordering and permission revocat
   assert.deepEqual([...registered.keys()], ['unrelated'], 'only obsolete selection registrations are removed');
   grants.add('https://reading.example/*');
   const beforeTargetChange = structuredClone(data.settings);
+  assert.equal((await message({ type: 'SELECTION_MODE', value: 'simple' })).ok, true);
+  assert.equal(data.translationMode, 'simple');
+  assert.equal((await message({ type: 'SELECTION_MODE', value: 'invalid' })).ok, false);
+  assert.equal(data.translationMode, 'simple');
+  assert.equal(await message({ type: 'SELECTION_MODE', value: 'full' }, extension), null);
+  assert.deepEqual(data.settings, beforeTargetChange);
+  chrome.storage.onChanged.fire({ translationMode: { newValue: 'simple' } }, 'local');
+  await tick();
+  assert.equal(messages.at(-1).settings.translationMode, 'simple');
   assert.equal((await message({ type: 'SELECTION_TARGET_LANGUAGE', value: 'ko' })).ok, true);
   assert.equal(data.targetLanguagePreference, 'ko');
   assert.deepEqual(data.settings, beforeTargetChange, 'content may only update the target preference');
@@ -60,7 +69,8 @@ test('global selection access, legacy migration, ordering and permission revocat
   assert.equal(data.targetLanguagePreference, 'ko');
 
   assert.equal((await message({ type: 'SELECTION_SITE_SET', tabId: 7, enabled: false })).ok, false, 'old site-management messages are rejected');
-  assert.equal((await message({ type: 'SELECTION_TRANSLATE', id: 'ok', text: 'hello', targetLanguage: 'ja' })).text, 'translated');
+  assert.equal((await message({ type: 'SELECTION_TRANSLATE', id: 'ok', text: 'hello', targetLanguage: 'ja', sourceLanguage: 'en' })).text, 'translated');
+  assert.equal(translations[0].sourceLanguage, 'en');
   const pending = message({ type: 'SELECTION_TRANSLATE', id: 'early-close', text: 'must never fetch' });
   await message({ type: 'SELECTION_CANCEL', id: 'early-close' }); await pending;
   assert.equal(translations.length, 1, 'close during permission checks prevents fetch');

@@ -667,5 +667,26 @@
   },
   "imageUnsupported": {
     "message": "不支援此圖片格式，請貼上 PNG、JPEG、WebP、GIF 或 BMP 圖片。"
+  },
+  "simpleModeSetting": {
+    "message": "啟用 Simple Translate"
+  },
+  "translationModeHint": {
+    "message": "關閉：Full Translate（預設）。開啟：Simple Translate 自動使用第一個模型翻譯。立即套用於頁面浮窗，工具列彈窗保持完整佈局。"
+  },
+  "switchFullMode": {
+    "message": "切換到 Full Translate"
+  },
+  "modeSaveFailed": {
+    "message": "翻譯模式儲存失敗，請重試。"
+  },
+  "sourceLanguage": {
+    "message": "原文語言"
+  },
+  "invalidSource": {
+    "message": "不支援的原文語言。"
+  },
+  "switchSimpleMode": {
+    "message": "切換到 Simple Translate"
   }
 }

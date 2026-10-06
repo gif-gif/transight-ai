@@ -216,15 +216,20 @@
     panel.hidden = false; panelAnchor = chosen.rect;
     const updatePinLocale = installPin();
     view = new TransightTranslationView(panel, {
+      selectionMode: true,
+      async setTranslationMode(value) {
+        const response = await send({ type: 'SELECTION_MODE', value });
+        if (!response?.ok) throw new Error();
+      },
       vault: config.vault, unlockUrl: chrome.runtime.getURL('src/unlock/unlock.html'),
       async getVaultStatus() {
         const response = await send({ type: 'SELECTION_VAULT_STATUS' });
         if (!response?.ok) throw new Error();
         return response.vault;
       },
-      async translate(text, targetLanguage, model, images) {
+      async translate(text, targetLanguage, model, images, sourceLanguage) {
         const id = crypto.randomUUID(); requestIds.add(id);
-        try { return await send({ type: 'SELECTION_TRANSLATE', id, text, targetLanguage, model, images,
+        try { return await send({ type: 'SELECTION_TRANSLATE', id, text, targetLanguage, model, images, sourceLanguage,
           context: { title: document.title.slice(0, 500), summary: (document.querySelector('meta[name="description"]')?.content || '').slice(0, 1500) } }); }
         finally { requestIds.delete(id); }
       },

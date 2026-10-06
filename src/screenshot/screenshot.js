@@ -33,9 +33,9 @@ try {
   view = new TransightTranslationView($('translation-host'), {
     imageMode: true, vault: await vaultStatus(), getVaultStatus: vaultStatus,
     unlockUrl: chrome.runtime.getURL('src/unlock/unlock.html'),
-    async translate(text, targetLanguage, model, image) {
+    async translate(text, targetLanguage, model, image, sourceLanguage) {
       const id = crypto.randomUUID(); requests.add(id);
-      try { return await chrome.runtime.sendMessage({ type: 'TRANSLATE', id, text, targetLanguage, model, image }); }
+      try { return await chrome.runtime.sendMessage({ type: 'TRANSLATE', id, text, targetLanguage, model, image, sourceLanguage }); }
       finally { requests.delete(id); }
     },
     cancel() { for (const id of requests) chrome.runtime.sendMessage({ type: 'CANCEL_TRANSLATE', id }).catch(() => {}); requests.clear(); },

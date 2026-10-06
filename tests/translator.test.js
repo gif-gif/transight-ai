@@ -115,3 +115,20 @@ test('multi-image requests retain image order and optional source text; zero ima
   assert.throws(() => buildRequest('', config, 'en', {}, []));
   assert.throws(() => buildRequest('', config, 'en', {}, Array(6).fill(images[0])));
 });
+
+
+test('explicit source language affects default/custom system prompts and auto preserves legacy requests', () => {
+  const legacy = buildRequest('Hello', config, 'ja');
+  assert.deepEqual(buildRequest('Hello', config, 'ja', {}, undefined, 'auto'), legacy);
+  for (const source of ['en', 'zh-CN', 'ja', 'ko']) {
+    const request = buildRequest('Hello', config, 'ja', {}, undefined, source);
+    assert.ok(request.messages[0].content.includes(`(${source}).`));
+    assert.equal(request.messages[1].content, 'Hello');
+    const custom = buildRequest('Hello', { ...config, systemPrompt: 'From {{from}} to {{to}}' }, 'ja', {}, undefined, source);
+    assert.ok(custom.messages[0].content.startsWith('From '));
+    assert.ok(!custom.messages[0].content.includes('{{from}}'));
+  }
+  for (const invalid of ['bad', '__proto__', null, {}, ['en']]) {
+    assert.throws(() => buildRequest('Hello', config, 'ja', {}, undefined, invalid));
+  }
+});

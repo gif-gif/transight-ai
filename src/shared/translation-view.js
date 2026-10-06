@@ -12,7 +12,7 @@
     let locale = initialLocale, busy = false, disposed = false, revision = 0;
     let entries = [], statusState, configured = false;
     let editVersion = 0, vaultState, waitingForUnlock = false, pendingRetry = null;
-    let speakingEntry, speechId;
+    let speakingEntry, speechId, autoTranslateTimer, composing = false;
     let inputImages = [], imageGeneration = 0, importingImages = 0, imageQueue = Promise.resolve();
     // Same bounds are enforced independently by validateImages in the background.
     const maxImages = 5, maxImageLength = 8 * 1024 * 1024, maxTotalImageLength = 20 * 1024 * 1024;
@@ -49,6 +49,7 @@
     const languageName = code => t(languageKeys[code]) || code;
     function status(text, error = false) {
       statusState = null;
+      delete $('status').dataset.key;
       $('status').textContent = text;
       $('status').className = `status${error ? ' error' : ''}`;
     }
@@ -60,7 +61,7 @@
       element.replaceChildren(t('http401'), before, link, after);
     }
     function statusKey(key, error = false) {
-      status(t(key), error); statusState = { key, error };
+      status(t(key), error); statusState = { key, error }; $('status').dataset.key = key;
       if (key === 'http401') renderAuthError($('status'));
     }
     function localize(scope = root) {
@@ -72,6 +73,7 @@
     function setBusy(value) {
       busy = value;
       for (const id of ['translate', 'source', 'target', 'clear']) $(id).disabled = value;
+      if (isSimple()) { $('source').disabled = false; $('target').disabled = false; }
       $('translate').disabled = value || importingImages > 0;
       if ($('screenshot')) $('screenshot').disabled = importingImages > 0;
       $('cancel-translation').hidden = !value;
@@ -82,7 +84,33 @@
     function count() {
       $('count').textContent = $('source').value.length.toLocaleString('en-US') + ' / 12,000' + (inputImages.length ? ' · ' + inputImages.length + '/5' : '');
     }
-    function modelIds() { return settings.models ?? (settings.model ? [settings.model] : []); }
+    function isSimple() { return adapter.selectionMode && settings.translationMode === 'simple'; }
+    function modelIds() {
+      const models = settings.models ?? (settings.model ? [settings.model] : []);
+      return isSimple() ? models.slice(0, 1) : models;
+    }
+    function renderMode() {
+      container.classList.toggle('simple-translate', Boolean(isSimple()));
+      $('source-language').hidden = false;
+      root.querySelector('.ui-language-control').hidden = Boolean(adapter.selectionMode);
+      $('source').readOnly = false;
+      const button = $('translation-mode');
+      button.hidden = !adapter.selectionMode;
+      // Static layout icons: stacked model cards for Full, one result for Simple.
+      button.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${isSimple()
+        ? '<rect x="4" y="3" width="16" height="7" rx="2"/><rect x="4" y="14" width="16" height="7" rx="2"/><path d="M8 6.5h8M8 17.5h8"/>'
+        : '<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10h8M8 14h5"/>'}</svg>`;
+      button.title = t(isSimple() ? 'switchFullMode' : 'switchSimpleMode');
+      button.setAttribute('aria-label', button.title);
+      if (!isSimple()) { $('source').style.height = ''; }
+      else resizeSource();
+    }
+    function resizeSource() {
+      if (isSimple()) {
+        $('source').style.height = '0px';
+        $('source').style.height = `${Math.max(48, Math.min(160, $('source').scrollHeight))}px`;
+      }
+    }
     function renderCopy(entry) {
       const button = entry.card.querySelector('.copy-result');
       button.disabled = entry.state !== 'success';
@@ -107,7 +135,7 @@
     function renderEntry(entry) {
       const { card, model, state, result, error } = entry;
       const title = card.querySelector('h3');
-      title.textContent = model || t('translation'); title.title = model;
+      title.textContent = isSimple() ? t('translation') : model || t('translation'); title.title = isSimple() ? '' : model;
       card.dataset.state = state;
       card.setAttribute('aria-busy', String(state === 'loading'));
       const content = card.querySelector('.result');
@@ -140,7 +168,7 @@
         resultsList.append(card); renderEntry(entry); return entry;
       });
     }
-    function cancel() { revision++; waitingForUnlock = false; pendingRetry = null; adapter.cancel?.(); setBusy(false); }
+    function cancel() { clearTimeout(autoTranslateTimer); revision++; waitingForUnlock = false; pendingRetry = null; adapter.cancel?.(); setBusy(false); }
     function cancelTranslation() {
       if (!busy) return;
       cancel(); clearCopyTimers();
@@ -199,7 +227,7 @@
       entry.state = 'loading'; entry.error = undefined; entry.errorCode = undefined;
       renderEntry(entry); updateBatchStatus();
       try {
-        const result = await adapter.translate(entry.request.text, entry.request.target, entry.model, entry.request.images);
+        const result = await adapter.translate(entry.request.text, entry.request.target, entry.model, entry.request.images, entry.request.sourceLanguage);
         if (disposed || current !== revision) return;
         if (!result?.ok) {
           const error = new Error(result?.error || t('backgroundFailed'));
@@ -233,13 +261,14 @@
       return translateEntry(entry, revision);
     }
     async function translate() {
-      if (busy || disposed || importingImages) return;
+      clearTimeout(autoTranslateTimer);
+      if (busy || disposed || importingImages || composing) return;
       stopSpeech();
       if (!configured) { statusKey('connectFirst', true); return; }
       if (adapter.imageMode && !inputImages.length) { statusKey('screenshotSelectFirst', true); return; }
       if (!adapter.imageMode && !inputImages.length && !$('source').value.trim()) { statusKey('enterText', true); $('source').focus(); return; }
       if ($('source').value.length > 12000) { statusKey('selectionTooLong', true); return; }
-      const current = ++revision, text = $('source').value, target = $('target').value, images = [...inputImages];
+      const current = ++revision, text = $('source').value, target = $('target').value, images = [...inputImages], sourceLanguage = $('source-language').value;
       waitingForUnlock = false; pendingRetry = null;
       if (adapter.getVaultStatus) {
         setBusy(true);
@@ -259,7 +288,7 @@
         }
       }
       setBusy(true); resetResult('loading'); statusKey('waiting');
-      for (const entry of entries) entry.request = { text, target, images };
+      for (const entry of entries) entry.request = { text, target, images, sourceLanguage };
       await Promise.all(entries.map(entry => translateEntry(entry, current)));
     }
     function closeMenu(focus = false) {
@@ -276,7 +305,15 @@
         const option = document.createElement('option'); option.value = code; option.textContent = languageName(code); $('target').append(option);
       }
       $('target').value = target;
-      renderSource(); setBusy(busy);
+      const sourceLanguage = $('source-language').value || 'auto';
+      $('source-language').replaceChildren();
+      for (const code of ['auto', ...Object.keys(languageKeys)]) {
+        const option = document.createElement('option'); option.value = code;
+        option.textContent = code === 'auto' ? t('autoDetect') : languageName(code);
+        $('source-language').append(option);
+      }
+      $('source-language').value = sourceLanguage;
+      renderMode(); renderSource(); setBusy(busy);
       for (const button of root.querySelectorAll('[data-language]')) button.setAttribute('aria-pressed', String(button.dataset.language === next.preference));
       entries.forEach(renderEntry);
       if (statusState) statusKey(statusState.key, statusState.error);
@@ -285,11 +322,13 @@
       adapter.localized?.(locale);
     }
     function applySettings(next, updateTarget = true) {
+      const modeChanged = adapter.selectionMode && settings.translationMode !== next.translationMode;
       const changed = JSON.stringify(settings) !== JSON.stringify(next);
       if (changed) cancel();
-      settings = next; configured = Boolean(modelIds().length && next.consent); $('setup').hidden = configured;
+      settings = next; renderMode(); configured = Boolean(modelIds().length && next.consent); $('setup').hidden = configured;
       if (changed || !entries.length) { resetResult(); status(''); }
       if (updateTarget && !busy) $('target').value = next.targetLanguage;
+      if (changed && (isSimple() || modeChanged) && ($('source').value.trim() || inputImages.length)) translate();
     }
     function renderSource() {
       const gallery = $('source-images'), wrap = $('source-image-wrap');
@@ -316,7 +355,7 @@
       return { text: $('source').value, images: [...inputImages] };
     }
     function input(text, auto = false) {
-      resetImages(); renderSource(); cancel(); editVersion++; $('source').value = text; count(); resetResult(); status('');
+      resetImages(); renderSource(); cancel(); editVersion++; $('source').value = text; renderMode(); count(); resetResult(); status('');
       if (text.length > 12000) statusKey('selectionTooLong', true);
       else if (auto) translate();
     }
@@ -343,6 +382,7 @@
       } finally { bitmap.close(); }
     }
     listen($('source'), 'paste', event => {
+      if (isSimple()) return;
       const data = event.clipboardData;
       const files = Array.from(data?.items || []).filter(item => item.kind === 'file' && item.type.startsWith('image/')).map(item => item.getAsFile()).filter(Boolean);
       if (!files.length) return; // Normal text paste remains entirely native.
@@ -375,7 +415,30 @@
         importingImages--; setBusy(busy);
       });
     });
-    listen($('source'), 'input', () => { cancel(); editVersion++; count(); resetResult(); status(''); });
+    function sourceEdited(event) {
+      cancel(); editVersion++; count(); resizeSource(); resetResult(); status('');
+      // Wait for a pause in typing and for IME composition to finish. Editing,
+      // switching languages/mode, clearing, and closing cancel pending work.
+      if (isSimple() && !composing && !event?.isComposing && ($('source').value.trim() || inputImages.length)) {
+        autoTranslateTimer = setTimeout(() => { if (!disposed && isSimple()) translate(); }, 600);
+      }
+    }
+    listen($('source'), 'input', sourceEdited);
+    listen($('source'), 'compositionstart', () => { composing = true; sourceEdited(); });
+    listen($('source'), 'compositionend', () => { composing = false; sourceEdited(); });
+    listen($('source-language'), 'change', () => {
+      cancel(); resetResult(); status('');
+      if (isSimple() || adapter.autoTranslateTarget) translate();
+    });
+    listen($('translation-mode'), 'click', async () => {
+      const button = $('translation-mode'), translationMode = isSimple() ? 'full' : 'simple';
+      button.disabled = true;
+      try {
+        await adapter.setTranslationMode(translationMode);
+        if (!disposed) applySettings({ ...settings, translationMode });
+      } catch { if (!disposed) statusKey('modeSaveFailed', true); }
+      finally { if (!disposed) button.disabled = false; }
+    });
     listen($('target'), 'change', async () => {
       cancel(); resetResult(); status('');
       const current = revision, target = $('target').value;
@@ -437,7 +500,7 @@
     });
     listen(root, 'click', event => { if (!event.target.closest?.('.ui-language-control')) closeMenu(); });
     listen(root, 'keydown', event => {
-      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); translate(); }
+      if (!event.isComposing && !composing && (event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); event.stopPropagation(); translate(); }
       if (event.key === 'Escape') {
         if (!$('ui-language-menu').hidden) { event.preventDefault(); event.stopPropagation(); closeMenu(true); }
         else if (adapter.close) { event.preventDefault(); event.stopPropagation(); adapter.close(); }

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
 
-export async function pinSmoke({ sample, ui, until, click, select, requests, screenshotDir, msg }) {
+export async function pinSmoke({ worker, sample, ui, until, click, select, requests, screenshotDir, msg }) {
   const hidden = () => ui('.selection-panel', 'function(){return this.hidden}');
   const position = () => ui('.selection-panel', 'function(){const r=this.getBoundingClientRect();return {x:r.x,y:r.y}}');
   await select('Keep this translation'); await click('.selection-bubble');
@@ -41,9 +41,9 @@ export async function pinSmoke({ sample, ui, until, click, select, requests, scr
   await ui('#source', 'function(){this.style.height="110px"}');
   await click('#translate'); await until(async () => (await ui('#status')) === msg('complete'));
   assert.deepEqual(await position(), anchored);
-  await click('#ui-language'); await click('[data-language="en"]');
+  await worker.evaluate(uiLanguage => chrome.storage.local.set({ uiLanguage }), 'en');
   await until(async () => (await ui('#pin-view', 'function(){return this.title}')) === 'Unpin translation window');
-  await click('#ui-language'); await click('[data-language="auto"]');
+  await worker.evaluate(uiLanguage => chrome.storage.local.set({ uiLanguage }), 'auto');
   await until(async () => (await ui('#pin-view', 'function(){return this.title}')) === msg('unpinTranslation'));
   await sample.screenshot({ path: path.join(screenshotDir, 'selection-pinned.png'), fullPage: true });
   await sample.setViewportSize({ width: 375, height: 480 });

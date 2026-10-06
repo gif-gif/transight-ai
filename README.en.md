@@ -19,9 +19,15 @@ An AI translation Chrome extension MVP built with **Manifest V3 and vanilla Java
 - **Connection testing**, loading indicators, timeouts, and actionable authentication, rate-limit, and model error messages.
 - **All-site selection**: HTTP/HTTPS access is declared at installation/update, without per-site enable buttons. Only clicking the translate button sends the selected text.
 
+### Simple Translate / Full Translate
+
+The **Use Simple Translate** switch in settings is off by default (**Full Translate**). When enabled, selection and context-menu panels automatically translate with **only the first selected model**. The compact panel shows source language (auto-detect by default), target language, editable source text, and translation—no Translate button. Changing either language or pausing typing for about 0.6 seconds translates again; the target preference is remembered.
+
+Use the top bar to open settings or switch between **Simple Translate / Full Translate** with the layout icon, preserving the source and restoring all selected models. Mode changes persist immediately and synchronize open page panels; the toolbar popup keeps its full layout. Retry, authentication settings links, and inline unlocking remain available. Copying and speech are also available in Simple mode; use Full mode for image tools.
+
 ### Screenshot and clipboard image translation
 
-1. Open the toolbar popup on an HTTP/HTTPS webpage and click the scissors icon to select a region.
+1. Open the toolbar popup on an HTTP/HTTPS webpage and click **Screenshot translation** to select a region.
 2. **Double-click inside the selection**, click **Capture selection**, or press Enter. The popup reopens with a **72 × 72 thumbnail** in the source area, without a new tab. Esc or **Cancel** exits the capture.
 3. Capture again to append another image while keeping existing text and images. You can also press **Ctrl+V / Cmd+V in the source textarea** of the toolbar popup or on-page panel to paste clipboard images. Attach up to **5 images**; each top-right **×** removes only that image. **Clear** removes both text and images.
 4. Review the content, choose a target language, and click **Translate image**. Typed text and all remaining images are sent together in order. Multi-model results support individual retries, cancellation, copying, speech, and inline unlocking. If the popup cannot reopen automatically, click the toolbar icon within 60 seconds to recover the capture draft.
@@ -44,7 +50,7 @@ Settings can enable or disable the selection trigger (on by default). Changes sa
 
 Edit the system prompt or restore the default, then save settings. An empty prompt uses the default. The limit is 16,000 characters, shared across selected models. Restore only edits the draft until saved. The template is sent as a `system` message; source text is also sent separately as a `user` message.
 
-- `{{text}}`: source text; `{{from}}`: automatic source-language detection by the model; `{{to}}`: current target language.
+- `{{text}}`: source text; `{{from}}`: the source language selected in Simple mode, or automatic detection when unspecified; `{{to}}`: current target language.
 - `{{title_prompt}}`: webpage title; `{{summary_prompt}}`: existing `description` metadata. No full-page scraping or additional AI summarization request.
 - `{{terms_prompt}}`: relevant terminology, empty while no glossary is configured.
 - `{{imt_style_guide}}`: selected translation style.

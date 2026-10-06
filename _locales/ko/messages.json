@@ -667,5 +667,26 @@
   },
   "imageUnsupported": {
     "message": "지원하지 않는 이미지 형식입니다. PNG, JPEG, WebP, GIF 또는 BMP 이미지를 붙여넣으세요."
+  },
+  "simpleModeSetting": {
+    "message": "Simple Translate 사용"
+  },
+  "translationModeHint": {
+    "message": "끄기: Full Translate(기본값). 켜기: Simple Translate는 첫 번째 모델로 자동 번역합니다. 페이지 패널에 즉시 적용되며 도구 모음 팝업은 전체 레이아웃을 유지합니다."
+  },
+  "switchFullMode": {
+    "message": "Full Translate로 전환"
+  },
+  "modeSaveFailed": {
+    "message": "번역 모드를 저장하지 못했습니다. 다시 시도해 주세요."
+  },
+  "sourceLanguage": {
+    "message": "원문 언어"
+  },
+  "invalidSource": {
+    "message": "지원하지 않는 원문 언어입니다."
+  },
+  "switchSimpleMode": {
+    "message": "Simple Translate로 전환"
   }
 }

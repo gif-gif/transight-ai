@@ -1,3 +1,4 @@
+import { simpleModeSmoke } from './simple-mode-smoke.mjs';
 import { inspectSourceImageLayout, assertSourceImageLayout } from './source-image-layout.mjs';
 import { pinSmoke } from './pin-smoke.mjs';
 import { inspectSelectStyle, assertSelectStyle } from './select-style-smoke.mjs';
@@ -154,18 +155,18 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
   assert.equal(await ui('.selection-panel', 'function(){return this.scrollHeight===this.clientHeight && this.scrollWidth===this.clientWidth}'), true);
   assert.equal(await sample.locator('[data-transight]').count(), 1);
   // Manual interface language changes synchronize without clearing the translation.
-  await click('#ui-language'); await click('[data-language="zh-CN"]');
+  await worker.evaluate(uiLanguage => chrome.storage.local.set({ uiLanguage }), 'zh-CN');
   await until(async () => (await ui('.translation-view', 'function(){return this.lang}')) === 'zh-CN');
   assert.equal(await ui('#result'), '多一点理解，让我们更靠近。');
-  await click('#ui-language'); await click('[data-language="zh-TW"]');
+  await worker.evaluate(uiLanguage => chrome.storage.local.set({ uiLanguage }), 'zh-TW');
   await until(async () => (await ui('.translation-view', 'function(){return this.lang}')) === 'zh-TW');
   assert.equal(await ui('#translate-label'), '翻譯文字');
   assert.equal(await ui('#result'), '多一点理解，让我们更靠近。');
   assert.equal(await ui('#target', 'function(){return this.value}'), 'zh-CN');
   assert.equal(await worker.evaluate(async () => (await chrome.storage.local.get('uiLanguage')).uiLanguage), 'zh-TW');
-  await click('#ui-language'); await click('[data-language="en"]');
+  await worker.evaluate(uiLanguage => chrome.storage.local.set({ uiLanguage }), 'en');
   await until(async () => (await ui('.translation-view', 'function(){return this.lang}')) === 'en');
-  await click('#ui-language'); await click('[data-language="auto"]');
+  await worker.evaluate(uiLanguage => chrome.storage.local.set({ uiLanguage }), 'auto');
   await until(async () => (await ui('#status')) === msg('complete'));
 
   assertSelectStyle(await ui('#target', inspectSelectStyle.toString()));
@@ -244,7 +245,7 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
   await sample.keyboard.press('Escape'); assert.equal(await ui('.selection-panel', 'function(){return this.hidden}'), true);
   await select(); await click('.selection-bubble'); await until(async () => (await ui('#status')) === msg('complete'));
   await sample.mouse.click(1000, 900); assert.equal(await ui('.selection-panel', 'function(){return this.hidden}'), true);
-  await pinSmoke({ sample, ui, until, click, select, requests, screenshotDir, msg });
+  await pinSmoke({ worker, sample, ui, until, click, select, requests, screenshotDir, msg });
   const beforeLongSelection = requests.length;
   await select('x'.repeat(12001)); await click('.selection-bubble');
   await until(async () => (await ui('#status')) === msg('selectionTooLong'));
@@ -443,6 +444,7 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
     }, preferenceBefore);
   }
   console.log('✓ Selection toggle: live hide, reload persistence, manual translation unaffected; custom prompt save/reload, popup/page requests, title/summary variables, restore default and credential isolation');
+  await simpleModeSmoke({ context, worker, sample, ui, until, click, select, requests, screenshotDir, msg, setMode });
   await session.detach();
   console.log('✓ Selection: automatic all-site injection, shared popup, selection-tail positioning (pointer, reverse, multiline, nested and viewport edges), next-paint pointer/keyboard trigger, compact trigger and 2.5s expiry/reset, no request on selection, editing/target, close/Esc/outside, cancellation, narrow screen, editable exclusion, persisted injection, second hostname, credential isolation');
 }

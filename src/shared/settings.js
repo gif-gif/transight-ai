@@ -16,7 +16,7 @@ export const LANGUAGES = Object.freeze({
 });
 export const DEFAULT_SETTINGS = Object.freeze({
   baseUrl: 'https://api.openai.com/v1', apiKey: '', model: '', targetLanguage: 'zh-CN',
-  style: 'natural', consent: false, systemPrompt: DEFAULT_SYSTEM_PROMPT, selectionEnabled: true
+  style: 'natural', consent: false, systemPrompt: DEFAULT_SYSTEM_PROMPT, selectionEnabled: true, translationMode: 'full'
 });
 export const STYLES = Object.freeze({ natural: '自然流畅', faithful: '忠实原文', professional: '专业严谨' });
 
@@ -58,10 +58,10 @@ export function validateSettings(input) {
 }
 
 export async function getSettings() {
-  const [{ settings }, { targetLanguagePreference }, { selectionEnabled }] = await Promise.all([
-    chrome.storage.local.get('settings'), chrome.storage.local.get('targetLanguagePreference'), chrome.storage.local.get('selectionEnabled')
+  const [{ settings }, { targetLanguagePreference }, { selectionEnabled }, { translationMode }] = await Promise.all([
+    chrome.storage.local.get('settings'), chrome.storage.local.get('targetLanguagePreference'), chrome.storage.local.get('selectionEnabled'), chrome.storage.local.get('translationMode')
   ]);
-  const merged = { ...DEFAULT_SETTINGS, ...settings, apiKey: '', selectionEnabled: selectionEnabled !== false };
+  const merged = { ...DEFAULT_SETTINGS, ...settings, apiKey: '', selectionEnabled: selectionEnabled !== false, translationMode: translationMode === 'simple' ? 'simple' : 'full' };
   if (typeof targetLanguagePreference === 'string' && Object.hasOwn(LANGUAGES, targetLanguagePreference)) merged.targetLanguage = targetLanguagePreference;
   const models = selectedModels(merged);
   return { ...merged, models, model: models[0] || '' };
@@ -96,4 +96,9 @@ export function fillLanguages(select, selected) {
 export async function setSelectionEnabled(value) {
   if (typeof value !== 'boolean') throw new Error(t('selectionSaveFailed'));
   await chrome.storage.local.set({ selectionEnabled: value });
+}
+
+export async function setTranslationMode(value) {
+  if (!['simple', 'full'].includes(value)) throw new Error(t('modeSaveFailed'));
+  await chrome.storage.local.set({ translationMode: value });
 }

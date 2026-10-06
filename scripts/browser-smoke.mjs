@@ -241,7 +241,10 @@ try {
   assert.equal(await page.locator('#settings').getAttribute('aria-label'), msg('openSettings'));
   assert.equal(await page.locator('#target option[value="zh-CN"]').innerText(), msg('langZhCN'));
   assert.equal(await page.locator('#target').inputValue(), 'zh-CN');
-  assert.equal(await page.locator('#target').evaluate(el => el.getBoundingClientRect().width), 200);
+  assert.equal(await page.locator('#source-language').isVisible(), true);
+  assert.equal(await page.locator('#source-language').inputValue(), 'auto');
+  assert.equal(await page.locator('#target').evaluate(el => el.getBoundingClientRect().width), await page.locator('#source-language').evaluate(el => el.getBoundingClientRect().width));
+  assert.equal(await page.locator('#screenshot').count(), 0, 'popup has no screenshot entry');
   assert.equal(await page.locator('#ui-language svg').count(), 1);
   assert.equal((await page.locator('#ui-language').innerText()).trim(), '');
   assert.equal(await page.locator('.brand h1').innerText(), chinese ? msg('brandShort') + 'AI' : 'Transight AI');
@@ -254,6 +257,7 @@ try {
   await page.setViewportSize({ width: 400, height: 800 });
   await page.goto(`chrome-extension://${id}/src/popup/popup.html`);
   await page.waitForFunction(() => document.querySelector('#setup').hidden);
+  await page.locator('#source-language').selectOption('en');
   await page.locator('#source').fill('A little understanding brings us closer.');
   await page.locator('#translate').click();
   await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('complete'));
@@ -296,11 +300,14 @@ try {
   assert.equal(await page.locator('#ui-language').evaluate(el => el === document.activeElement), true);
   await switchLanguage('auto', msg('translate'));
   await options.close();
+  await page.locator('#source-language').selectOption('en');
   await page.locator('#source').fill('A little understanding brings us closer.');
   await page.locator('#translate').click();
   await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('complete'));
   assert.equal(await worker.evaluate(async () => (await chrome.storage.local.get('uiLanguage')).uiLanguage), 'auto');
   for (const select of await page.locator('select:visible').all()) assertSelectStyle(await select.evaluate(inspectSelectStyle));
+  assert.ok(requests.at(-1).body.messages[0].content.includes('Source language: English (en).'));
+  assert.equal(await page.locator('#ui-language').isVisible(), true);
   await page.screenshot({ path: path.join(screenshotDir, 'popup.png'), fullPage: true });
   await page.locator('#copy').click();
   await page.locator('#copy[data-copied="true"]').waitFor();

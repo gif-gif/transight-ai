@@ -92,3 +92,27 @@ test('selection preference is independent of provider settings and works without
     for (const value of ['false', null, 0]) await assert.rejects(setSelectionEnabled(value));
   } finally { chrome.storage = previous; }
 });
+
+
+test('translation mode defaults to full and persists independently without changing models or credentials', async () => {
+  const { getSettings, setTranslationMode } = await import('../src/shared/settings.js');
+  const previous = chrome.storage;
+  const data = { settings: { ...config, models: ['first', 'second'] }, credentialVault: { ciphertext: 'keep' } };
+  const snapshot = structuredClone(data);
+  chrome.storage = { local: { get: async key => ({ [key]: data[key] }), set: async values => Object.assign(data, values) } };
+  try {
+    assert.equal((await getSettings()).translationMode, 'full');
+    for (const mode of ['simple', 'full', 'simple']) {
+      await setTranslationMode(mode);
+      assert.equal((await getSettings()).translationMode, mode);
+      assert.deepEqual(data.settings, snapshot.settings);
+      assert.deepEqual(data.credentialVault, snapshot.credentialVault);
+    }
+    for (const invalid of [null, true, 'bad', {}, ['simple'], '__proto__']) await assert.rejects(setTranslationMode(invalid));
+    data.translationMode = 'invalid';
+    assert.equal((await getSettings()).translationMode, 'full');
+    delete data.settings;
+    await setTranslationMode('simple');
+    assert.equal((await getSettings()).translationMode, 'simple');
+  } finally { chrome.storage = previous; }
+});

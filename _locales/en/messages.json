@@ -667,5 +667,26 @@
   },
   "imageUnsupported": {
     "message": "Unsupported image format. Paste a PNG, JPEG, WebP, GIF or BMP image."
+  },
+  "simpleModeSetting": {
+    "message": "Use Simple Translate"
+  },
+  "translationModeHint": {
+    "message": "Off: Full Translate (default). On: Simple Translate automatically translates with your first model. Applies immediately to page panels; the toolbar keeps its full layout."
+  },
+  "switchFullMode": {
+    "message": "Switch to Full Translate"
+  },
+  "modeSaveFailed": {
+    "message": "Could not save translation mode. Please try again."
+  },
+  "sourceLanguage": {
+    "message": "Source language"
+  },
+  "invalidSource": {
+    "message": "Unsupported source language."
+  },
+  "switchSimpleMode": {
+    "message": "Switch to Simple Translate"
   }
 }

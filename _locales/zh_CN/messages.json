@@ -667,5 +667,26 @@
   },
   "imageUnsupported": {
     "message": "不支持此图片格式，请粘贴 PNG、JPEG、WebP、GIF 或 BMP 图片。"
+  },
+  "simpleModeSetting": {
+    "message": "启用 Simple Translate"
+  },
+  "translationModeHint": {
+    "message": "关闭：Full Translate（默认）。开启：Simple Translate 自动使用第一个模型翻译。立即应用于页面浮窗，工具栏弹窗保持完整布局。"
+  },
+  "switchFullMode": {
+    "message": "切换到 Full Translate"
+  },
+  "modeSaveFailed": {
+    "message": "翻译模式保存失败，请重试。"
+  },
+  "sourceLanguage": {
+    "message": "原文语言"
+  },
+  "invalidSource": {
+    "message": "不支持的原文语言。"
+  },
+  "switchSimpleMode": {
+    "message": "切换到 Simple Translate"
   }
 }

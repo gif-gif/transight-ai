@@ -62,16 +62,16 @@ export async function contextMenuSmoke({ context, worker, sample, tabId, request
     assert.ok(single.cards[0].bottom <= single.bottom);
     const tree = await session.send('Accessibility.getFullAXTree');
     assert.ok(tree.nodes.some(node => node.role?.value === 'dialog' && node.name?.value === msg('panelLabel')));
-    for (const selector of ['#source', '#target', '#translate', '#pin-view', '#settings', '#ui-language', '#close-view']) {
+    for (const selector of ['#source', '#target', '#translate', '#pin-view', '#settings', '#source-language', '#close-view']) {
       assert.equal(await ui('function(selector){return !!this.querySelector(selector)}', [selector]), true);
     }
     await click('.copy-result');
     await until(() => ui('function(){return this.querySelector(".copy-result").dataset.copied==="true"}'));
     await until(() => ui('function(){return this.querySelector(".copy-result").dataset.copied==="false"}'));
-    await click('#ui-language'); await click('[data-language="en"]');
+    await worker.evaluate(uiLanguage => chrome.storage.local.set({ uiLanguage }), 'en');
     await until(() => ui('function(){return this.querySelector(".translation-view").lang==="en"}'));
     assert.equal(await ui('function(){return this.querySelector(".result").textContent}'), literal);
-    await click('#ui-language'); await click('[data-language="auto"]');
+    await worker.evaluate(uiLanguage => chrome.storage.local.set({ uiLanguage }), 'auto');
     await until(() => ui('function(expected){return this.querySelector("#status").textContent===expected}', [msg('complete')]));
     await ui('function(){this.querySelector(".selection-panel").scrollTop=0}');
     await sample.screenshot({ path: path.join(screenshotDir, 'panel.png'), fullPage: true });

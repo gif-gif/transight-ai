@@ -45,7 +45,7 @@ async function withRequest(signal, callback) {
   finally { activeRequests.delete(controller); signal?.removeEventListener('abort', cancel); }
 }
 function abortRequests() { for (const controller of activeRequests) controller.abort(); }
-async function runTranslation(text, targetLanguage, signal, model, context, image) {
+async function runTranslation(text, targetLanguage, signal, model, context, image, sourceLanguage) {
   return withRequest(signal, async requestSignal => {
     await languageReady;
     const settings = validateSettings(await getSettings());
@@ -54,7 +54,7 @@ async function runTranslation(text, targetLanguage, signal, model, context, imag
     if (!settings.models.includes(chosen)) throw new Error(t('modelNotConfigured'));
     const apiKey = await credentials.resolve(settings.baseUrl);
     if (requestSignal.aborted) throw new Error(t('vaultLockedError'));
-    return translate(text, { ...settings, apiKey, model: chosen, models: [chosen] }, targetLanguage, { signal: requestSignal, context, image });
+    return translate(text, { ...settings, apiKey, model: chosen, models: [chosen] }, targetLanguage, { signal: requestSignal, context, image, sourceLanguage });
   });
 }
 
@@ -109,7 +109,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.id !== undefined && (typeof message.id !== 'string' || message.id.length > 80)) return false;
   const controller = new AbortController();
   if (message.id) { popupJobs.get(key)?.abort(); popupJobs.set(key, controller); }
-  runTranslation(message.text, message.targetLanguage, controller.signal, message.model, message.context, message.images !== undefined ? message.images : message.image)
+  runTranslation(message.text, message.targetLanguage, controller.signal, message.model, message.context, message.images !== undefined ? message.images : message.image, message.sourceLanguage)
     .then(result => sendResponse({ ok: true, ...result }))
     .catch(error => sendResponse({ ok: false, error: error.message || t('translationFailed'), ...(error.code === 'AUTH_REQUIRED' ? { code: 'AUTH_REQUIRED' } : {}) }))
     .finally(() => { if (popupJobs.get(key) === controller) popupJobs.delete(key); });

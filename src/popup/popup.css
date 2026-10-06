@@ -61,3 +61,24 @@ html.standalone body{width:400px;max-width:100%}
 .remove-source-image{cursor:default;position:absolute;top:-3px;right:-3px;display:flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;border:1px solid #dbe3df;border-radius:50%;background:#fff;color:#111;box-shadow:0 1px 3px #0002;opacity:0;pointer-events:none}
 .source-thumbnail:hover .remove-source-image,.remove-source-image:focus-visible{opacity:1;pointer-events:auto}
 .remove-source-image svg{width:10px;height:10px}
+
+/* Page-only Simple Translate: the same request/error/unlock lifecycle, less chrome. */
+.mode-button svg{width:18px;height:18px}
+.simple-translate .brand small,
+
+.simple-translate #clear,.simple-translate .card-foot,
+.simple-translate .translation-actions,.simple-translate footer,
+.simple-translate .empty-state,
+.simple-translate .result-card:not([data-state="error"]) .result-meta{display:none!important}
+.simple-translate main{padding:12px 16px 16px}
+.simple-translate .language-row{display:flex;gap:8px;margin-bottom:10px}
+.simple-translate .language-row select{width:0;flex:1;min-width:0;font-size:12px}
+.simple-translate .text-card{margin-bottom:8px}
+.simple-translate #source{min-height:48px;max-height:160px;resize:none;font-size:13px;line-height:1.65;overflow-y:auto}
+.simple-translate .result{min-height:48px;padding:10px 14px;font-size:14px;line-height:1.7}
+.simple-translate .status{margin:4px 0;font-size:11px}
+.simple-translate .status:empty,.simple-translate .status[data-key="complete"]{display:none}
+.simple-translate .topbar .brand small{display:none}
+
+/* Both modes expose source and target languages without crowding the toolbar. */
+.language-row select{width:0;flex:1;min-width:0}

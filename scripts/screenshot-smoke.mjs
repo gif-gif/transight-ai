@@ -20,19 +20,19 @@ export async function screenshotSmoke({ context, worker, page, sample, requests,
       if (!await page.evaluate(() => chrome.extension.getViews({ type: 'popup' }).length)) {
         await sample.bringToFront(); await worker.evaluate(() => chrome.action.openPopup());
       }
-      await page.waitForFunction(() => chrome.extension.getViews({ type: 'popup' }).some(view => view.document.querySelector('#screenshot')?.hidden === false));
-      const screenshotEntry = await page.evaluate(() => {
-        const doc = chrome.extension.getViews({ type: 'popup' })[0].document;
-        const button = doc.querySelector('#screenshot'), bounds = button.getBoundingClientRect();
-        return { inHeader: !!button.closest('.header-actions'), text: button.textContent.trim(),
-          label: button.getAttribute('aria-label'), title: button.title,
-          hasIcon: !!button.querySelector('svg[aria-hidden="true"]'),
-          width: bounds.width, height: bounds.height,
-          overflow: doc.documentElement.scrollWidth > doc.defaultView.innerWidth };
+      await page.waitForFunction(() => chrome.extension.getViews({ type: 'popup' }).some(view => view.document.querySelector('#target option')));
+      // The popup no longer exposes a capture button. Exercise the retained
+      // capture pipeline directly from the authorized extension popup context.
+      const response = await page.evaluate(async () => {
+        const view = chrome.extension.getViews({ type: 'popup' })[0], doc = view.document;
+        if (doc.querySelector('#screenshot')) throw new Error('Screenshot entry must be absent');
+        const draft = { text: doc.querySelector('#source').value,
+          images: Array.from(doc.querySelectorAll('#source-images img'), image => image.src) };
+        const result = await view.chrome.runtime.sendMessage({ type: 'SCREENSHOT_CAPTURE', draft });
+        if (result?.ok) view.close();
+        return result;
       });
-      assert.deepEqual(screenshotEntry, { inHeader: true, text: '', label: msg('screenshotTranslate'),
-        title: msg('screenshotTranslate'), hasIcon: true, width: 40, height: 40, overflow: false });
-      await page.evaluate(() => chrome.extension.getViews({ type: 'popup' })[0].document.querySelector('#screenshot').click());
+      assert.equal(response?.ok, true);
       await sample.locator(selector).waitFor({ state: 'visible' });
       await page.waitForFunction(() => !chrome.extension.getViews({ type: 'popup' }).length);
     };

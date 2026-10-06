@@ -667,5 +667,26 @@
   },
   "imageUnsupported": {
     "message": "未対応の画像形式です。PNG、JPEG、WebP、GIF、BMPを貼り付けてください。"
+  },
+  "simpleModeSetting": {
+    "message": "Simple Translate を使う"
+  },
+  "translationModeHint": {
+    "message": "オフ：Full Translate（既定）。オン：Simple Translate は最初のモデルで自動翻訳します。ページ内パネルに即時反映され、ツールバーの表示は変わりません。"
+  },
+  "switchFullMode": {
+    "message": "Full Translate に切り替え"
+  },
+  "modeSaveFailed": {
+    "message": "翻訳モードを保存できませんでした。再試行してください。"
+  },
+  "sourceLanguage": {
+    "message": "原文の言語"
+  },
+  "invalidSource": {
+    "message": "対応していない原文の言語です。"
+  },
+  "switchSimpleMode": {
+    "message": "Simple Translate に切り替え"
   }
 }

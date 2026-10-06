@@ -13,9 +13,9 @@ async function getVaultStatus() {
 const initialVault = await getVaultStatus().catch(() => null);
 const view = new TransightTranslationView(document, {
   vault: initialVault, getVaultStatus, unlockUrl: chrome.runtime.getURL('src/unlock/unlock.html'),
-  async translate(text, targetLanguage, model, images) {
+  async translate(text, targetLanguage, model, images, sourceLanguage) {
     const id = crypto.randomUUID(); requestIds.add(id);
-    try { return await chrome.runtime.sendMessage({ type: 'TRANSLATE', id, text, targetLanguage, model, images, context: !images?.length && text === selectedText ? selectedContext : undefined }); }
+    try { return await chrome.runtime.sendMessage({ type: 'TRANSLATE', id, text, targetLanguage, model, images, sourceLanguage, context: !images?.length && text === selectedText ? selectedContext : undefined }); }
     finally { requestIds.delete(id); }
   },
   cancel() {
@@ -65,15 +65,3 @@ async function init() {
 }
 init().catch(() => view.statusKey('readConfigFailed', true));
 window.addEventListener('pagehide', () => view.dispose());
-
-const screenshotButton = document.querySelector('#screenshot');
-screenshotButton.hidden = standalone;
-screenshotButton.addEventListener('click', async () => {
-  screenshotButton.disabled = true; view.statusKey('screenshotCapturing');
-  try {
-    const response = await chrome.runtime.sendMessage({ type: 'SCREENSHOT_CAPTURE', draft: view.getDraft() });
-    if (!response?.ok) throw new Error(response?.error);
-    window.close();
-  } catch (error) { if (error.message) view.status(error.message, true); else view.statusKey('screenshotFailed', true); }
-  finally { screenshotButton.disabled = false; }
-});
