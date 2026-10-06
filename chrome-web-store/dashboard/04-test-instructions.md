@@ -1,6 +1,6 @@
 # Test instructions / 测试说明
 
-核对日期：2026-10-06 · 版本：0.1.1。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
+核对日期：2026-10-06 · 版本：0.1.2。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
 
 ## 提交前必须补齐
 
@@ -17,7 +17,7 @@
 ## 可粘贴的英文审核说明
 
 ```text
-Transight AI 0.1.1 — reviewer instructions
+Transight AI 0.1.2 — reviewer instructions
 
 Purpose: translate user-provided text using the user's configured AI service. No Transight AI account or extension login is required. AI service access is needed for successful translations.
 
@@ -54,13 +54,13 @@ Support contact: <REVIEW_SUPPORT_CONTACT>
 
 12. Full source language and cancellation: choose an explicit source language from its dropdown and translate. In a page panel, changing source or target language requests translation again. Verify the target preference in Settings and the toolbar popup. For a long-running request, click Cancel next to Translate; a canceled batch must not overwrite newer results. Cancel cannot retract data already received by the provider.
 
-13. Local speech: after a translation completes, click the speaker next to Copy, then click it again to stop. Playback must not start automatically. Start speech in another result/view and verify the old speech stops. If no matching local voice is installed, expect guidance rather than remote fallback. Copy changes to a check mark for about 1.5 seconds.
+13. Local speech: after a translation completes, click the speaker next to Copy, then click it again to stop. Playback must not start automatically. Start speech in another result/view and verify the old speech stops. All target languages use a local Chinese voice (prefer zh-CN, otherwise another Chinese locale) without rewriting the result. Test both Chinese and non-Chinese results. If no local Chinese voice is installed, expect installation guidance rather than remote or non-Chinese fallback. Copy changes to a check mark for about 1.5 seconds.
 
 14. Clipboard images: using the system screenshot tool, copy an image. Paste it in the toolbar popup source field or a Full page panel. Paste a second image, enter text beneath the single-row thumbnails, remove one with its hover/focus close button, and translate. Use a model that supports image inputs; otherwise expect an independent model error. Pasting alone must not send requests. Maximum 5 images; Simple does not support image paste. No screenshot entry remains in the popup header.
 
 15. Selection toggle and prompt: disable selection translation in Settings. Its automatic icon and panel disappear, but toolbar and explicit right-click translation still work. Re-enable it. Edit the system prompt, save, translate, then restore the default and save again. Source/target language, text, available page title/description, and style placeholders are supported. The terms placeholder is empty because no glossary UI is implemented. Keep credentials out of prompts. Default text requests may include page title/description when available; image requests omit them.
 
-Limitations: on-page controls cannot run on chrome:// pages, the Chrome Web Store, or other protected pages. Use manual input in the toolbar popup there. Automatic selection controls are intended for ordinary webpage text, not editable fields. Allow the extension's requested site access for on-page tests. Model discovery depends on provider support; manual model entry is supported. There is no phonetic transcription, full-page translation, or persistent translation-history feature. Speech requires an installed matching local voice. The popup no longer has a screenshot capture entry; test images by pasting them into Full mode.
+Limitations: on-page controls cannot run on chrome:// pages, the Chrome Web Store, or other protected pages. Use manual input in the toolbar popup there. Automatic selection controls are intended for ordinary webpage text, not editable fields. Allow the extension's requested site access for on-page tests. Model discovery depends on provider support; manual model entry is supported. There is no phonetic transcription, full-page translation, or persistent translation-history feature. Speech requires an installed local Chinese voice; foreign-language pronunciation depends on that engine. The popup no longer has a screenshot capture entry; test images by pasting them into Full mode.
 
 Data handling: submitted text, pasted images, applicable prompt/page metadata, and credentials go to the configured endpoint. Editing in Simple mode and changing languages or modes can start new translations. Models receive separate requests; quota usage can therefore increase with the number of selected models. There is no built-in analytics or persistent translation history. API configuration is saved locally; API keys are encrypted with AES-256-GCM and a PBKDF2-SHA-256 password-derived key. Unlocked keys are cached only in restricted session storage. Passwords and derived keys are not persisted.
 ```

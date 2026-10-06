@@ -174,7 +174,7 @@
     "message": "페이지 자동 스캔, 번역 기록, 사용 분석이 없습니다. 사용자가 요청할 때만 작동합니다."
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.1"
+    "message": "Transight AI · v0.1.2"
   },
   "builtFor": {
     "message": "읽고 싶은 세상을 더 가까이."
@@ -531,7 +531,7 @@
     "message": "읽기 중지"
   },
   "speechNoLocalVoice": {
-    "message": "이 언어의 로컬 음성을 찾을 수 없습니다. 시스템 설정에서 해당 음성을 설치해 주세요."
+    "message": "로컬 중국어 음성을 찾을 수 없습니다. 시스템 설정에서 중국어 음성을 설치해 주세요."
   },
   "speechFailed": {
     "message": "음성 읽기에 실패했습니다. 다시 시도해 주세요."

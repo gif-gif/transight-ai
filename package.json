@@ -1,6 +1,6 @@
 {
   "name": "yijian-ai-translator",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "description": "译见 AI — 按需翻译的 Chrome 扩展",

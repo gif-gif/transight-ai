@@ -56,6 +56,14 @@ def canvas():
     text(im,(124,52),'Transight AI',32,bold=True)
     return im
 
+# Never blend old-version browser captures into a new release's material set.
+import json
+release_version=json.loads((ROOT/'manifest.json').read_text())['version']
+for locale in ['en-US','zh-CN','zh-TW','ja-JP','ko-KR']:
+    provenance=ROOT/'artifacts/screenshots'/locale/'capture-info.json'
+    assert provenance.is_file(), f'Missing capture provenance: {provenance}'
+    assert json.loads(provenance.read_text())['version']==release_version, f'Stale screenshots: {locale}'
+
 icon=Image.new('RGBA',(128,128))
 art=Image.open(ROOT/'assets/icon-128.png').convert('RGBA').resize((96,96),Image.Resampling.LANCZOS)
 icon.paste(art,(16,16))

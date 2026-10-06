@@ -174,7 +174,7 @@
     "message": "No automatic page scanning, translation history, or analytics. It works only when you ask."
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.1"
+    "message": "Transight AI · v0.1.2"
   },
   "builtFor": {
     "message": "Built for a world worth reading."
@@ -531,7 +531,7 @@
     "message": "Stop reading"
   },
   "speechNoLocalVoice": {
-    "message": "No local voice is available for this language. Install a voice in your system settings."
+    "message": "No local Chinese voice is available. Install a Chinese voice in your system settings."
   },
   "speechFailed": {
     "message": "Could not read the translation aloud. Please try again."

@@ -1,7 +1,7 @@
 // Focus-independent material capture using the shipped UI's saved language preference.
 // This is not a substitute for native toolbar/automatic-language regression tests.
 import assert from 'node:assert/strict';
-import { mkdtemp, cp, mkdir, rm, readFile } from 'node:fs/promises';
+import { mkdtemp, cp, mkdir, rm, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,6 +9,8 @@ import http from 'node:http';
 import { openContextTranslation } from '../src/shared/context-menu.js';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const root = fileURLToPath(new URL('../', import.meta.url));
+const manifest = JSON.parse(await readFile(path.join(root, 'manifest.json')));
+let fixtureReply;
 const locale = process.env.TEST_BROWSER_LOCALE || 'ja-JP';
 const language = { 'en-US': 'en', 'zh-CN': 'zh-CN', 'zh-TW': 'zh-TW', 'ja-JP': 'ja', 'ko-KR': 'ko' }[locale];
 assert.ok(language, 'supported screenshot locale');
@@ -26,7 +28,7 @@ const server = http.createServer(async (req, res) => {
   if (req.url !== '/v1/chat/completions' || req.method !== 'POST') { res.writeHead(404); res.end('{}'); return; }
   let body = ''; for await (const chunk of req) body += chunk;
   const request = JSON.parse(body);
-  res.end(JSON.stringify({ choices: [{ message: { content: request.model === 'z-model' ? '多一份理解，便少一分距离。' : '多一点理解，让我们更靠近。' } }] }));
+  res.end(JSON.stringify({ choices: [{ message: { content: fixtureReply ?? (request.model === 'z-model' ? '多一份理解，便少一分距离。' : '多一点理解，让我们更靠近。') } }] }));
 });
 let context;
 try {
@@ -38,6 +40,7 @@ try {
     args: [`--disable-extensions-except=${extension}`, `--load-extension=${extension}`], viewport: { width: 1120, height: 980 }
   });
   const worker = context.serviceWorkers()[0] || await context.waitForEvent('serviceworker');
+  assert.equal(await worker.evaluate(() => chrome.runtime.getManifest().version), manifest.version);
   const origin = `chrome-extension://${new URL(worker.url()).host}`;
   const base = `http://127.0.0.1:${server.address().port}`;
   await worker.evaluate(async ({ baseUrl, language }) => chrome.storage.local.set({ uiLanguage: language, settings: {
@@ -48,13 +51,27 @@ try {
   const popup = await context.newPage();
   await popup.setViewportSize({ width: 400, height: 800 });
   await popup.goto(`${origin}/src/popup/popup.html`);
+  assert.equal(await popup.locator('.version').innerText(), `v${manifest.version}`);
   await popup.locator('#source').fill('A little understanding brings us closer.');
   assert.ok((await popup.locator('#translate').innerText()).startsWith(catalog.translate.message));
   assert.equal(await popup.locator('#screenshot').count(), 0);
   await popup.locator('#translate').click();
   await popup.locator('.result-card[data-state="success"]').nth(1).waitFor();
   await popup.screenshot({ path: path.join(output, 'popup-multi.png') });
-  console.log('✓ localized popup and two model results', language);
+  async function models(values) {
+    await worker.evaluate(async models => {
+      const { settings } = await chrome.storage.local.get('settings');
+      await chrome.storage.local.set({ settings: { ...settings, model: models[0], models } });
+    }, values);
+  }
+  await models(['mock-translator']);
+  await popup.reload();
+  await popup.locator('#source').fill('A little understanding brings us closer.');
+  await popup.locator('#translate').click();
+  await popup.locator('.result-card[data-state="success"]').waitFor();
+  await popup.screenshot({ path: path.join(output, 'popup.png') });
+  await models(['mock-translator', 'z-model']);
+  console.log('✓ localized popup, single/two model results and version', language, manifest.version);
   const options = await context.newPage();
   await options.goto(`${origin}/src/options/options.html`);
   await options.locator('#save:enabled').waitFor();
@@ -64,6 +81,8 @@ try {
   await options.locator('#save').click();
   await options.waitForFunction(text => document.querySelector('#status').textContent === text, catalog.saved.message);
   assert.equal(await options.locator('#api-key').inputValue(), '');
+  assert.ok((await options.locator('[data-i18n="versionBrand"]').innerText()).endsWith(`v${manifest.version}`));
+  await options.screenshot({ path: path.join(output, 'options.png'), fullPage: true });
   await options.screenshot({ path: path.join(output, 'options-multi.png'), fullPage: true });
   await options.screenshot({ path: path.join(output, 'settings-preferences.png'), fullPage: true });
   const sample = await context.newPage(); await sample.goto(`${base}/sample`);
@@ -100,6 +119,21 @@ try {
   await until(async () => await ui('.selection-bubble', 'function(){return !this.hidden}'));
   await sample.screenshot({ path: path.join(output, 'selection-trigger.png') });
   await click('.selection-bubble'); await done(2);
+  assert.equal(await ui('.version'), `v${manifest.version}`);
+  assert.equal(await ui('.translation-view', 'function(){return this.lang}'), language);
+  await sample.screenshot({ path: path.join(output, 'selection.png') });
+  await click('#pin-view');
+  assert.equal(await ui('#pin-view', 'function(){return this.getAttribute("aria-pressed")}'), 'true');
+  const point = await ui('.topbar', 'function(){const r=this.getBoundingClientRect();return {x:r.x+30,y:r.y+24}}');
+  await sample.mouse.move(point.x, point.y); await sample.mouse.down();
+  await sample.mouse.move(point.x+140, point.y+40, { steps: 8 }); await sample.mouse.up();
+  const moved = await ui('.topbar', 'function(){const r=this.getBoundingClientRect();return {x:r.x+30,y:r.y+24}}');
+  assert.ok(Math.abs(moved.x-point.x-140)<1 && Math.abs(moved.y-point.y-40)<1);
+  await sample.screenshot({ path: path.join(output, 'selection-pinned.png') });
+  // Restore the selection-anchored position before the Simple-mode capture.
+  await sample.mouse.move(moved.x, moved.y); await sample.mouse.down();
+  await sample.mouse.move(point.x, point.y, { steps: 8 }); await sample.mouse.up();
+  await click('#pin-view');
   await click('#translation-mode'); await done(1);
   assert.equal(await ui('#translate', 'function(){return this.getBoundingClientRect().height === 0}'), true);
   await sample.screenshot({ path: path.join(output, 'selection-simple.png') });
@@ -126,6 +160,15 @@ try {
   await openContext(); await done(2);
   await sample.screenshot({ path: path.join(output, 'context-multi.png') });
   await click('#close-view');
+  await models(['mock-translator']);
+  fixtureReply = '<img src=x onerror=alert(1)> Translation remains plain text.';
+  await openContext(); await done(1);
+  assert.equal(await ui('.result'), fixtureReply);
+  assert.equal(await ui('.result', 'function(){return this.querySelectorAll("img").length}'), 0);
+  await sample.screenshot({ path: path.join(output, 'panel.png') });
+  fixtureReply = undefined;
+  await click('#close-view');
+  await models(['mock-translator', 'z-model']);
   await options.locator('#lock-vault').click();
   await options.locator('#vault-unlock-fields:visible').waitFor();
   await openContext();
@@ -135,6 +178,7 @@ try {
   await unlock.waitForFunction(() => innerHeight < 125 && document.body.getBoundingClientRect().height <= innerHeight);
   await sample.screenshot({ path: path.join(output, 'selection-locked.png') });
   assert.deepEqual(errors, []);
+  await writeFile(path.join(output, 'capture-info.json'), JSON.stringify({ version: manifest.version, locale, language, method: 'isolated Chromium; saved extension language preference; local mock API', capturedAt: new Date().toISOString() }, null, 2)+'\n');
   console.log('PASS: actual localized popup/settings, Simple/Full, pasted images, context panel, masked inline unlock.');
   console.log('Screenshots:', output);
 } finally {

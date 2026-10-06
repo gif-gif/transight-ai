@@ -174,7 +174,7 @@
     "message": "ページの自動スキャン、翻訳履歴、アクセス解析はありません。操作したときだけ動作します。"
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.1"
+    "message": "Transight AI · v0.1.2"
   },
   "builtFor": {
     "message": "読みたい世界を、もっと身近に。"
@@ -531,7 +531,7 @@
     "message": "読み上げを停止"
   },
   "speechNoLocalVoice": {
-    "message": "この言語のローカル音声が見つかりません。システム設定で音声をインストールしてください。"
+    "message": "ローカルの中国語音声が見つかりません。システム設定で中国語音声をインストールしてください。"
   },
   "speechFailed": {
     "message": "読み上げに失敗しました。もう一度お試しください。"

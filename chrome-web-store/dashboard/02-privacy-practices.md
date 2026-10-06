@@ -10,6 +10,8 @@ Translate text that the user types or selects, and text/images that the user pas
 
 ## 2. Permission justification / 权限理由
 
+需要逐项复制时，请使用[独立权限申请说明目录](../permission-justifications/README.md)，六项分别提供中文和英文文案；以下保留合并参考说明。
+
 只填写实际 manifest 中列出的权限。不要为不存在的 `tabs`、`history`、`clipboardRead`、`clipboardWrite`、`cookies` 权限编造理由；调用某个 API 不代表 manifest 一定声明了同名权限。
 
 ### storage
@@ -41,7 +43,7 @@ Run a packaged selection-reading function when the toolbar popup is opened, and 
 ### tts
 
 ```text
-Read a translated result aloud only when the user clicks its speaker button. The extension selects a matching voice explicitly reported by Chrome as local (remote=false), handles long text in chunks, and coordinates playback and stopping across its views. There is no automatic playback, remote-voice fallback, cloud speech API, microphone access, or stored audio. Translated text is passed to the selected local speech engine for playback and is not additionally persisted for this feature. If no matching local voice is available, the user is prompted to install one.
+Read a translated result aloud only when the user clicks its speaker button. The extension uses a Chinese voice explicitly reported by Chrome as local (remote=false) for every target language, preferring zh-CN and otherwise another Chinese locale without rewriting the translated text, handles long text in chunks, and coordinates playback and stopping across its views. There is no automatic playback, remote-voice fallback, cloud speech API, microphone access, or stored audio. Translated text is passed to the selected local speech engine for playback and is not additionally persisted for this feature. If no local Chinese voice is available, the user is prompted to install one; no non-Chinese voice is used as a fallback.
 ```
 
 以上说明对应当前语音功能；本次材料更新最后重新生成 package，并核对 ZIP 与源码一致。线上隐私政策仍需运营者同步。
@@ -101,7 +103,7 @@ The extension processes user-provided source text, translations, AI service sett
 | 原文、模型 ID、源/目标语言、系统提示词、翻译风格 | POST 到配置 Base URL 的 `/chat/completions`；Full 每个已选模型分别请求，Simple 仅第一个。点击划词/右键翻译、翻译、重试、修改语言/模式、Simple 停止输入约 0.6 秒均可能发起请求 |
 | 网页上下文 | 可用的标题和 description 元数据通过提示词变量发送；没有整页抓取或额外 AI 摘要。纯手动输入与图片请求不附带页面上下文；删除提示词变量可不使用相应信息 |
 | 粘贴图片 | 用户主动粘贴到原文框；最多 5 张，处理为最长边不超过 2,048px 的静态 JPEG。预览不上传，翻译时随文字发给配置的服务。仅存在内存，无 local/session storage 或历史保存；第三方服务留存需另行确认 |
-| 朗读内容 | 点击扬声器后传递给 Chrome 标记为本地的匹配语音；无云端语音回退，无自动播放、音频存储或话筒权限 |
+| 朗读内容 | 点击扬声器后传递给 Chrome 标记为本地的中文语音（所有目标语言统一使用，不改写译文）；无云端语音回退，无自动播放、音频存储或话筒权限 |
 | API Key | 密文保存在本地 `chrome.storage.local`；解锁后明文只暂存受限 `chrome.storage.session`；服务请求中通过 Bearer header 发送，不交给内容脚本或硬编码的开发者服务器 |
 | 解锁密码 | 至少 6 个字符；仅用于本地派生解密密钥，不持久保存、不发送给 AI 服务。页面浮窗使用扩展来源的独立 iframe 收集密码，通过扩展内部消息发送给后台；父页面仅收到高度通知，不收到密码 |
 | 模型列表 | GET `/models` 返回的数据供设置页选择；选中的模型 ID 会保存。获取模型可在勾选翻译同意前执行，仍会发送 API Key，不要宣称同意前绝无网络请求 |

@@ -1,4 +1,4 @@
-Transight AI — Across languages. Closer in meaning.
+Transight AI — Across languages. Closer in meaning. · v0.1.2
 
 Translate text and pasted images using your own AI service. Open the toolbar popup, click the icon near selected webpage text, or use the right-click translation command.
 
@@ -13,7 +13,7 @@ READ WITHOUT LEAVING THE PAGE
 • Pin the current panel and drag its top bar. With 1–2 models the height adapts; with more models the first two results are visible and the rest scroll, subject to screen space.
 • Choose automatic source detection or a specific source language. Target preferences are remembered across popup, panels, and Settings.
 • Cancel a running translation in Full mode or retry just a failed model. Authentication errors link directly to Settings.
-• Click a speaker icon for local read-aloud, and click again to stop. There is no automatic playback. Availability depends on installed local voices.
+• Click a speaker icon for local read-aloud, and click again to stop. There is no automatic playback. Availability depends on an installed local Chinese voice for all target languages.
 
 IMAGES AND PERSONAL PREFERENCES
 • Paste clipboard images into the source field in the toolbar popup or Full panel. Attach up to 5 images in a horizontally scrollable thumbnail row, enter text below, or delete individual images.

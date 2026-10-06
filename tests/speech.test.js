@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import { createSpeechController, selectLocalVoice, speechChunks, installSpeech } from '../src/shared/speech.js';
 
 const voice = (lang, extra = {}) => ({ voiceName: `Local ${lang}`, lang, remote: false, eventTypes: ['start', 'end', 'error'], ...extra });
-function setup(voices = [voice('en-US'), voice('ja-JP')]) {
+function setup(voices = [voice('en-US'), voice('zh-CN'), voice('ja-JP')]) {
   const calls = [], timers = new Map(), events = []; let n = 0, stops = 0;
   const runtime = {};
   const tts = {
@@ -26,6 +26,21 @@ test('voice selection requires known local voices, a matching language and compl
   for (const extra of [{ remote: true }, { remote: undefined }, { eventTypes: ['start'] }, { voiceName: '' }]) {
     assert.equal(selectLocalVoice([voice('en-US', extra)], 'en'), undefined);
   }
+});
+test('every translation language uses the same local Chinese voice without changing the text', () => {
+  const s = setup([voice('en-US'), voice('zh-TW'), voice('zh-CN'), voice('ja-JP')]);
+  for (const language of ['zh-CN', 'zh-TW', 'en', 'ja', 'ko', 'fr', 'de', 'es', 'ru', 'pt']) {
+    const text = `Result ${language}: Hello, 世界。`;
+    s.start('a', language, text, language);
+    assert.equal(s.calls.at(-1).options.voiceName, 'Local zh-CN');
+    assert.equal(s.calls.at(-1).options.lang, 'zh-CN');
+    assert.equal(s.calls.at(-1).text, text);
+  }
+  s.controller.stop('a');
+});
+test('another local Chinese locale is used when zh-CN is unavailable', () => {
+  const s = setup([voice('en-US'), voice('zh-TW')]); s.start();
+  assert.equal(s.calls[0].options.lang, 'zh-TW'); s.controller.stop('a');
 });
 test('chunks preserve non-whitespace content, sentence boundaries and Unicode', () => {
   const text = 'Hello world.\n日本語です。한국어입니다！' + '🙂'.repeat(500) + '\n' + 'word '.repeat(160);
@@ -55,20 +70,20 @@ test('new model/window replaces playback; old owner and stale IDs cannot stop it
 });
 test('stop during voice discovery and newest-request wins prevent late audio', () => {
   const s = setup(), callbacks = []; s.tts.getVoices = callback => callbacks.push(callback);
-  s.start(); s.controller.stop('a'); callbacks.shift()([voice('en-US')]); assert.equal(s.calls.length, 0);
+  s.start(); s.controller.stop('a'); callbacks.shift()([voice('zh-CN')]); assert.equal(s.calls.length, 0);
   s.start('a', 'two'); s.start('b', 'three');
-  callbacks.shift()([voice('en-US')]); assert.equal(s.calls.length, 0);
-  callbacks.shift()([voice('en-US')]); assert.equal(s.calls.length, 1);
+  callbacks.shift()([voice('zh-CN')]); assert.equal(s.calls.length, 0);
+  callbacks.shift()([voice('zh-CN')]); assert.equal(s.calls.length, 1);
   s.controller.stop('b');
 });
 test('missing voices never trigger remote or wrong-language fallback', () => {
-  const s = setup([voice('en-US', { remote: true }), voice('ja-JP')]); s.start();
+  const s = setup([voice('zh-CN', { remote: true }), voice('en-US'), voice('ja-JP')]); s.start();
   assert.equal(s.calls.length, 0); assert.equal(s.events.at(-1).error, 'speechNoLocalVoice'); assert.equal(s.timers.size, 0);
 });
 test('voice and speaking timeouts clean up playback and permit retry', () => {
   const s = setup(); s.tts.getVoices = () => {}; s.start();
   [...s.timers.values()][0](); assert.equal(s.events.at(-1).error, 'speechFailed');
-  s.tts.getVoices = callback => callback([voice('en-US')]); s.start();
+  s.tts.getVoices = callback => callback([voice('zh-CN')]); s.start();
   [...s.timers.values()][0](); assert.equal(s.stops, 1); assert.equal(s.timers.size, 0);
   s.start(); assert.equal(s.calls.length, 2); s.controller.stop('a');
 });
@@ -94,7 +109,7 @@ function port(sender) { return { name: 'transight-speech', sender, messages: [],
 test('port access is limited to our popup/content; disconnect stops only its own session', () => {
   const calls = []; let stops = 0;
   const runtime = { id: 'ours', getURL: p => `chrome-extension://ours/${p}`, onConnect: event() };
-  installSpeech({ runtime, tts: { getVoices: cb => cb([voice('en-US')]), speak: (text, options) => calls.push(options), stop: () => stops++ } });
+  installSpeech({ runtime, tts: { getVoices: cb => cb([voice('zh-CN')]), speak: (text, options) => calls.push(options), stop: () => stops++ } });
   for (const sender of [{ id: 'external', url: 'https://example.test', tab: { id: 1 }, frameId: 0 },
     { id: 'ours', url: 'https://example.test' }, { id: 'ours', url: runtime.getURL('src/options/options.html') }]) {
     const p = port(sender); runtime.onConnect.fire(p); assert.equal(p.disconnected, true);

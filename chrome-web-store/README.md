@@ -1,16 +1,16 @@
 # Transight AI · Chrome Web Store 提交材料
 
-> **安装包状态：已同步当前源码。** `package/transight-0.1.1.zip` 包含 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。更新后运行完整校验，文件来源与哈希见 `inventory.json`。版本号保持 `0.1.1`，本次未向商店提交审核。
+> **安装包状态：已同步当前源码。** ZIP 已包含所有译文统一使用本地中文语音的调整。 `package/transight-0.1.2.zip` 包含 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。更新后运行完整校验，文件来源与哈希见 `inventory.json`。版本号已从 `0.1.1` 升至 `0.1.2`，本次未向商店提交审核。
 
-准备日期：2026-10-01；最新功能与五语言材料更新：2026-10-06。当前提交版本：**0.1.1**。
+准备日期：2026-10-01；最新功能与五语言材料更新：2026-10-06。当前提交版本：**0.1.2**。
 
-本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.1.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip` 仅作历史保留；若商店已接收过 0.1.1，提交下一次更新前须提升源码版本再打包。
+本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.2.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip` 和 `transight-0.1.1.zip` 仅作历史保留；若商店已接收过 0.1.2，提交下一次更新前须提升源码版本再打包。
 
 ## 逐项上传清单
 
 | 项目 | 材料 | 说明 |
 | --- | --- | --- |
-| 插件安装包 | `package/transight-0.1.1.zip` | **当前源码构建**；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
+| 插件安装包 | `package/transight-0.1.2.zip` | **当前源码构建，已包含中文语音播报调整**；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
 | 名称 / 简短描述 / 版本 | ZIP 内 `manifest.json` 和 `_locales/`；便于复制的汇总见 `listing/metadata.json` | 沿用现有版本和国际化配置，没有创建重复 manifest |
 | 英文详细介绍 | `listing/description.en.txt` | 可直接粘贴到英文商品介绍 |
 | 简体中文详细介绍 | `listing/description.zh-CN.txt` | 可直接粘贴到简体中文商品介绍 |
@@ -36,7 +36,7 @@
 - 英文名称：**Transight AI**。
 - 简体中文名称：**译见 AI · 随手翻译**。
 - 繁体中文名称：**譯見 AI · 隨手翻譯**。
-- 版本：**0.1.1**。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
+- 版本：**0.1.2**。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
 - 英文简短描述：**99** 个字符；简体中文及繁体中文简短描述各 **35** 个字符，日语与韩语长度见 `listing/metadata.json`；五种语言均在 132 字符以内。
 - `manifest.json` 中的 `__MSG_extensionName__` / `__MSG_extensionDescription__` 是现有国际化引用；对应内容已随 `_locales/` 打包，不需要改成固定英文。
 
@@ -94,6 +94,8 @@ README 另展示图片粘贴和单行缩略图，不再额外增加商店截图�
 
 ## 开发者后台填写材料
 
+单项权限理由已拆分到 [权限申请说明目录](permission-justifications/README.md)：storage、contextMenus、activeTab、scripting、主机权限、tts，分别提供中英文可复制文案和注意事项。
+
 以下四份文件按后台栏目组织：中文填写指引 + 可粘贴的英文申报/审核文案，复用已有介绍与图片，不重复生成素材。核对日期：**2026-10-06**。
 
 | 后台栏目 | 文件 | 包含内容 |
@@ -123,21 +125,18 @@ npm run package
 
 该命令先执行静态检查及单元测试，再从当前源码白名单打包，并包含根目录 `LICENSE`；ZIP 输出到本目录的 `package/`，**不写入、不清理 `dist/`**。`npm run build` 仍只构建开发者模式加载目录，不生成 ZIP。
 
-截图从真实扩展的隔离浏览器测试获取，不重建界面。先构建当前源码，再采集五语言素材（需要 Playwright 与 Chromium；自定义路径见根 README）：
+截图从实际扩展界面采集，不重建或修改界面像素。本次 0.1.2 使用隔离的无界面 Chromium、本地模拟服务及插件自身的显示语言偏好，重新采集五语言界面（需要 Playwright 与 Chromium；自定义路径见根 README）：
 
 ```sh
 npm run build
-for locale in en-US zh-CN zh-TW; do
-  TEST_STORE_ASSETS=1 TEST_BROWSER_LOCALE="$locale" npm run test:browser || exit 1
-done
-for locale in ja-JP ko-KR; do
+for locale in en-US zh-CN zh-TW ja-JP ko-KR; do
   TEST_BROWSER_LOCALE="$locale" node scripts/store-screenshots.mjs || exit 1
 done
 ```
 
-macOS 采用有界面浏览器以应用原生语言；`TEST_STORE_ASSETS=1` 仅跳过没有用户入口的旧截图后台测试，其余可见界面、图片粘贴、模式和凭据测试照常执行。旧截图后台在无界面环境另行测试，例如 `TEST_SCREENSHOT_ONLY=1 TEST_BROWSER_HEADLESS=1 TEST_BROWSER_LOCALE=zh-CN npm run test:browser`（该环境原生浏览器语言为简体中文）。素材回复来自本地模拟服务。
+采集脚本检查实际版本号、语言、多模型结果、Simple / Full 切换、图片粘贴、固定拖动和内嵌解锁，并刷新 README 引用的截图。回复来自本地模拟服务；仅使用测试凭据，密码以掩码显示。该流程不代替真实工具栏尺寸、浏览器自动语言及第三方 AI 服务测试。
 
-本次英文、简体中文、繁体中文完成原生浏览器界面回归；日语和韩语的有界面测试遇到 macOS 窗口焦点限制，因此使用 `scripts/store-screenshots.mjs` 在无界面浏览器中保存插件显示语言偏好，采集实际扩展界面，并检查多模型、模式切换、图片粘贴和解锁状态。此采集不代替日/韩原生浏览器自动语言及工具栏尺寸测试。脚本使用隔离配置和仅供测试的本地服务/凭据，不修改运行时代码。
+需要完整界面回归时，可单独执行 `TEST_STORE_ASSETS=1 TEST_BROWSER_LOCALE=en-US npm run test:browser`。macOS 的原生语言回归使用有界面浏览器，可能受窗口焦点影响。`TEST_STORE_ASSETS=1` 仅跳过无用户入口的旧截图后台测试；后台可另行用 `TEST_SCREENSHOT_ONLY=1 TEST_BROWSER_HEADLESS=1 TEST_BROWSER_LOCALE=zh-CN npm run test:browser` 检查（原生浏览器语言需匹配测试环境）。
 
 只有在更新现有图标或截图之后，才需要重新做尺寸适配（Python 3 + Pillow，字体路径按 macOS 编写）：
 

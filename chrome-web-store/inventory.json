@@ -1,12 +1,13 @@
 {
   "prepared_date": "2026-10-06",
-  "version": "0.1.1",
-  "archive": "package/transight-0.1.1.zip",
+  "version": "0.1.2",
+  "archive": "package/transight-0.1.2.zip",
   "checks": {
     "manifest_at_zip_root": true,
     "runtime_and_license_only": true,
     "archive_source_match_except_store_icon": true,
     "runtime_file_count": 42,
+    "release_version_consistent": true,
     "description_limit_132": true,
     "dimensions_and_image_modes_valid": true,
     "readme_image_links_valid": true,
@@ -36,18 +37,18 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 13654,
-      "sha256": "9bb928a153672b044ef7d1a13d3e2da94ff47e35fdab635df3a9a1e579657461"
+      "bytes": 13830,
+      "sha256": "02df101043db7be6424a4351fd7f1e1edaeedd941b36ed1658481992b2697feb"
     },
     {
       "path": "dashboard/01-store-listing.md",
-      "bytes": 4731,
-      "sha256": "336e07c0fee7e5ae7097700bdec87e2fe2c9890ae5b1cad459362eaba58585cc"
+      "bytes": 4737,
+      "sha256": "b59d90e0955664403a31565c04a2801a4b01acbdd8b0d021046e7c39b685e641"
     },
     {
       "path": "dashboard/02-privacy-practices.md",
-      "bytes": 15452,
-      "sha256": "8dbea168587375d2e6a712ace59618ee22082417afb15ccef5719b0ea07a0287"
+      "bytes": 15849,
+      "sha256": "6eb71ef06e812b49fe50a37125697ee0d77def8333cbc2037702fbb850575dbb"
     },
     {
       "path": "dashboard/03-distribution.md",
@@ -56,8 +57,8 @@
     },
     {
       "path": "dashboard/04-test-instructions.md",
-      "bytes": 10947,
-      "sha256": "6ba5f3817579341a1c62646912a60fd4dbebf8b10f9a9a08897cfcf88427ea17"
+      "bytes": 11197,
+      "sha256": "73e3d8de97cadbc29302630321b83bd79315160fb183abedd665f474bc9e29f5"
     },
     {
       "path": "icons/icon-128.png",
@@ -69,33 +70,33 @@
     },
     {
       "path": "listing/description.en.txt",
-      "bytes": 4550,
-      "sha256": "901bae1a3b56023307f1ff22e7f5eb57420135bcf1e3f35864adf10cda121794"
+      "bytes": 4595,
+      "sha256": "acc35545997450804faa369f3ecb78115e91cd194e20903a9d1f771bf392c101"
     },
     {
       "path": "listing/description.ja.txt",
-      "bytes": 4873,
-      "sha256": "6ab5a33979afaff9b55a26a18759862f1f7055853874b9d97ce68f8b77222b7e"
+      "bytes": 5018,
+      "sha256": "ace28bbba46181c608de1fe0ea0ebc7a5529a082eef07a99a91fc61e9e5f1e83"
     },
     {
       "path": "listing/description.ko.txt",
-      "bytes": 4883,
-      "sha256": "af38d498692d606212c8ab1549257ad033d743e9075d5e5754c4ff31e32bf589"
+      "bytes": 5047,
+      "sha256": "76ff54e30f60e5412c62680fe26ee2c2eddd43eb4d1dabdff328e9ce35933ba7"
     },
     {
       "path": "listing/description.zh-CN.txt",
-      "bytes": 3791,
-      "sha256": "f082b89e3cf3d6fd9653298543b9bc9b833edc41622a0d74dcc7476c463990e0"
+      "bytes": 3867,
+      "sha256": "889101a60e7ad4da45a35c5156891f4d73a272968380c7bf4d294da531be40d4"
     },
     {
       "path": "listing/description.zh-TW.txt",
-      "bytes": 3809,
-      "sha256": "540c01c03412b44a2a2fd2bc533bf568daf23b8a7010c47c02dbfd992d8477ab"
+      "bytes": 3894,
+      "sha256": "22c3157f2a2f6a961fbe2e869b4bd7e0ffffb998bad8bd15859f154ec18b78fd"
     },
     {
       "path": "listing/metadata.json",
       "bytes": 1793,
-      "sha256": "180dc3226dba3db28f7ee0be27c2ba49e1ae0b0a8be6fcd75053c4f5cdff1b30"
+      "sha256": "25ebe0798a76ae7ceb417ab8ce4d139f69881fb03615f901a1dbda1803722421"
     },
     {
       "path": "package/transight-0.1.0.zip",
@@ -106,6 +107,46 @@
       "path": "package/transight-0.1.1.zip",
       "bytes": 116429,
       "sha256": "99c507cde250c25beb5110556eaf73ff13b7288767feaa6083a753c5644d6354"
+    },
+    {
+      "path": "package/transight-0.1.2.zip",
+      "bytes": 116468,
+      "sha256": "13f69ef55140a0703e4b0b8c388fc3c5d0e4f50e785fa689f5881687622d1fab"
+    },
+    {
+      "path": "permission-justifications/01-storage.md",
+      "bytes": 2021,
+      "sha256": "3a3e8987dbacda9f087f29d94e9064f466fa35de6f1d4d27ee7ebf042a8e47a0"
+    },
+    {
+      "path": "permission-justifications/02-contextMenus.md",
+      "bytes": 1001,
+      "sha256": "ee97752fe3cc4cb47d298f2f6b3cf43260bc5b6b8a0cdd6bdc7d5e59a80b146e"
+    },
+    {
+      "path": "permission-justifications/03-activeTab.md",
+      "bytes": 1934,
+      "sha256": "9806bee79b05be579ef0e23e7f231a9491a6d69bb8831703ec9924907261bca4"
+    },
+    {
+      "path": "permission-justifications/04-scripting.md",
+      "bytes": 1359,
+      "sha256": "9cc0d19da6a23e5e55722e902e5fffa73ff8137f3d4ed3b8f5552dbfd1247a56"
+    },
+    {
+      "path": "permission-justifications/05-host-permissions.md",
+      "bytes": 2437,
+      "sha256": "481c6876c809bedd5e79b03b7ee4d222e0aea329703535dd96732f557a3d3d40"
+    },
+    {
+      "path": "permission-justifications/06-tts.md",
+      "bytes": 1875,
+      "sha256": "c388def47852b762b1d4b6c0decb7cf11ef8f592210cff594303360a24fbd27e"
+    },
+    {
+      "path": "permission-justifications/README.md",
+      "bytes": 2245,
+      "sha256": "dc08ae85601105a9cfa64c8516a7e25966da500bf21a53a59b02c6efbc4d8abd"
     },
     {
       "path": "promo/marquee-1400x560.png",
@@ -125,56 +166,56 @@
     },
     {
       "path": "screenshots/en/01-multi-model.png",
-      "bytes": 91898,
-      "sha256": "aedc31c0fcf3fb4899f57278f43f7a22d2f53d696bae2733fa1a51673734a0c4",
+      "bytes": 94892,
+      "sha256": "ae8725249e9a85ed83aa7bdbb77f72fb905ce470f3d7ca8ad1dc768be823db6f",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/en/02-on-page.png",
-      "bytes": 120578,
-      "sha256": "b81179978b0b49196b9df533097e6b200479ced9889a361c8ae662252dbf5609",
+      "bytes": 124374,
+      "sha256": "0691f48389856eb6c5ecc230bd03453a7d12b8b53d409e8b17774dfc3936c1d3",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/en/03-settings.png",
-      "bytes": 186253,
-      "sha256": "699378f349d3d1cf3c2477155917e287c7c7c3282030ea903184c1d32e15a258",
+      "bytes": 187212,
+      "sha256": "b5b4bf0094384bdf1e94d1fb4b164d2bc3b4ce1e4911aae452748525d5bdd954",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/en/04-inline-unlock.png",
-      "bytes": 143549,
-      "sha256": "57c9579495dc32f72e3f2063c41a491e875e38268fbbc72369f945406fc55fd7",
+      "bytes": 145539,
+      "sha256": "7e8e82c82f9f832d9030554f1770a5c8579806bb64e22329a86a8768779ff678",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/en/05-selection-trigger.png",
-      "bytes": 82847,
-      "sha256": "54c1bf3bf268ee9b97cbb87899507fa973a0e1a0ff3f1e6e5d99d5b209aac9ae",
+      "bytes": 85489,
+      "sha256": "a0576bed86085955ebab12c63350d2515bdab94827a4e46e2e4bf342b2d485fc",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/ja/01-multi-model.png",
-      "bytes": 124865,
-      "sha256": "0094382cfbdd48c2a6a1ddf701bb475e7680bc085c605d715c8ec732006efe99",
+      "bytes": 124939,
+      "sha256": "9dcaf3d92ffbc03c4e450f11fdc6186cfbd6b1d2705092fbb906d17a830c4127",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/ja/02-on-page.png",
-      "bytes": 146387,
-      "sha256": "10ea7705ce87993ef4656198c468f7db89f44a2550ae1e1a62d3c0280f486716",
+      "bytes": 146914,
+      "sha256": "df7c776addf8161640a5ad3fda28c891ddea8f6479a80cad1d1749f63a8af0dd",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -189,8 +230,8 @@
     },
     {
       "path": "screenshots/ja/04-inline-unlock.png",
-      "bytes": 175091,
-      "sha256": "cb25745c78ece67a63886d820d7af2b64458e036a67ed84044b2c78537259c1d",
+      "bytes": 175186,
+      "sha256": "9730e4adb629173b5477e92207c61087d7228d2925d7cffa3cd877a5e816c6c4",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -205,16 +246,16 @@
     },
     {
       "path": "screenshots/ko/01-multi-model.png",
-      "bytes": 94263,
-      "sha256": "4ac8bed6476583afa69e859422bf1ecbab7693372f7643fbdc9758b506e606ab",
+      "bytes": 94351,
+      "sha256": "6e72e947bfe4e528cdf7cd8fec67bc39911950e70d47bf7689f01d201dece1fc",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/ko/02-on-page.png",
-      "bytes": 123687,
-      "sha256": "1ddd1e59119c54b0935a98916b9360a92bdb97a268731129f3dfa5bf827e7a7a",
+      "bytes": 123863,
+      "sha256": "ed53b8e8d181724fd03c2a55b8b5e657b154d59c82bf921c79338d9ea938093c",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -229,8 +270,8 @@
     },
     {
       "path": "screenshots/ko/04-inline-unlock.png",
-      "bytes": 146813,
-      "sha256": "0b689f9d7f3edc360b412ce2fb787ac25ce58ba33bfdb2a762ed6e979f02d70f",
+      "bytes": 146915,
+      "sha256": "c7b5f32e40ae2d43c5dbd2cb68a1468f082bc54da7814b130b9e5eac05485d81",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -245,93 +286,93 @@
     },
     {
       "path": "screenshots/zh-CN/01-multi-model.png",
-      "bytes": 112798,
-      "sha256": "a6ac58f2508cbf5e726bd4aaa9b945bd790247cbd459dd21c30b5d623b81b7e8",
+      "bytes": 115280,
+      "sha256": "2d530c37fa402e1abe8ce3300ec9b785be496dfbc77492fc939f1b230e4b7456",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-CN/02-on-page.png",
-      "bytes": 132631,
-      "sha256": "a9e9afbc44f156769c5193a9f709a5b2dd75980df16fec34ac3b795374309447",
+      "bytes": 135117,
+      "sha256": "68ee14217b9417189c1246f402285e7c7d02a7f3cca49065b87dd6b5903256b3",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-CN/03-settings.png",
-      "bytes": 200984,
-      "sha256": "8bb038ceceb86e27e1258f818d94b2132edd17ddad6a0b4510867b465146f3e4",
+      "bytes": 202014,
+      "sha256": "154cebe675b56698287bd1dd30f82d5eafa7e0818b1caa2699ebc076d8f54285",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-CN/04-inline-unlock.png",
-      "bytes": 153699,
-      "sha256": "c9d258b5e4b218dba9ccccec52223cbc883768666adf3bd750506374a0fea0db",
+      "bytes": 155908,
+      "sha256": "d01cd27fdbc290f7c0d534b93e6693487af3f8f8f4b4c4b9d2809d0532089fb5",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-CN/05-selection-trigger.png",
-      "bytes": 102593,
-      "sha256": "3e308a058343f70edad889879f5d2b7e09c3dce49c792b6b4204b35ccb290643",
+      "bytes": 102002,
+      "sha256": "03f551efd1dd034491540839432c9465b7efc7ac8dc54feb2240735ec02f73ea",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-TW/01-multi-model.png",
-      "bytes": 116784,
-      "sha256": "7428cc0686bc6298dfdbc20eaef3b026fe5817171c842a9893d8de6cf53d1ced",
+      "bytes": 119202,
+      "sha256": "05c6f9ddeac130c8373cd96a4e33029d4ad6baac5406a0c64a286a7796d94405",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-TW/02-on-page.png",
-      "bytes": 137580,
-      "sha256": "2183f92a7ea3aa0dd76be85c856ff683c968a250650c44713aaa9744493f6781",
+      "bytes": 139889,
+      "sha256": "533cd7e77a321838915060cc669def26fb67cf93cd094a4615502ab3537c46d0",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-TW/03-settings.png",
-      "bytes": 205945,
-      "sha256": "20a7e063a6270fb872ee0bc21347f0e1b96f4050b7d3126c8d802f067be47c1f",
+      "bytes": 206300,
+      "sha256": "68d832172f70847ea08f56513352cf6180f28c080b1a905a3417511580f972c9",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-TW/04-inline-unlock.png",
-      "bytes": 159204,
-      "sha256": "107006da7669b3db16cc1c4373680768d798db3b793783ae22cbf03adcd72c00",
+      "bytes": 161475,
+      "sha256": "c73df942ad6613441dc305ebeb6b4a8d5aa999f10f96559604c0aa699dd227ac",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-TW/05-selection-trigger.png",
-      "bytes": 110026,
-      "sha256": "60a17447d06471c62ce26396da361a2c48172771338dfdee0acfc5c4c26bafc9",
+      "bytes": 109414,
+      "sha256": "4e2a2b704e2d114a119933085edd6629e76eb918bed90c7c97d60cefd629e825",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "tools/prepare-images.py",
-      "bytes": 12659,
-      "sha256": "7100da5e725c78beb2d69b08ced3196bcd77852ed892c53fc4bf5dda3dff31df"
+      "bytes": 13135,
+      "sha256": "1794e83f9753ad3070b4f36fd3b61965d26eb29ee6f0548d8278d7f791ca0979"
     },
     {
       "path": "tools/validate.py",
-      "bytes": 7421,
-      "sha256": "0bbe9fa5cbc5195a4d63bdf463aee3c3e7099c0ced1d5e7f24058897c140492b"
+      "bytes": 8008,
+      "sha256": "2fcfb44162ba6b5f17727a02c84bd646451e5326b84396780d1530522db23dda"
     }
   ]
 }

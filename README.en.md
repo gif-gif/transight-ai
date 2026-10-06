@@ -4,6 +4,8 @@
 
 An AI translation Chrome extension MVP built with **Manifest V3 and vanilla JavaScript / HTML / CSS**. It has no runtime dependencies or embedded API keys. Run `npm run build` to generate an unpacked extension in `dist/`, ready to load into Chrome. No ZIP is generated.
 
+**Current version: 0.1.2** (2026-10-06). Documentation, UI screenshots, and store materials are synchronized. Store package: [`transight-0.1.2.zip`](chrome-web-store/package/transight-0.1.2.zip). For developer mode, load `dist/`; reload the extension and refresh open webpages after updating.
+
 ## Features
 
 - **Simplified Chinese, Traditional Chinese, English, Japanese, and Korean UI**: follows Chrome’s UI language automatically, with English as the fallback for unsupported languages.
@@ -42,7 +44,7 @@ A Chat Completions-compatible model with image input is required. Models are not
 
 Each model card has a speaker button next to Copy. Click to read, click again to stop; translation never autoplays. Completed results can be read while other models are still translating. Only one result plays across the extension at a time. Another model or window takes over playback. Closing the owning view, navigating, clearing, or retranslating stops it; pinning, dragging, and copying do not.
 
-Chrome `tts` selects a voice explicitly reported as local for the result’s original target language. Long results are read in chunks. No translation API key or cloud speech service is used, and audio or additional speech text is not persisted. If no matching local voice is available, install one in your system settings; there is no remote or wrong-language fallback. Availability and voice quality depend on the system. Pause, speed, voice selection, and download controls are not included. Reload the extension and refresh open webpages after updating.
+Chrome `tts` uses a local Chinese voice for every result, preferring zh-CN and otherwise another Chinese locale, regardless of the target language. The translated text is not rewritten. Long results are read in chunks. No translation API key or cloud speech service is used, and audio or additional speech text is not persisted. If no local Chinese voice is available, install one in your system settings; there is no remote or non-Chinese fallback. Foreign-language pronunciation depends on the Chinese voice engine; availability and voice quality depend on the system. Pause, speed, voice selection, and download controls are not included. Reload the extension and refresh open webpages after updating.
 
 ### Selection toggle and custom system prompt
 

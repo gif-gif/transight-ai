@@ -174,7 +174,7 @@
     "message": "不自動掃描網頁，不儲存翻譯紀錄，沒有分析追蹤。只在你主動使用時運作。"
   },
   "versionBrand": {
-    "message": "譯見 AI · v0.1.1"
+    "message": "譯見 AI · v0.1.2"
   },
   "builtFor": {
     "message": "為值得閱讀的世界而造。"
@@ -531,7 +531,7 @@
     "message": "停止朗讀"
   },
   "speechNoLocalVoice": {
-    "message": "找不到此語言的本機語音，請在系統設定中安裝對應語音。"
+    "message": "找不到本機中文語音，請在系統設定中安裝中文語音。"
   },
   "speechFailed": {
     "message": "語音朗讀失敗，請重試。"

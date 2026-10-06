@@ -1,4 +1,6 @@
 // One in-memory speech session for the whole extension. No text/audio is stored.
+// Use the same local Chinese voice for every result, independent of its target language.
+const playbackLanguage = 'zh-CN';
 const languages = new Set(['zh-CN', 'zh-TW', 'en', 'ja', 'ko', 'fr', 'de', 'es', 'ru', 'pt']);
 const normalize = value => String(value || '').replaceAll('_', '-').toLowerCase();
 export function selectLocalVoice(voices, language) {
@@ -74,7 +76,7 @@ export function createSpeechController(tts, runtime, timers = globalThis) {
           if (active !== job) return;
           timers.clearTimeout(job.timer);
           if (error) { finish(job, 'error', 'speechFailed'); return; }
-          job.voice = selectLocalVoice(voices || [], message.language);
+          job.voice = selectLocalVoice(voices || [], playbackLanguage);
           if (!job.voice) { finish(job, 'error', 'speechNoLocalVoice'); return; }
           playChunk(job);
         });

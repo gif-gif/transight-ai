@@ -40,13 +40,13 @@ export async function speechSmoke({ context, worker, page, sample, tabId, screen
     const nativeCheck = await worker.evaluate(async () => {
       const real = await new Promise(resolve => chrome.tts.getVoices(resolve));
       const local = real.filter(v => v.remote === false && v.eventTypes?.includes('end'));
-      const nativeVoice = local.find(v => v.lang?.startsWith('en'));
-      let nativeResult = 'No local English voice; native audio test skipped';
+      const nativeVoice = local.find(v => v.lang?.startsWith('zh'));
+      let nativeResult = 'No local Chinese voice; native audio test skipped';
       if (nativeVoice) {
         nativeResult = await new Promise(resolve => {
           const timer = setTimeout(() => { chrome.tts.stop(); resolve('timeout'); }, 15000);
           const finish = value => { clearTimeout(timer); resolve(value); };
-          chrome.tts.speak('Translation.', {
+          chrome.tts.speak('翻译。', {
             voiceName: nativeVoice.voiceName, lang: nativeVoice.lang,
             ...(nativeVoice.extensionId ? { extensionId: nativeVoice.extensionId } : {}), volume: 0,
             requiredEventTypes: ['end'], onEvent: event => {
@@ -125,12 +125,14 @@ export async function speechSmoke({ context, worker, page, sample, tabId, screen
     await clickPanel('.speak-result'); await until(async () => await count() === 8);
     stopCount = await stops(); await sample.reload(); await until(async () => await stops() === stopCount + 1, 'navigation stops');
 
-    // A language without a local voice remains usable for translation/copy.
+    // A non-Chinese target still uses the fixed local Chinese voice.
     await page.locator('#source').fill('French'); await page.locator('#target').selectOption('fr');
     await page.locator('#translate').click(); await page.locator('.result-card[data-state="success"]').nth(1).waitFor();
-    await first.click(); await page.waitForFunction(message => document.querySelector('#status').textContent === message, msg('speechNoLocalVoice'));
+    await first.click(); await until(async () => await count() === 9);
+    assert.equal(await worker.evaluate(() => globalThis.speechTest.calls.at(-1).options.lang), 'zh-CN');
     assert.equal(await page.locator('.copy-result').first().isEnabled(), true);
-    console.log('✓ Speech: disabled/ready/loading models, manual play/stop/end/error, local-only voices, target language, cross-window exclusion, stale close, panel pin/copy/close/navigation');
+    await first.click();
+    console.log('✓ Speech: disabled/ready/loading models, manual play/stop/end/error, local-only Chinese voice across target languages, cross-window exclusion, stale close, panel pin/copy/close/navigation');
   } finally {
     await other?.close();
     await worker.evaluate(async previous => {

@@ -14,8 +14,14 @@ manifest=json.loads((ROOT/'manifest.json').read_text())
 metadata=json.loads((OUT/'listing/metadata.json').read_text())
 assert set(metadata['localizations']) == {p.name for p in (ROOT/'_locales').iterdir() if p.is_dir()}, 'Listing locales must match packaged locales'
 assert metadata['version']==manifest['version'], 'Update listing metadata after a version change'
+assert json.loads((ROOT/'package.json').read_text())['version']==manifest['version'], 'Package version must match manifest'
+for page in ['src/popup/popup.html','src/options/options.html']:
+    assert f'v{manifest["version"]}' in (ROOT/page).read_text(), f'Stale UI version: {page}'
+for readme in ROOT.glob('README*.md'):
+    assert f'transight-{manifest["version"]}.zip' in readme.read_text(), f'Stale README release: {readme.name}'
 for locale, record in metadata['localizations'].items():
     strings=json.loads((ROOT/f'_locales/{locale}/messages.json').read_text())
+    assert strings['versionBrand']['message'].endswith(f'v{manifest["version"]}'), f'Stale localized version: {locale}'
     assert record['name']==strings['extensionName']['message']
     assert record['short_description']==strings['extensionDescription']['message']
     assert len(record['short_description'])==record['description_character_count']<=132
@@ -79,7 +85,7 @@ for p in sorted(OUT.rglob('*')):
         im=Image.open(p);record.update(width=im.width,height=im.height,mode=im.mode)
     files.append(record)
 report={'prepared_date':date.today().isoformat(),'version':manifest['version'],'archive':str(archive.relative_to(OUT)),
-        'checks':{'manifest_at_zip_root':True,'runtime_and_license_only':True,'archive_source_match_except_store_icon':source_matches,'runtime_file_count':archive_count,'description_limit_132':True,'dimensions_and_image_modes_valid':True,'readme_image_links_valid':True,'readme_image_count':len(readme_images),'dashboard_guides_present':True,'permission_explanations_present':True},
+        'checks':{'manifest_at_zip_root':True,'runtime_and_license_only':True,'archive_source_match_except_store_icon':source_matches,'runtime_file_count':archive_count,'release_version_consistent':True,'description_limit_132':True,'dimensions_and_image_modes_valid':True,'readme_image_links_valid':True,'readme_image_count':len(readme_images),'dashboard_guides_present':True,'permission_explanations_present':True},
         'validation_mode':'assets-only' if args.assets_only else 'release',
         'archive_status':archive_status,'ready_to_upload_archive':source_matches,
         'archive_differences':{'missing':missing,'extra':extra,'changed':changed},
