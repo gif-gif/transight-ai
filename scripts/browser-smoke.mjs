@@ -346,7 +346,10 @@ try {
   await contextMenuSmoke({ context, worker, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
   assert.deepEqual(errors, []);
   await speechSmoke({ context, worker, page, sample, tabId, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
-  await screenshotSmoke({ context, worker, page, sample, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
+  // Store assets exercise the visible UI. The retained capture backend has no
+  // user entry and requires a separate headless run (native macOS DPI differs).
+  if (process.env.TEST_STORE_ASSETS === '1') console.log('Store assets: retired capture backend skipped; clipboard paste is covered by selection tests.');
+  else await screenshotSmoke({ context, worker, page, sample, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
   await credentialSmoke({ context, worker, page, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; },
     restart: async () => {
       await context.close(); context = await launch();

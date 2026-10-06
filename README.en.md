@@ -8,7 +8,7 @@ An AI translation Chrome extension MVP built with **Manifest V3 and vanilla Java
 
 - **Simplified Chinese, Traditional Chinese, English, Japanese, and Korean UI**: follows Chrome’s UI language automatically, with English as the fallback for unsupported languages.
 
-- **Toolbar translation**: automatically detect the source language, type or paste text, choose a target language, translate, and copy the result.
+- **Toolbar translation**: automatically detect or explicitly select the source language, type or paste text, choose a target language, translate, and copy the result.
 - **Selected text**: select text on a webpage before opening the extension to populate the source field. The text is not sent automatically.
 - **Selection translation**: enabled by default on all ordinary HTTP/HTTPS webpages. Select text, then click the green globe-and-exchange-arrow icon. Only clicking sends a request; the panel shares the toolbar UI.
 - **Context-menu translation**: right-click selected text and choose “用译见 AI 翻译选中文字” (Translate selected text with Transight AI) to display the translation in an on-page panel.
@@ -27,16 +27,16 @@ Use the top bar to open settings or switch between **Simple Translate / Full Tra
 
 ### Screenshot and clipboard image translation
 
-1. Open the toolbar popup on an HTTP/HTTPS webpage and click **Screenshot translation** to select a region.
-2. **Double-click inside the selection**, click **Capture selection**, or press Enter. The popup reopens with a **72 × 72 thumbnail** in the source area, without a new tab. Esc or **Cancel** exits the capture.
-3. Capture again to append another image while keeping existing text and images. You can also press **Ctrl+V / Cmd+V in the source textarea** of the toolbar popup or on-page panel to paste clipboard images. Attach up to **5 images**; each top-right **×** removes only that image. **Clear** removes both text and images.
-4. Review the content, choose a target language, and click **Translate image**. Typed text and all remaining images are sent together in order. Multi-model results support individual retries, cancellation, copying, speech, and inline unlocking. If the popup cannot reopen automatically, click the toolbar icon within 60 seconds to recover the capture draft.
+The popup no longer has a screenshot entry: neither scissors nor a Screenshot translation button is shown. **Starting an in-page region capture from the popup is no longer available.** The underlying capture/cropping implementation remains, but is not a visible user entry. Use your system screenshot tool to copy an image, then paste it into the source field.
 
-Switching tabs, scrolling, or resizing cancels region selection. Confirmation temporarily captures the viewport and immediately crops it in the background; only the selected region reaches the popup or AI service. The full viewport is not displayed, stored, or uploaded. Capture covers the visible webpage, not browser chrome, scrolling pages, desktop, internal Chrome pages, or local files.
+1. Press **Ctrl+V / Cmd+V** in the source field of the toolbar popup or a **Full Translate** page panel. Simple mode supports text only.
+2. Attach up to **5 images**, shown as **72 × 72 thumbnails** at the top-left of the input. They stay on one horizontally scrollable row; text begins beneath them.
+3. Hover over an image to reveal its small white **×** button, also accessible by keyboard focus. Remove images individually or use **Clear** to remove text and images together.
+4. Choose source (automatic or explicit) and target languages, then click **Translate image**. Text and all retained images are sent together to each selected model. Retry, cancel, copy, speech, and inline unlocking remain available.
 
-Requires a Chat Completions-compatible image-input model; models are not switched automatically and no separate OCR service is used. Images are resized proportionally to a maximum longest edge of 2,048 pixels, without upscaling. Pasted PNG, JPEG, WebP, GIF, and BMP images are converted to static JPEG; SVG is not supported.
+A Chat Completions-compatible model with image input is required. Models are not switched automatically and no separate OCR service is used. Pasted PNG, JPEG, WebP, GIF, and BMP images become static JPEG with a maximum longest edge of 2,048 pixels, without upscaling. SVG is not supported.
 
-**Capturing, pasting, and previewing do not upload images.** Only translation or retry sends text and images to the configured services; image charges may apply. Only paste events in the source textarea are handled, with no clipboard-read permission or background clipboard access. Images never enter local/session storage or translation history. Capture handoff drafts are memory-only, one-use, and expire after 60 seconds. Starting another capture temporarily preserves existing input, including after cancellation until expiry; ordinary closing does not persist images. Review sensitive information and translation accuracy. Custom prompts use typed text for `{{text}}` (empty for images alone); image requests omit page title/summary metadata.
+**Pasting and previewing do not upload images.** Translation and retry submit them to your configured provider; language or mode changes in an active panel may also start another translation. Provider fees may apply. Only source-field paste events are handled: no clipboard-read permission or background clipboard access. Images are not saved in local/session storage or persistent history. Image requests omit page title/summary context. Review images for sensitive information and verify results.
 
 ### Read translations aloud
 
@@ -50,13 +50,19 @@ Settings can enable or disable the selection trigger (on by default). Changes sa
 
 Edit the system prompt or restore the default, then save settings. An empty prompt uses the default. The limit is 16,000 characters, shared across selected models. Restore only edits the draft until saved. The template is sent as a `system` message; source text is also sent separately as a `user` message.
 
-- `{{text}}`: source text; `{{from}}`: the source language selected in Simple mode, or automatic detection when unspecified; `{{to}}`: current target language.
+- `{{text}}`: source text; `{{from}}`: the selected source language in either mode, or automatic detection when unspecified; `{{to}}`: current target language.
 - `{{title_prompt}}`: webpage title; `{{summary_prompt}}`: existing `description` metadata. No full-page scraping or additional AI summarization request.
 - `{{terms_prompt}}`: relevant terminology, empty while no glossary is configured.
 - `{{imt_style_guide}}`: selected translation style.
 
 Unavailable context becomes empty. The default template includes title/summary variables, so available metadata accompanies webpage translation requests to your chosen provider. Remove these variables to omit it. Manual input carries no page context. Prompts are stored locally; do not put credentials in them.
 
+### Current controls
+
+- Full and Simple both provide a source-language dropdown, defaulting to auto-detect. Switching modes preserves the source text and source language.
+- The target language is remembered across popup, page panels, and settings. Full mode has a cancellation button; editing text/languages in Simple cancels obsolete work and retranslates.
+- Change interface language in the toolbar popup or Settings. Page panels no longer show a globe language button, but still follow the saved preference.
+- Simple uses only the first selected model and keeps copy/local speech; the toolbar popup always uses the full layout.
 
 ## Screenshots
 
@@ -91,6 +97,16 @@ Translations appear in the upper-right corner of the webpage and can be copied o
 Click the translation icon beside selected text to open the shared translation interface near the selection. Edit the source, change the target language, or copy the result.
 
 <img src="docs/screenshots/en/selection.png" alt="Transight AI shared translation panel beside selected webpage text" width="900">
+
+### Simple mode and image input
+
+Simple mode with editable source, language selection, copying, and speech.
+
+<img src="docs/screenshots/en/selection-simple.png" alt="Simple mode with editable source, language selection, copying, and speech." width="700">
+
+Full mode with a single thumbnail row and text beneath.
+
+<img src="docs/screenshots/en/selection-image-strip.png" alt="Full mode with a single thumbnail row and text beneath." width="700">
 
 ## 1. Build and Load the Extension
 
@@ -228,7 +244,7 @@ Input/password fields, editable regions, and the panel itself do not trigger sel
 | --- | --- |
 | `storage` | Local settings and temporary selections for restricted-page fallback |
 | `contextMenus` | Add the selected-text translation command to the context menu |
-| `activeTab` | Temporarily access the current page and capture its visible area when screenshot translation is requested |
+| `activeTab` | Read the active page selection and applicable context after user action; capture handlers remain packaged but have no visible entry |
 | `scripting` | Read selected text or inject the translation panel |
 | `tts` | Read translations on request with local voices and manage playback/stop events |
 | `host_permissions`: all HTTP/HTTPS sites | Inject selection controls and access the configured API. Chrome may show an all-site access warning at install/update |
@@ -328,11 +344,11 @@ Inline unlocking in Traditional Chinese:
 
 <img src="docs/screenshots/zh-TW/selection-locked.png" alt="Compact inline unlock form in the Traditional Chinese translation panel" width="900">
 
-The store submission folder also includes Traditional Chinese listing copy and 4 localized screenshots.
+The store submission folder also includes Traditional Chinese listing copy and 5 localized screenshots.
 
 ### Japanese and Korean interfaces
 
-See the [Japanese README](README.ja.md) and [Korean README](README.ko.md) for localized setup, security instructions, and actual UI screenshots. The store submission folder now includes five listing languages with 4 screenshots per language.
+See the [Japanese README](README.ja.md) and [Korean README](README.ko.md) for localized setup, security instructions, and actual UI screenshots. The store submission folder now includes five listing languages with 5 screenshots per language.
 
 ## License
 

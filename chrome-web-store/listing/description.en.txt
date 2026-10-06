@@ -1,38 +1,37 @@
 Transight AI — Across languages. Closer in meaning.
 
-Translate text while you read, using your own AI service and models. Open Transight AI from the toolbar, click the translation icon after selecting webpage text, or use the right-click menu. Read and compare translations without leaving the page.
+Translate text and pasted images using your own AI service. Open the toolbar popup, click the icon near selected webpage text, or use the right-click translation command.
 
-YOUR MODELS, YOUR CHOICE
-• Connect a service compatible with the Chat Completions API using your API Base URL, API key, and model IDs.
-• Fetch your provider’s model list when supported, or enter model IDs manually.
-• Select up to 5 models and compare their translations in separate result cards.
-• Copy individual translations and retry failed results independently.
+SIMPLE OR FULL — YOUR CHOICE
+• Full Translate is the default: compare up to 5 selected models in independent result cards, with per-model copying and retry.
+• Enable Simple Translate in Settings or use the page panel’s layout icon. It uses only the first selected model and shows editable source text, translation, and source/target language selectors, without a Translate button.
+• In Simple mode, changing either language or pausing typing for about 0.6 seconds starts a new translation. Copy and local speech remain available.
+• Switch back to Full from the same icon. The mode preference is saved; the toolbar popup always keeps the full layout.
 
-STAY WITH YOUR READING
-• Translate typed, pasted, or selected text.
-• Use a shared on-page panel for selection and right-click translation.
-• Pin the current panel and drag its header to reposition it.
-• With one or two models, the panel adapts to its content. With more models, it shows two result cards and lets you scroll to the rest, subject to available screen space.
-• Choose natural, faithful, or professional translation styles.
+READ WITHOUT LEAVING THE PAGE
+• Select webpage text to show a compact translation icon near the selection end for about 2.5 seconds. Selecting alone does not upload text; clicking opens translation.
+• Pin the current panel and drag its top bar. With 1–2 models the height adapts; with more models the first two results are visible and the rest scroll, subject to screen space.
+• Choose automatic source detection or a specific source language. Target preferences are remembered across popup, panels, and Settings.
+• Cancel a running translation in Full mode or retry just a failed model. Authentication errors link directly to Settings.
+• Click a speaker icon for local read-aloud, and click again to stop. There is no automatic playback. Availability depends on installed local voices.
 
-UNLOCK WITHOUT LEAVING THE PAGE
-• Protect your saved API key with a local password.
-• Unlock directly in the toolbar popup or on-page panel with a compact password form; pending translations resume after unlocking.
-• Lock immediately or remove the saved key in Settings. Forgotten passwords cannot be recovered; remove and re-enter the key to start again.
+IMAGES AND PERSONAL PREFERENCES
+• Paste clipboard images into the source field in the toolbar popup or Full panel. Attach up to 5 images in a horizontally scrollable thumbnail row, enter text below, or delete individual images.
+• Requires image-input support from your selected model. Pasting and previewing alone do not upload images. The popup no longer has a screenshot capture button; use your system screenshot tool, then paste.
+• Enable/disable automatic selection controls in Settings. Manual toolbar and right-click translation remain available when disabled.
+• Customize the system prompt or restore the default. Supported placeholders include source text, source/target language, available page title/description metadata, and translation style. No whole-page scraping or separate AI summary is performed.
 
-LANGUAGE SUPPORT
-• Translate into Simplified Chinese, Traditional Chinese, English, Japanese, Korean, French, German, Spanish, Russian, and Portuguese.
-• Simplified Chinese, Traditional Chinese, English, Japanese, and Korean interface. The interface follows your browser language, falls back to English, and can be switched manually.
+SET UP YOUR SERVICE
+1. Enter a Chat Completions-compatible Base URL and API key if required.
+2. Fetch the provider’s model list or enter IDs manually, then choose up to 5 models.
+3. To save a key, set and confirm a local unlock password of at least 6 characters. Review the data-sharing notice, save, and test the connection.
+4. Translate from the toolbar or an ordinary HTTP/HTTPS webpage. Unlock in the popup/panel when needed; pending work resumes.
 
-GET STARTED
-1. Open Settings and enter your compatible AI service’s Base URL and API key, if required.
-2. Fetch the model list or enter your model IDs, then select your preferred models.
-3. When saving an API key, set and confirm a local unlock password of at least 6 characters. Review the data-sharing notice, save your settings, and test the connection.
-4. Select text on an ordinary webpage and click the translation icon, use the right-click translation command, or paste text into the toolbar popup.
+Five interface languages: English, Simplified Chinese, Traditional Chinese, Japanese, Korean. The interface follows the browser with English fallback. Change it in the popup or Settings; page panels follow that preference without a separate language button. Ten translation languages include Chinese (both scripts), English, Japanese, Korean, French, German, Spanish, Russian, and Portuguese.
 
-IMPORTANT INFORMATION
-Transight AI does not include an AI subscription, API key, or translation credits. You need access to a compatible AI service. Provider charges may apply, and each selected model sends a separate request. Unauthenticated local services are also supported. Model-list availability depends on your provider.
+PRIVACY AND LIMITATIONS
+No subscription, key, or credits are included. Provider charges may apply; each model receives a separate request. Selected text, images, and applicable prompt/page metadata are sent only to your configured AI endpoint for translation. Editing in Simple mode, switching languages or modes, and retrying may send new requests. Model discovery contacts /models and may send the key; connection testing sends sample text. Canceling cannot retract data already received by the provider.
 
-Text submitted for translation is sent to the AI endpoint you configure. Changing the target language in an active translation panel can send another request. Connection testing sends a short test request, and fetching models contacts your configured service. API keys are encrypted locally with your unlock password using AES-256-GCM. Unlock again after restarting Chrome or reloading/updating the extension; passwords are not saved or sent to AI providers. Unlocked keys are held in session memory and can be locked or removed in Settings. Settings are not Chrome-synced. The extension does not include analytics or persistent translation history, and does not automatically scan and upload entire webpages.
+Keys are encrypted locally with AES-256-GCM and a password-derived key; unlocked keys are held in restricted session storage. Unlock again after browser restart or extension reload/update. Passwords are not saved or sent to AI providers. There is no Chrome sync, built-in analytics, persistent translation history, or audio storage. Images remain in memory, and speech uses only voices reported as local. Third-party provider policies still apply.
 
-All-site access enables selection translation on ordinary HTTP/HTTPS pages and requests to your configured API. Chrome internal pages, the Chrome Web Store, and other protected pages may restrict on-page features. AI translations may be inaccurate; verify important information. Your provider’s data-processing terms apply to submitted content.
+On-page features are restricted on Chrome internal pages, the Chrome Web Store, and other protected pages. Model discovery and image input depend on your provider. AI translations may be inaccurate; verify important information.

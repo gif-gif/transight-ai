@@ -1,6 +1,6 @@
 # Test instructions / 测试说明
 
-核对日期：2026-10-02 · 版本：0.1.1。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
+核对日期：2026-10-06 · 版本：0.1.1。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
 
 ## 提交前必须补齐
 
@@ -42,7 +42,7 @@ Support contact: <REVIEW_SUPPORT_CONTACT>
 
 6. Select text again and use the right-click command 'Translate selection with Transight AI'. Expect the same shared floating translation layout. Pin the panel, click elsewhere on the page, and verify it stays open. Drag its top header to reposition it. Close it with the close button or Esc.
 
-7. In an active on-page panel, change the target language; this requests new translations. Change interface language via the globe menu to Japanese, Korean, and Traditional Chinese, then back to English. The interface language changes without changing the selected translation target or existing translations. Choose Follow browser to restore automatic detection: ja/ja-JP selects Japanese, ko/ko-KR selects Korean, Chinese variants select the matching script, and unsupported languages fall back to English. The compact unlock form and any open Settings page also follow the chosen interface language.
+7. In an active on-page panel, change the target language; this requests new translations. Change interface language in the toolbar popup globe menu or Settings (not the page panel) to Japanese, Korean, and Traditional Chinese, then back to English. The interface language changes without changing the selected translation target or existing translations. Choose Follow browser to restore automatic detection: ja/ja-JP selects Japanese, ko/ko-KR selects Korean, Chinese variants select the matching script, and unsupported languages fall back to English. The compact unlock form and any open Settings page also follow the chosen interface language.
 
 8. Optional multi-model check: if two valid model IDs were provided, select both and save. Expect independent result cards for the same source text. With three or more configured models, results beyond the first two are scrollable, subject to available viewport space.
 
@@ -50,9 +50,19 @@ Support contact: <REVIEW_SUPPORT_CONTACT>
 
 10. Optional retry check: open the popup, temporarily disconnect the network, and translate the sample text. Expect an error card. Restore connectivity and click that card's Retry link; only that model is retried. If the key is locked before retrying, unlock within the panel; only that pending model retry should resume. Provider errors, unavailable models, or quota limits may also produce error cards. Do not change real credentials for this check.
 
-Limitations: on-page controls cannot run on chrome:// pages, the Chrome Web Store, or other protected pages. Use manual input in the toolbar popup there. Automatic selection controls are intended for ordinary webpage text, not editable fields. Allow the extension's requested site access for on-page tests. Model discovery depends on provider support; manual model entry is supported. No separate speech, phonetics, full-page translation, or translation-history feature is included in this version.
+11. Simple mode: turn on Use Simple Translate in Settings, then select text and click its icon. Expect only the first selected model, editable source and result, source/target dropdowns, copy and speaker controls, and no Translate button. Edit the source: after about 0.6 seconds without typing, expect a new request; IME composition does not send partial input. Changing either language also translates. Use the layout icon to switch back to Full and restore all selected models; switch back again to verify preference persistence. The toolbar popup always remains Full.
 
-Data handling: text and credentials go to the configured endpoint. Models receive separate requests; quota usage can therefore increase with the number of selected models. There is no built-in analytics or persistent translation history. API configuration is saved locally; API keys are encrypted with AES-256-GCM and a PBKDF2-SHA-256 password-derived key. Unlocked keys are cached only in restricted session storage. Passwords and derived keys are not persisted.
+12. Full source language and cancellation: choose an explicit source language from its dropdown and translate. In a page panel, changing source or target language requests translation again. Verify the target preference in Settings and the toolbar popup. For a long-running request, click Cancel next to Translate; a canceled batch must not overwrite newer results. Cancel cannot retract data already received by the provider.
+
+13. Local speech: after a translation completes, click the speaker next to Copy, then click it again to stop. Playback must not start automatically. Start speech in another result/view and verify the old speech stops. If no matching local voice is installed, expect guidance rather than remote fallback. Copy changes to a check mark for about 1.5 seconds.
+
+14. Clipboard images: using the system screenshot tool, copy an image. Paste it in the toolbar popup source field or a Full page panel. Paste a second image, enter text beneath the single-row thumbnails, remove one with its hover/focus close button, and translate. Use a model that supports image inputs; otherwise expect an independent model error. Pasting alone must not send requests. Maximum 5 images; Simple does not support image paste. No screenshot entry remains in the popup header.
+
+15. Selection toggle and prompt: disable selection translation in Settings. Its automatic icon and panel disappear, but toolbar and explicit right-click translation still work. Re-enable it. Edit the system prompt, save, translate, then restore the default and save again. Source/target language, text, available page title/description, and style placeholders are supported. The terms placeholder is empty because no glossary UI is implemented. Keep credentials out of prompts. Default text requests may include page title/description when available; image requests omit them.
+
+Limitations: on-page controls cannot run on chrome:// pages, the Chrome Web Store, or other protected pages. Use manual input in the toolbar popup there. Automatic selection controls are intended for ordinary webpage text, not editable fields. Allow the extension's requested site access for on-page tests. Model discovery depends on provider support; manual model entry is supported. There is no phonetic transcription, full-page translation, or persistent translation-history feature. Speech requires an installed matching local voice. The popup no longer has a screenshot capture entry; test images by pasting them into Full mode.
+
+Data handling: submitted text, pasted images, applicable prompt/page metadata, and credentials go to the configured endpoint. Editing in Simple mode and changing languages or modes can start new translations. Models receive separate requests; quota usage can therefore increase with the number of selected models. There is no built-in analytics or persistent translation history. API configuration is saved locally; API keys are encrypted with AES-256-GCM and a PBKDF2-SHA-256 password-derived key. Unlocked keys are cached only in restricted session storage. Passwords and derived keys are not persisted.
 ```
 
 ## 测试服务与凭据维护

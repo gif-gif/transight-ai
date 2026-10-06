@@ -1,8 +1,8 @@
 # Transight AI · Chrome Web Store 提交材料
 
-> **安装包状态：已同步当前源码。** `package/transight-0.1.1.zip` 包含五种界面语言、API Key 密码保护和浮窗内解锁。更新后运行完整校验，文件来源与哈希见 `inventory.json`。版本号保持 `0.1.1`，本次未向商店提交审核。
+> **安装包状态：已同步当前源码。** `package/transight-0.1.1.zip` 包含 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。更新后运行完整校验，文件来源与哈希见 `inventory.json`。版本号保持 `0.1.1`，本次未向商店提交审核。
 
-准备日期：2026-10-01；五语言界面与材料更新：2026-10-02。当前提交版本：**0.1.1**。
+准备日期：2026-10-01；最新功能与五语言材料更新：2026-10-06。当前提交版本：**0.1.1**。
 
 本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.1.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip` 仅作历史保留；若商店已接收过 0.1.1，提交下一次更新前须提升源码版本再打包。
 
@@ -18,11 +18,11 @@
 | 日语详细介绍 | `listing/description.ja.txt` | 可直接粘贴到日语商品介绍 |
 | 韩语详细介绍 | `listing/description.ko.txt` | 可直接粘贴到韩语商品介绍 |
 | 插件图标 | `icons/icon-128.png` | 128×128 PNG，现有图标主体缩至 96×96，四周透明留白 16px |
-| 英文截图 | `screenshots/en/01-multi-model.png` 至 `04-inline-unlock.png` | 4 张，每张 1280×800，RGB PNG |
-| 简体中文截图 | `screenshots/zh-CN/01-multi-model.png` 至 `04-inline-unlock.png` | 4 张，每张 1280×800，RGB PNG |
-| 繁体中文截图 | `screenshots/zh-TW/01-multi-model.png` 至 `04-inline-unlock.png` | 4 张，每张 1280×800，RGB PNG |
-| 日语截图 | `screenshots/ja/01-multi-model.png` 至 `04-inline-unlock.png` | 4 张，每张 1280×800，RGB PNG |
-| 韩语截图 | `screenshots/ko/01-multi-model.png` 至 `04-inline-unlock.png` | 4 张，每张 1280×800，RGB PNG |
+| 英文截图 | `screenshots/en/01-multi-model.png` 至 `05-selection-trigger.png` | 5 张，每张 1280×800，RGB PNG |
+| 简体中文截图 | `screenshots/zh-CN/01-multi-model.png` 至 `05-selection-trigger.png` | 5 张，每张 1280×800，RGB PNG |
+| 繁体中文截图 | `screenshots/zh-TW/01-multi-model.png` 至 `05-selection-trigger.png` | 5 张，每张 1280×800，RGB PNG |
+| 日语截图 | `screenshots/ja/01-multi-model.png` 至 `05-selection-trigger.png` | 5 张，每张 1280×800，RGB PNG |
+| 韩语截图 | `screenshots/ko/01-multi-model.png` 至 `05-selection-trigger.png` | 5 张，每张 1280×800，RGB PNG |
 | 小型宣传图 | `promo/small-440x280.png` | 440×280，RGB PNG，英文通用品牌图 |
 | 大型宣传图 | `promo/marquee-1400x560.png` | 1400×560，RGB PNG，可选上传 |
 | 文件与来源清单 | `inventory.json` | 文件尺寸、SHA-256、素材来源及 ZIP 检查结果 |
@@ -30,7 +30,7 @@
 ## 商品信息建议
 
 - **主要语言：English（英语）**。与现有 `manifest.default_locale = en` 一致，适合全球用户。
-- **额外本地化：简体中文、繁体中文、日语、韩语**。分别粘贴对应详细介绍、上传该语言的 4 张截图；共 20 张截图，不要将五种语言的图片全部上传进同一个语言栏位。
+- **额外本地化：简体中文、繁体中文、日语、韩语**。分别粘贴对应详细介绍、上传该语言的 5 张截图；共 25 张截图，不要将五种语言的图片全部上传进同一个语言栏位。
 - **建议分类：Productivity（生产力）**；如果当前后台提供下级分类，可选 Tools（工具）。最终以开发者后台可选项为准。
 - 日语与韩语名称：**Transight AI**。
 - 英文名称：**Transight AI**。
@@ -54,16 +54,32 @@
 
 ## 素材复用说明
 
-复用现有品牌素材和截图排版，使用五种语言的真实浏览器测试截图；新增日语、韩语设置与紧凑浮窗内解锁图。没有重新设计图标，也没有生成虚构 UI。
+复用现有品牌素材和截图排版，使用五种语言的真实浏览器测试截图；本次重新采集五语言界面，并增加 Simple 精简模式和最新翻译偏好展示。没有重新设计图标，也没有生成虚构 UI。
 
 - 图标来自现有 `assets/icon-128.png`。仅为满足商店的留白规范缩放原图，没有重画。提交 ZIP 内的 `assets/icon-128.png` 使用此商店版；源文件和 `dist/` 的开发图标不变，16/32/48px 工具栏图标不变。
 - 多模型截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/popup-multi.png`。
-- 页面浮窗截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/context-multi.png`。
-- 设置截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/options-multi.png`，展示密码保护和多模型配置。
+- 页面浮窗截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-simple.png`。
+- 设置截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/settings-preferences.png`，展示翻译偏好、Simple / Full、划词开关和自定义提示词。
 - 浮窗内解锁截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-locked.png`，展示最新紧凑解锁表单。
 - 原截图不是商店规定尺寸，因此只对真实截图做裁切、等比缩放和 1280×800 全幅介绍排版；无外部透明边框或信箱式黑边，不修改界面文字、不伪造模型结果。
 - 截图沿用本地测试服务与示例模型；图中已注明测试回复，不代表实际模型的翻译质量。设置截图不展示已保存的 Key，解锁图中的测试密码已遮挡，未包含实际凭据。
 - 两张宣传图沿用此前准备的必要/可选素材，复用现有图标、绿色品牌风格和英文品牌名称。官方文档说明宣传图目前不按语言本地化，因此仅准备一套英文图，不重复制作中文宣传图。
+
+## 本次截图与功能同步
+
+每种语言保留 5 张（共 25 张），全部为 1280 × 800 RGB PNG；同一顺序对应：
+
+1. `01-multi-model.png`：Full 多模型译文，源语言下拉框、复制和本地朗读。
+2. `02-on-page.png`：Simple 可编辑原文与单模型译文；无翻译按钮，顶部图标切换 Full。
+3. `03-settings.png`：目标语言、划词开关、Simple / Full 模式和自定义系统提示词。
+4. `04-inline-unlock.png`：浮窗内紧凑解锁，测试密码遮挡。
+5. `05-selection-trigger.png`：选中文字后，末尾附近显示约 2.5 秒的翻译图标。
+
+第 5 张来自 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-trigger.png`。
+README 另展示图片粘贴和单行缩略图，不再额外增加商店截图数量。
+所有译文来自本机模拟服务，用于展示界面，并不代表实际模型质量；示例目标语言与固定模拟回复可能不同。
+
+当前 popup 已移除截图入口，不再引导用户点击剪刀或“截图翻译”。图片使用系统截图后粘贴到 popup / Full 浮窗原文框；Simple 只处理文字。浮窗不再显示界面语言按钮，仍可在 popup 和设置中切换界面语言。工具栏 popup 始终使用 Full 布局。
 
 ## 提交前还需你确认
 
@@ -71,14 +87,14 @@
 
 1. 开发者账号、注册及后台要求的身份/联系信息。
 2. 可公开访问的隐私政策地址，以及你希望公开的支持邮箱或支持页面。当前没有提供这些信息，因此没有编造 URL、开发者身份或联系方式。
-3. 在 Privacy practices 栏目中如实说明：用户提供的文本发送到其配置的 AI 服务；API Key 加密保存在浏览器本地，解锁后仅在受限会话存储中缓存；多模型会分别请求，第三方服务可能收费。不要因为没有自建服务器，就宣称“数据从不离开设备”。
+3. 在 Privacy practices 栏目中如实说明：用户提交的文本、图片及适用的提示词/网页标题和 description 元数据发送到其配置的 AI 服务；API Key 加密保存在浏览器本地，解锁后仅在受限会话存储中缓存；多模型会分别请求，第三方服务可能收费。不要因为没有自建服务器，就宣称“数据从不离开设备”。
 4. 核对全部 HTTP/HTTPS 网站访问权限的理由：普通网页划词翻译，以及访问用户自定义的 AI API。可参考 `dashboard/02-privacy-practices.md` 的英文权限说明；它们是提交辅助草稿，需按实际后台问题确认。
 5. 如审核要求测试方法，提供你认可的可用测试服务与必要说明；不要把真实密钥放进商店图片、公开介绍或安装包。
 6. 上传后检查图片裁切和本地化展示，确认版本号和商品名称后再提交审核。
 
 ## 开发者后台填写材料
 
-以下四份文件按后台栏目组织：中文填写指引 + 可粘贴的英文申报/审核文案，复用已有介绍与图片，不重复生成素材。核对日期：**2026-10-02**。
+以下四份文件按后台栏目组织：中文填写指引 + 可粘贴的英文申报/审核文案，复用已有介绍与图片，不重复生成素材。核对日期：**2026-10-06**。
 
 | 后台栏目 | 文件 | 包含内容 |
 | --- | --- | --- |
@@ -107,6 +123,22 @@ npm run package
 
 该命令先执行静态检查及单元测试，再从当前源码白名单打包，并包含根目录 `LICENSE`；ZIP 输出到本目录的 `package/`，**不写入、不清理 `dist/`**。`npm run build` 仍只构建开发者模式加载目录，不生成 ZIP。
 
+截图从真实扩展的隔离浏览器测试获取，不重建界面。先构建当前源码，再采集五语言素材（需要 Playwright 与 Chromium；自定义路径见根 README）：
+
+```sh
+npm run build
+for locale in en-US zh-CN zh-TW; do
+  TEST_STORE_ASSETS=1 TEST_BROWSER_LOCALE="$locale" npm run test:browser || exit 1
+done
+for locale in ja-JP ko-KR; do
+  TEST_BROWSER_LOCALE="$locale" node scripts/store-screenshots.mjs || exit 1
+done
+```
+
+macOS 采用有界面浏览器以应用原生语言；`TEST_STORE_ASSETS=1` 仅跳过没有用户入口的旧截图后台测试，其余可见界面、图片粘贴、模式和凭据测试照常执行。旧截图后台在无界面环境另行测试，例如 `TEST_SCREENSHOT_ONLY=1 TEST_BROWSER_HEADLESS=1 TEST_BROWSER_LOCALE=zh-CN npm run test:browser`（该环境原生浏览器语言为简体中文）。素材回复来自本地模拟服务。
+
+本次英文、简体中文、繁体中文完成原生浏览器界面回归；日语和韩语的有界面测试遇到 macOS 窗口焦点限制，因此使用 `scripts/store-screenshots.mjs` 在无界面浏览器中保存插件显示语言偏好，采集实际扩展界面，并检查多模型、模式切换、图片粘贴和解锁状态。此采集不代替日/韩原生浏览器自动语言及工具栏尺寸测试。脚本使用隔离配置和仅供测试的本地服务/凭据，不修改运行时代码。
+
 只有在更新现有图标或截图之后，才需要重新做尺寸适配（Python 3 + Pillow，字体路径按 macOS 编写）：
 
 ```sh
@@ -114,7 +146,7 @@ python3 chrome-web-store/tools/prepare-images.py
 python3 chrome-web-store/tools/validate.py --assets-only
 ```
 
-以上仅更新素材与清单，不生成 ZIP。准备正式提交时再显式执行：
+图片脚本同时同步根目录四份 README 已引用的截图，不改动网站截图。以上仅更新素材与清单，不生成 ZIP。准备正式提交时再显式执行：
 
 ```sh
 npm run package

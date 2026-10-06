@@ -1,7 +1,7 @@
 """Validate store assets and archive; write a reproducible material inventory."""
 from pathlib import Path
 from PIL import Image
-import argparse, hashlib, io, json, zipfile
+import argparse, hashlib, io, json, re, zipfile
 from datetime import date
 
 parser = argparse.ArgumentParser(description=__doc__)
@@ -30,7 +30,7 @@ for permission in manifest['permissions'] + manifest['host_permissions']:
 expected={'icons/icon-128.png':(128,128),'promo/small-440x280.png':(440,280),'promo/marquee-1400x560.png':(1400,560)}
 for locale in ['en','zh-CN','zh-TW','ja','ko']:
     screenshots=sorted((OUT/'screenshots'/locale).glob('*.png'))
-    assert 1<=len(screenshots)<=5
+    assert {p.name for p in screenshots} == {'01-multi-model.png','02-on-page.png','03-settings.png','04-inline-unlock.png','05-selection-trigger.png'}, locale
     expected.update({str(p.relative_to(OUT)):(1280,800) for p in screenshots})
 for filename,dimensions in expected.items():
     im=Image.open(OUT/filename)
@@ -38,6 +38,14 @@ for filename,dimensions in expected.items():
     assert im.mode==('RGBA' if filename.startswith('icons/') else 'RGB'), filename
 icon=Image.open(OUT/'icons/icon-128.png')
 assert icon.getchannel('A').getbbox()==(16,16,112,112)
+# Root README image links must exist and contain valid PNG data.
+readme_images=set()
+for readme in ROOT.glob('README*.md'):
+    readme_images.update(re.findall(r'docs/screenshots/[^\s"<>\)]+\.png', readme.read_text()))
+for relative in sorted(readme_images):
+    image=ROOT/relative
+    assert image.is_file(), f'Missing README image: {relative}'
+    Image.open(image).verify()
 archive=OUT/'package'/f'transight-{manifest["version"]}.zip'
 with zipfile.ZipFile(archive) as z:
     assert z.testzip() is None
@@ -71,11 +79,11 @@ for p in sorted(OUT.rglob('*')):
         im=Image.open(p);record.update(width=im.width,height=im.height,mode=im.mode)
     files.append(record)
 report={'prepared_date':date.today().isoformat(),'version':manifest['version'],'archive':str(archive.relative_to(OUT)),
-        'checks':{'manifest_at_zip_root':True,'runtime_and_license_only':True,'archive_source_match_except_store_icon':source_matches,'runtime_file_count':archive_count,'description_limit_132':True,'dimensions_and_image_modes_valid':True,'dashboard_guides_present':True,'permission_explanations_present':True},
+        'checks':{'manifest_at_zip_root':True,'runtime_and_license_only':True,'archive_source_match_except_store_icon':source_matches,'runtime_file_count':archive_count,'description_limit_132':True,'dimensions_and_image_modes_valid':True,'readme_image_links_valid':True,'readme_image_count':len(readme_images),'dashboard_guides_present':True,'permission_explanations_present':True},
         'validation_mode':'assets-only' if args.assets_only else 'release',
         'archive_status':archive_status,'ready_to_upload_archive':source_matches,
         'archive_differences':{'missing':missing,'extra':extra,'changed':changed},
-        'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/context-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/options-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-locked.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
+        'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-simple.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/settings-preferences.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-locked.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-trigger.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
 (OUT/'inventory.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 screenshot_count = sum(len(list((OUT/'screenshots'/locale).glob('*.png'))) for locale in ['en','zh-CN','zh-TW','ja','ko'])
 print(f'PASS: localized descriptions, padded icon, {screenshot_count} screenshots, 2 promotional tiles, 4 dashboard guides and permission explanations.')

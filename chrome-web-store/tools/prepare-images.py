@@ -1,5 +1,6 @@
 """Adapt existing artwork and actual UI screenshots; no new UI captures or AI images.
-Run from any directory with Python 3 + Pillow. All outputs stay in chrome-web-store.
+Run after the five-locale browser suite with Python 3 + Pillow.
+Updates store assets and only screenshots referenced by the root README files.
 """
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -23,91 +24,6 @@ def font(size, bold=False, zh=False):
         path = CJK if zh else BOLD if bold else FONT
     return ImageFont.truetype(str(path), size)
 
-TRADITIONAL_COPY = {
-    '保护你的密钥，\n选择翻译模型。': '保護你的金鑰，\n選擇翻譯模型。',
-    '至少 6 个字符的本地解锁密码。': '至少 6 個字元的本機解鎖密碼。',
-    '加密保存密钥，随时锁定。': '加密儲存金鑰，隨時鎖定。',
-    '实际设置截图 · 示例模型，不展示已保存密钥。': '實際設定截圖 · 範例模型，不顯示已儲存金鑰。',
-    '就地解锁，\n继续翻译。': '就地解鎖，\n繼續翻譯。',
-    '在浮窗或工具栏弹窗中输入密码。': '在浮動視窗或工具列彈出視窗中輸入密碼。',
-    '紧凑显示，解锁后继续等待中的翻译。': '緊湊顯示，解鎖後繼續等待中的翻譯。',
-    '密码不保存，也不发送给 AI 服务。': '密碼不儲存，也不傳送給 AI 服務。',
-    '重启浏览器或重载扩展后需重新解锁。': '重新啟動瀏覽器或載入擴充功能後需重新解鎖。',
-    '实际界面截图 · 测试密码已遮挡。': '實際介面截圖 · 測試密碼已遮蔽。',
-    '一段原文，\n多种模型对照。': '一段原文，\n多種模型對照。',
-    '最多同时对比 5 个 AI 模型。': '最多同時比較 5 個 AI 模型。',
-    '独立译文、复制与失败重试。': '獨立譯文、複製與失敗重試。',
-    '使用你自己的 AI 服务。': '使用你自己的 AI 服務。',
-    '需自行配置 AI 服务，服务商可能收取费用。': '需自行設定 AI 服務，服務商可能收取費用。',
-    '实际界面截图 · 译文为测试服务示例。': '實際介面截圖 · 譯文為測試服務範例。',
-    '选中文字，\n继续你的阅读。': '選取文字，\n繼續你的閱讀。',
-    '划词或右键，打开同一个翻译浮窗。': '選取或右鍵，開啟同一個翻譯浮動視窗。',
-    '固定本次浮窗，拖动顶部调整位置。': '固定本次浮動視窗，拖曳頂部調整位置。',
-    '多模型先显示两个，其余滚动查看。': '多模型先顯示兩個，其餘捲動查看。',
-    '适用于普通 HTTP / HTTPS 网页。': '適用於一般 HTTP / HTTPS 網頁。',
-    '连接自己的服务，\n选择翻译模型。': '連接自己的服務，\n選擇翻譯模型。',
-    '设置 API 地址与密钥。': '設定 API 網址與金鑰。',
-    '拉取模型列表，或手动填写模型 ID。': '取得模型清單，或手動填寫模型 ID。',
-    '简体、繁体中文与英文界面。': '簡體、繁體中文與英文介面。',
-    '需要兼容 Chat Completions 的 AI 服务。': '需要相容 Chat Completions 的 AI 服務。',
-    '实际界面截图 · 本地测试地址，密钥已遮挡。': '實際介面截圖 · 本機測試網址，金鑰已遮蔽。',
-}
-
-LOCALIZED_COPY = {'ja': {'01 / COMPARE MODELS': '01 / モデルを比較',
-        '02 / TRANSLATE IN PLACE': '02 / その場で翻訳',
-        '03 / YOUR AI SERVICE': '03 / 自分の AI サービス',
-        '04 / UNLOCK IN PLACE': '04 / その場で解除',
-        '一段原文，\n多种模型对照。': 'ひとつの文章を、\n複数の視点で。',
-        '最多同时对比 5 个 AI 模型。': '最大 5 つの AI モデルを比較。',
-        '独立译文、复制与失败重试。': 'モデルごとに結果・コピー・再試行。',
-        '使用你自己的 AI 服务。': '使う AI サービスは、あなたが選ぶ。',
-        '需自行配置 AI 服务，服务商可能收取费用。': 'AI サービスの設定が必要です。料金が発生する場合があります。',
-        '实际界面截图 · 译文为测试服务示例。': '実際の UI · 訳文はテストサービスの例です。',
-        '选中文字，\n继续你的阅读。': '文章を選択。\n読書を続けよう。',
-        '划词或右键，打开同一个翻译浮窗。': '選択・右クリックで共通のパネルを表示。',
-        '固定本次浮窗，拖动顶部调整位置。': 'パネルを固定し、上部をドラッグして移動。',
-        '多模型先显示两个，其余滚动查看。': 'まず 2 件を表示。残りはスクロール。',
-        '适用于普通 HTTP / HTTPS 网页。': '通常の HTTP / HTTPS ページで利用できます。',
-        '保护你的密钥，\n选择翻译模型。': 'キーを守る。\nモデルを選ぶ。',
-        '至少 6 个字符的本地解锁密码。': '6 文字以上のローカル解除パスワード。',
-        '加密保存密钥，随时锁定。': 'キーを暗号化保存。いつでもロック。',
-        '拉取模型列表，或手动填写模型 ID。': 'モデル一覧を取得、または ID を手入力。',
-        '需要兼容 Chat Completions 的 AI 服务。': 'Chat Completions 互換サービスが必要です。',
-        '实际设置截图 · 示例模型，不展示已保存密钥。': '実際の設定 · モデルは例、保存キーは非表示。',
-        '就地解锁，\n继续翻译。': 'ここで解除。\n翻訳を続けよう。',
-        '在浮窗或工具栏弹窗中输入密码。': 'パネルやポップアップで直接解除。',
-        '紧凑显示，解锁后继续等待中的翻译。': 'コンパクトなフォーム。解除後に翻訳を再開。',
-        '密码不保存，也不发送给 AI 服务。': 'パスワードは保存せず、AI にも送りません。',
-        '重启浏览器或重载扩展后需重新解锁。': 'ブラウザー再起動・拡張機能再読込後は再度解除。',
-        '实际界面截图 · 测试密码已遮挡。': '実際の UI · テスト用パスワードは非表示。'},
- 'ko': {'01 / COMPARE MODELS': '01 / 모델 비교',
-        '02 / TRANSLATE IN PLACE': '02 / 그 자리에서 번역',
-        '03 / YOUR AI SERVICE': '03 / 나만의 AI 서비스',
-        '04 / UNLOCK IN PLACE': '04 / 바로 잠금 해제',
-        '一段原文，\n多种模型对照。': '하나의 원문,\n다양한 번역.',
-        '最多同时对比 5 个 AI 模型。': '최대 5개 AI 모델을 비교하세요.',
-        '独立译文、复制与失败重试。': '모델별 결과, 복사, 다시 시도.',
-        '使用你自己的 AI 服务。': '내가 선택한 AI 서비스를 사용하세요.',
-        '需自行配置 AI 服务，服务商可能收取费用。': 'AI 서비스 설정이 필요하며 요금이 발생할 수 있습니다.',
-        '实际界面截图 · 译文为测试服务示例。': '실제 UI · 번역문은 테스트 서비스 예시입니다.',
-        '选中文字，\n继续你的阅读。': '글을 선택하고,\n계속 읽으세요.',
-        '划词或右键，打开同一个翻译浮窗。': '선택 또는 우클릭으로 같은 패널을 엽니다.',
-        '固定本次浮窗，拖动顶部调整位置。': '패널을 고정하고 상단을 드래그해 이동하세요.',
-        '多模型先显示两个，其余滚动查看。': '두 결과를 먼저 보고 나머지는 스크롤하세요.',
-        '适用于普通 HTTP / HTTPS 网页。': '일반 HTTP / HTTPS 페이지에서 사용합니다.',
-        '保护你的密钥，\n选择翻译模型。': '키는 안전하게,\n모델은 자유롭게.',
-        '至少 6 个字符的本地解锁密码。': '6자 이상의 로컬 잠금 해제 비밀번호.',
-        '加密保存密钥，随时锁定。': '키를 암호화하고 언제든 잠그세요.',
-        '拉取模型列表，或手动填写模型 ID。': '모델 목록을 가져오거나 ID를 입력하세요.',
-        '需要兼容 Chat Completions 的 AI 服务。': 'Chat Completions 호환 서비스가 필요합니다.',
-        '实际设置截图 · 示例模型，不展示已保存密钥。': '실제 설정 · 예시 모델, 저장된 키는 표시하지 않음.',
-        '就地解锁，\n继续翻译。': '여기서 잠금 해제,\n번역은 계속.',
-        '在浮窗或工具栏弹窗中输入密码。': '패널이나 팝업에서 바로 잠금 해제.',
-        '紧凑显示，解锁后继续等待中的翻译。': '간결한 양식. 해제 후 대기 중인 번역 재개.',
-        '密码不保存，也不发送给 AI 服务。': '비밀번호는 저장하거나 AI로 보내지 않습니다.',
-        '重启浏览器或重载扩展后需重新解锁。': '브라우저 재시작·확장 재로드 후 다시 해제하세요.',
-        '实际界面截图 · 测试密码已遮挡。': '실제 UI · 테스트 비밀번호는 가려져 있습니다.'}}
-
 def save_if_changed(im, path):
     # Reuse unchanged assets rather than rewriting icons, promos or screenshots.
     if path.exists():
@@ -118,8 +34,6 @@ def save_if_changed(im, path):
     im.save(path)
 
 def text(im, xy, value, size, color=INK, bold=False, zh=False):
-    if zh == 'tw': value = TRADITIONAL_COPY.get(value, value)
-    elif zh in ('ja', 'ko'): value = LOCALIZED_COPY[zh].get(value, value)
     ImageDraw.Draw(im).text(xy, value, font=font(size,bold,zh), fill=color, spacing=13)
 
 def logo(im, xy, size):
@@ -147,54 +61,87 @@ art=Image.open(ROOT/'assets/icon-128.png').convert('RGBA').resize((96,96),Image.
 icon.paste(art,(16,16))
 save_if_changed(icon, OUT/'icons/icon-128.png')
 
+# -*- coding: utf-8 -*-
+# Copy describes only visible, currently shipped controls. UI pixels come from
+# the isolated browser suite; the mock replies do not represent model quality.
+SHOT_COPY = {
+'en': [
+ ('One text.\nMore perspectives.', ['Full mode: compare up to 5 models.', 'Copy, listen, or retry each result.', 'Your AI service. Your choice.']),
+ ('Less interface.\nMore understanding.', ['Simple mode uses your first model.', 'Edit the source. Translation follows.', 'Copy and local speech stay close.']),
+ ('Translate\nyour way.', ['Choose Simple or Full mode.', 'Turn the selection trigger on or off.', 'Write your own system prompt.']),
+ ('Unlock here.\nKeep translating.', ['Unlock in the popup or page panel.', 'Your API key stays encrypted at rest.', 'Passwords are not sent to AI services.']),
+ ('Select a passage.\nStart right there.', ['A small icon near the selection end.', 'Click to open the translation panel.', 'Selection alone sends no request.'])],
+'zh-CN': [
+ ('一段原文，\n多种模型对照。', ['Full 模式，最多对比 5 个模型。','独立译文、复制、朗读与重试。','使用你自己选择的 AI 服务。']),
+ ('少一点界面，\n多一点理解。', ['Simple 模式，只用第一个模型。','编辑原文，停笔后自动翻译。','保留复制与本地语音朗读。']),
+ ('按你的方式，\n开始翻译。', ['选择 Simple 或 Full 模式。','随时开启或关闭划词入口。','自定义翻译系统提示词。']),
+ ('就地解锁，\n继续翻译。', ['在弹窗或页面浮窗直接解锁。','API Key 在本地加密保存。','解锁密码不发送给 AI 服务。']),
+ ('选中一段，\n从这里开始。', ['小图标贴近选中文字的末尾。','点击打开翻译浮窗。','仅选中文字，不发送翻译请求。'])],
+'zh-TW': [
+ ('一段原文，\n多種模型對照。', ['Full 模式，最多比較 5 個模型。','獨立譯文、複製、朗讀與重試。','使用你自己選擇的 AI 服務。']),
+ ('少一點介面，\n多一點理解。', ['Simple 模式，只用第一個模型。','編輯原文，停筆後自動翻譯。','保留複製與本機語音朗讀。']),
+ ('按你的方式，\n開始翻譯。', ['選擇 Simple 或 Full 模式。','隨時開啟或關閉選取翻譯入口。','自訂翻譯系統提示詞。']),
+ ('就地解鎖，\n繼續翻譯。', ['在彈出視窗或頁面浮窗直接解鎖。','API Key 在本機加密儲存。','解鎖密碼不傳送給 AI 服務。']),
+ ('選取一段，\n從這裡開始。', ['小圖示靠近所選文字的末尾。','點擊開啟翻譯浮動視窗。','僅選取文字，不傳送翻譯請求。'])],
+'ja': [
+ ('ひとつの文章を、\n複数の視点で。', ['Full モードで最大 5 モデルを比較。','結果ごとにコピー・読み上げ・再試行。','自分で選んだ AI サービスを利用。']),
+ ('シンプルに、\n理解を深く。', ['Simple は最初のモデルだけを使用。','原文を編集すると、自動で再翻訳。','コピーとローカル読み上げも利用可能。']),
+ ('あなたに合った\n翻訳体験を。', ['Simple / Full モードを切り替え。','選択翻訳のオン・オフを設定。','システムプロンプトを自由に編集。']),
+ ('その場で解除。\n翻訳を続けよう。', ['ポップアップやパネルでロック解除。','API キーはローカルで暗号化保存。','解除用パスワードは AI に送信しません。']),
+ ('文章を選択。\nそこから翻訳。', ['選択範囲の末尾に小さなアイコン。','クリックで翻訳パネルを表示。','選択するだけでは送信しません。'])],
+'ko': [
+ ('하나의 원문,\n다양한 관점.', ['Full 모드에서 최대 5개 모델 비교.','결과별 복사, 읽기, 다시 시도.','내가 선택한 AI 서비스를 사용하세요.']),
+ ('더 간결하게,\n더 깊이 이해하기.', ['Simple은 첫 번째 모델만 사용합니다.','원문을 수정하면 자동으로 번역합니다.','복사와 로컬 음성 읽기도 그대로.']),
+ ('나에게 맞는\n번역 방식.', ['Simple / Full 모드를 선택하세요.','선택 번역을 켜거나 끄세요.','시스템 프롬프트를 직접 작성하세요.']),
+ ('여기서 잠금 해제,\n번역은 계속.', ['팝업이나 페이지 패널에서 바로 해제.','API 키는 로컬에 암호화 저장됩니다.','해제 비밀번호는 AI에 보내지 않습니다.']),
+ ('문장을 선택하고,\n바로 시작하세요.', ['선택한 텍스트 끝에 작은 아이콘.','클릭하면 번역 패널이 열립니다.','선택만으로는 요청을 보내지 않습니다.'])]}
+NOTES = {
+'en': ('Actual UI · Local mock service; example results only.', 'Bring your own API. Provider charges may apply.'),
+'zh-CN': ('实际界面 · 本地模拟服务，译文仅为示例。','需自行配置 API，服务商可能收取费用。'),
+'zh-TW': ('實際介面 · 本機模擬服務，譯文僅為範例。','需自行設定 API，服務商可能收取費用。'),
+'ja': ('実際の UI · ローカル模擬サービスの翻訳例です。','API の設定が必要です。料金が発生する場合があります。'),
+'ko': ('실제 UI · 로컬 모의 서비스의 예시 번역입니다.','API 설정이 필요하며 서비스 요금이 발생할 수 있습니다.')}
+
+def fitted_text(im, xy, value, size, max_width, **kwargs):
+    # Fit each localized line, never clip or silently wrap promotional copy.
+    while max(ImageDraw.Draw(im).textbbox((0,0), line, font=font(size, kwargs.get('bold',False), kwargs.get('zh',False)))[2] for line in value.splitlines()) > max_width:
+        size -= 1
+        if size < 14: raise ValueError(f'Copy too long: {value}')
+    text(im, xy, value, size, **kwargs)
+
+def settings_crop(source):
+    im=Image.open(source).convert('RGB')
+    runs=[]; start=None
+    for y in range(im.height):
+        white=im.getpixel((115,y))==(255,255,255)
+        if white and start is None: start=y
+        elif not white and start is not None:
+            if y-start>80: runs.append((start,y))
+            start=None
+    assert len(runs)==3, f'Inspect updated settings layout: {source}: {runs}'
+    return (90,runs[-2][0]-6,735,runs[-1][1]+6)
+
 for locale, folder, zh in [('en-US','en',False),('zh-CN','zh-CN',True),('zh-TW','zh-TW','tw'),('ja-JP','ja','ja'),('ko-KR','ko','ko')]:
     src=ROOT/'artifacts/screenshots'/locale
     dest=OUT/'screenshots'/folder
-    im=canvas()
-    text(im,(60,175),'01 / COMPARE MODELS',17,GREEN,bold=True,zh=zh if zh in ('ja', 'ko') else False)
-    text(im,(60,231),'One text.\nMore perspectives.' if not zh else '一段原文，\n多种模型对照。',48,bold=True,zh=zh)
-    lines = ['Compare up to 5 AI models.', 'Independent results, copy and retry.', 'Your AI service. Your choice.'] if not zh else ['最多同时对比 5 个 AI 模型。','独立译文、复制与失败重试。','使用你自己的 AI 服务。']
-    for i,line in enumerate(lines): text(im,(60,414+i*43),line,23,MUTED,zh=zh)
-    screenshot(im,src/'popup-multi.png',(0,0,400,710),(764,42))
-    text(im,(60,680),'Bring your own API · Provider charges may apply.' if not zh else '需自行配置 AI 服务，服务商可能收取费用。',18,MUTED,zh=zh)
-    text(im,(60,718),'Actual UI · Example responses from a test service.' if not zh else '实际界面截图 · 译文为测试服务示例。',17,MUTED,zh=zh)
-    save_if_changed(im, dest/'01-multi-model.png')
-
-    im=canvas()
-    text(im,(60,175),'02 / TRANSLATE IN PLACE',17,GREEN,bold=True,zh=zh if zh in ('ja', 'ko') else False)
-    text(im,(60,231),'Select. Translate.\nKeep reading.' if not zh else '选中文字，\n继续你的阅读。',48,bold=True,zh=zh)
-    lines = ['Open from a selection or right-click.', 'Pin the panel and drag it into place.', 'Two results visible. Scroll for more.'] if not zh else ['划词或右键，打开同一个翻译浮窗。','固定本次浮窗，拖动顶部调整位置。','多模型先显示两个，其余滚动查看。']
-    for i,line in enumerate(lines):text(im,(60,414+i*43),line,23,MUTED,zh=zh)
-    # Existing screenshot: right-click panel in the top-right. Include its full
-    # two-card viewport and edge/shadow, with no reconstructed UI.
-    screenshot(im,src/'context-multi.png',(696,0,1120,700),(748,42))
-    text(im,(60,680),'On ordinary HTTP/HTTPS webpages.' if not zh else '适用于普通 HTTP / HTTPS 网页。',18,MUTED,zh=zh)
-    text(im,(60,718),'Actual UI · Example responses from a test service.' if not zh else '实际界面截图 · 译文为测试服务示例。',17,MUTED,zh=zh)
-    save_if_changed(im, dest/'02-on-page.png')
-
-    im=canvas()
-    text(im,(60,175),'03 / YOUR AI SERVICE',17,GREEN,bold=True,zh=zh if zh in ('ja', 'ko') else False)
-    text(im,(60,231),'Protect your key.\nChoose your models.' if not zh else '保护你的密钥，\n选择翻译模型。',42,bold=True,zh=zh)
-    lines=['Local unlock password: 6+ characters.', 'Encrypt your key. Lock it at any time.', 'Fetch models or enter model IDs.'] if not zh else ['至少 6 个字符的本地解锁密码。','加密保存密钥，随时锁定。','拉取模型列表，或手动填写模型 ID。']
-    for i,line in enumerate(lines):text(im,(60,414+i*43),line,21 if not zh else 22,MUTED,zh=zh)
-    # Crop the actual protection + model controls, preserving their aspect ratio.
-    settings_box = {'en-US': (123,641,702,1318), 'zh-CN': (123,620,702,1256), 'zh-TW': (123,620,702,1277), 'ja-JP': (123,641,702,1318), 'ko-KR': (123,641,702,1318)}[locale]
-    settings_height = round((settings_box[3] - settings_box[1]) * 530 / 579)
-    screenshot(im,src/'options-multi.png',settings_box,(650,112),(530,settings_height))
-    text(im,(60,680),'Compatible Chat Completions API required.' if not zh else '需要兼容 Chat Completions 的 AI 服务。',18,MUTED,zh=zh)
-    text(im,(60,718),'Actual settings · Test models, saved key not displayed.' if not zh else '实际设置截图 · 示例模型，不展示已保存密钥。',17,MUTED,zh=zh)
-    save_if_changed(im, dest/'03-settings.png')
-
-    im=canvas()
-    text(im,(60,175),'04 / UNLOCK IN PLACE',17,GREEN,bold=True,zh=zh if zh in ('ja', 'ko') else False)
-    text(im,(60,231),'Unlock here.\nKeep translating.' if not zh else '就地解锁，\n继续翻译。',48,bold=True,zh=zh)
-    lines = ['Unlock in the popup or on-page panel.', 'A compact form. Pending work resumes.', 'Passwords stay out of AI requests.'] if not zh else ['在浮窗或工具栏弹窗中输入密码。','紧凑显示，解锁后继续等待中的翻译。','密码不保存，也不发送给 AI 服务。']
-    for i,line in enumerate(lines): text(im,(60,414+i*43),line,22,MUTED,zh=zh)
-    # Include the entire actual locked panel, uniformly scaled to fit the canvas.
-    screenshot(im,src/'selection-locked.png',(696,0,1120,860),(792,26),(365,740))
-    text(im,(60,680),'Unlock again after browser restart or extension reload.' if not zh else '重启浏览器或重载扩展后需重新解锁。',18,MUTED,zh=zh)
-    text(im,(60,718),'Actual UI · Masked test password.' if not zh else '实际界面截图 · 测试密码已遮挡。',17,MUTED,zh=zh)
-    save_if_changed(im, dest/'04-inline-unlock.png')
+    sources=[('popup-multi.png','01-multi-model.png',(0,0,400,710)),
+             ('selection-simple.png','02-on-page.png',(0,64,424,435)),
+             ('settings-preferences.png','03-settings.png',settings_crop(src/'settings-preferences.png')),
+             ('selection-locked.png','04-inline-unlock.png',(696,0,1120,860)),
+             ('selection-trigger.png','05-selection-trigger.png',(0,0,424,160))]
+    for index,((source,filename,box),(title,lines)) in enumerate(zip(sources,SHOT_COPY[folder]),1):
+        im=canvas()
+        text(im,(60,175),f'{index:02d} / TRANSIGHT AI',17,GREEN,bold=True)
+        fitted_text(im,(60,231),title,44,535,bold=True,zh=zh)
+        for i,line in enumerate(lines): fitted_text(im,(60,412+i*48),line,23,535,color=MUTED,zh=zh)
+        fitted_text(im,(60,675),NOTES[folder][1],17,535,color=MUTED,zh=zh)
+        fitted_text(im,(60,716),NOTES[folder][0],16,535,color=MUTED,zh=zh)
+        width,height=box[2]-box[0],box[3]-box[1]
+        scale=min(530/width,710/height,1.25)
+        size=(round(width*scale),round(height*scale))
+        xy=(650+(530-size[0])//2,(800-size[1])//2)
+        screenshot(im,src/source,box,xy,size)
+        save_if_changed(im,dest/filename)
 
 # Promotions are language-neutral branding plus concise English copy.
 # High-resolution rendering followed by downsampling keeps type crisp.
@@ -220,4 +167,19 @@ for w,h,filename in [(440,280,'small-440x280.png'),(1400,560,'marquee-1400x560.p
         # Reuse the brand artwork, not an invented translation/chat symbol.
         logo(im,(1080*scale,190*scale),200*scale)
     save_if_changed(im.resize((w,h),Image.Resampling.LANCZOS), OUT/'promo'/filename)
-print('Prepared store icon, 4 existing-UI screenshots per locale, and both promotional tiles.')
+# Synchronize only root-README image references, never unrelated website images.
+import re, shutil
+readme_images = set()
+for readme in ROOT.glob('README*.md'):
+    readme_images.update(re.findall(r'docs/screenshots/[^\s"<>\)]+\.png', readme.read_text()))
+locale_dirs = {'en':'en-US','ja':'ja-JP','ko':'ko-KR','zh-TW':'zh-TW'}
+for relative in sorted(readme_images):
+    target=ROOT/relative
+    tail=target.relative_to(ROOT/'docs/screenshots')
+    assert len(tail.parts) in (1,2), relative
+    locale='zh-CN' if len(tail.parts)==1 else locale_dirs[tail.parts[0]]
+    source=ROOT/'artifacts/screenshots'/locale/tail.name
+    assert source.exists(), f'Missing fresh browser screenshot: {source}'
+    target.parent.mkdir(parents=True,exist_ok=True)
+    if not target.exists() or source.read_bytes()!=target.read_bytes(): shutil.copyfile(source,target)
+print(f'Prepared 25 store screenshots and {len(readme_images)} README screenshots; unchanged brand assets reused.')
