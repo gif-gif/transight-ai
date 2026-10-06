@@ -84,3 +84,34 @@ test('non-authentication failures do not carry a settings-action code', async ()
     }), error => error.code === undefined);
   }
 });
+
+test('image translation uses inline vision content, target language and custom system prompt', () => {
+  const image = 'data:image/png;base64,iVBORw0KGgo=';
+  const request = buildRequest('', { ...config, systemPrompt: 'Translate into {{to}}. {{text}}' }, 'ja', {}, image);
+  assert.match(request.messages[0].content, /日本語 \(ja\)/);
+  assert.equal(request.messages[1].content[0].type, 'text');
+  assert.match(request.messages[1].content[0].text, /日本語/);
+  assert.deepEqual(request.messages[1].content[1], { type: 'image_url', image_url: { url: image } });
+  assert.throws(() => buildRequest('', config, 'ja', {}, 'https://untrusted/image'));
+  assert.throws(() => buildRequest('', config));
+});
+test('image requests use the existing transport and safe vision-specific errors', async () => {
+  const image = 'data:image/png;base64,iVBORw0KGgo=';
+  const result = await translate('', config, 'ja', { image, fetchImpl: async (_, init) => {
+    assert.equal(JSON.parse(init.body).messages[1].content[1].image_url.url, image);
+    assert.equal(init.credentials, 'omit'); return ok('こんにちは');
+  } });
+  assert.equal(result.text, 'こんにちは');
+  for (const code of [400, 415, 422]) await assert.rejects(translate('', config, 'ja', { image,
+    fetchImpl: async () => new Response('secret', { status: code }) }), error => /图片/.test(error.message) && !error.message.includes('secret'));
+});
+
+test('multi-image requests retain image order and optional source text; zero images is text-only', () => {
+  const images = ['data:image/png;base64,YQ==', 'data:image/jpeg;base64,Yg=='];
+  const body = buildRequest('User source text', config, 'en', {}, images);
+  assert.match(body.messages[1].content[0].text, /User source text/);
+  assert.deepEqual(body.messages[1].content.slice(1).map(part => part.image_url.url), images);
+  assert.equal(buildRequest('Plain text', config, 'en', {}, []).messages[1].content, 'Plain text');
+  assert.throws(() => buildRequest('', config, 'en', {}, []));
+  assert.throws(() => buildRequest('', config, 'en', {}, Array(6).fill(images[0])));
+});

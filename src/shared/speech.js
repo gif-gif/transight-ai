@@ -89,7 +89,7 @@ export function installSpeech(api = chrome) {
   api.runtime.onConnect.addListener(port => {
     if (port.name !== 'transight-speech') return;
     const sender = port.sender;
-    const popup = sender?.url?.split(/[?#]/)[0] === api.runtime.getURL('src/popup/popup.html');
+    const popup = ['src/popup/popup.html', 'src/screenshot/screenshot.html'].some(path => sender?.url?.split(/[?#]/)[0] === api.runtime.getURL(path));
     const content = sender?.tab?.id != null && Number.isInteger(sender.frameId) && sender.frameId >= 0 && /^https?:\/\//.test(sender.url || '');
     if (sender?.id !== api.runtime.id || (!popup && !content)) { port.disconnect(); return; }
     let closed = false;

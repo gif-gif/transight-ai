@@ -4,6 +4,7 @@ const standalone = new URLSearchParams(location.search).has('fallback');
 document.documentElement.classList.toggle('standalone', standalone);
 await initI18n();
 const requestIds = new Set();
+let selectedContext, selectedText;
 async function getVaultStatus() {
   const response = await chrome.runtime.sendMessage({ type: 'VAULT_STATUS' });
   if (!response?.ok) throw new Error();
@@ -12,9 +13,9 @@ async function getVaultStatus() {
 const initialVault = await getVaultStatus().catch(() => null);
 const view = new TransightTranslationView(document, {
   vault: initialVault, getVaultStatus, unlockUrl: chrome.runtime.getURL('src/unlock/unlock.html'),
-  async translate(text, targetLanguage, model) {
+  async translate(text, targetLanguage, model, images) {
     const id = crypto.randomUUID(); requestIds.add(id);
-    try { return await chrome.runtime.sendMessage({ type: 'TRANSLATE', id, text, targetLanguage, model }); }
+    try { return await chrome.runtime.sendMessage({ type: 'TRANSLATE', id, text, targetLanguage, model, images, context: !images?.length && text === selectedText ? selectedContext : undefined }); }
     finally { requestIds.delete(id); }
   },
   cancel() {
@@ -34,6 +35,10 @@ chrome.storage.onChanged.addListener((changes, area) => {
 });
 async function init() {
   const version = view.editVersion;
+  if (!standalone) {
+    const draft = await chrome.runtime.sendMessage({ type: 'SCREENSHOT_TAKE' }).catch(() => null);
+    if (draft?.ok && draft.draft && view.editVersion === version) { view.setDraft(draft.draft); return; }
+  }
   let selection = '';
   if (standalone) {
     const { contextDraft } = await chrome.storage.session.get('contextDraft');
@@ -44,10 +49,12 @@ async function init() {
       if (tab?.id) {
         const results = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: () => {
           const el = document.activeElement;
-          if (el instanceof HTMLTextAreaElement || (el instanceof HTMLInputElement && ['text', 'search', 'url', 'email', 'tel'].includes(el.type))) return el.value.slice(el.selectionStart ?? 0, el.selectionEnd ?? 0);
-          return window.getSelection()?.toString() || '';
+          const context = { title: document.title.slice(0, 500), summary: (document.querySelector('meta[name="description"]')?.content || '').slice(0, 1500) };
+          if (el instanceof HTMLTextAreaElement || (el instanceof HTMLInputElement && ['text', 'search', 'url', 'email', 'tel'].includes(el.type))) return { text: el.value.slice(el.selectionStart ?? 0, el.selectionEnd ?? 0), context };
+          return { text: window.getSelection()?.toString() || '', context };
         } });
-        selection = results[0]?.result || '';
+        selection = results[0]?.result?.text || '';
+        selectedText = selection.trim(); selectedContext = results[0]?.result?.context;
       }
     } catch { /* Restricted pages still support manual input. */ }
   }
@@ -58,3 +65,15 @@ async function init() {
 }
 init().catch(() => view.statusKey('readConfigFailed', true));
 window.addEventListener('pagehide', () => view.dispose());
+
+const screenshotButton = document.querySelector('#screenshot');
+screenshotButton.hidden = standalone;
+screenshotButton.addEventListener('click', async () => {
+  screenshotButton.disabled = true; view.statusKey('screenshotCapturing');
+  try {
+    const response = await chrome.runtime.sendMessage({ type: 'SCREENSHOT_CAPTURE', draft: view.getDraft() });
+    if (!response?.ok) throw new Error(response?.error);
+    window.close();
+  } catch (error) { if (error.message) view.status(error.message, true); else view.statusKey('screenshotFailed', true); }
+  finally { screenshotButton.disabled = false; }
+});

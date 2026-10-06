@@ -12,7 +12,7 @@ test('selection site grants are exact HTTP(S) host patterns, never privileged sc
   for (const url of ['chrome://extensions', 'file:///secret', 'about:blank', 'data:text/plain,hello', 'invalid']) assert.equal(sitePattern(url), null);
 });
 test('only explicitly whitelisted configuration crosses into a webpage', () => {
-  assert.deepEqual(publicSettings({ apiKey: 'SECRET', baseUrl: 'https://private.example', model: 'test', consent: true, targetLanguage: 'ja', futureSecret: 'SECRET' }), { model: 'test', models: ['test'], consent: true, targetLanguage: 'ja' });
+  assert.deepEqual(publicSettings({ apiKey: 'SECRET', baseUrl: 'https://private.example', model: 'test', consent: true, targetLanguage: 'ja', futureSecret: 'SECRET', systemPrompt: 'PRIVATE TEMPLATE' }), { model: 'test', models: ['test'], consent: true, targetLanguage: 'ja', selectionEnabled: true });
 });
 test('global selection access, legacy migration, ordering and permission revocation', async () => {
   const event = () => ({ listeners: [], addListener(fn) { this.listeners.push(fn); }, fire(...args) { this.listeners.forEach(fn => fn(...args)); } });

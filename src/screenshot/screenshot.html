@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Transight AI</title><link rel="stylesheet" href="../shared/ui.css"><link rel="stylesheet" href="../popup/popup.css"><link rel="stylesheet" href="screenshot.css"></head>
+<body>
+  <header class="capture-heading"><div><p class="eyebrow">TRANSIGHT AI</p><h1 data-i18n="screenshotTranslate">Screenshot translation</h1><p data-i18n="screenshotInstructions">Only your selected area is shown. Check the preview, then translate.</p></div><button id="close-editor" class="secondary" data-i18n="screenshotClose">Close</button></header>
+  <p id="capture-error" class="status error" role="alert" hidden></p>
+  <div class="capture-layout" id="capture-layout" hidden>
+    <section class="capture-panel" aria-labelledby="preview-title">
+      <div class="capture-panel-head"><h2 id="preview-title" data-i18n="screenshotPreview">Screenshot preview</h2><span id="dimensions"></span></div>
+      <div id="crop-stage" class="crop-stage"><img id="original" draggable="false" alt="Screenshot preview"><div id="crop-shade" hidden></div></div>
+      <img id="preview" class="cropped-preview" alt="Selected screenshot" hidden>
+      <div id="crop-controls">
+        <details><summary data-i18n="screenshotCoordinates">Select precisely with coordinates</summary><div class="crop-coordinates">
+          <label>X<input id="crop-x" type="number" min="0" value="0"></label><label>Y<input id="crop-y" type="number" min="0" value="0"></label>
+          <label><span data-i18n="screenshotWidth">Width</span><input id="crop-width" type="number" min="4" value="4"></label><label><span data-i18n="screenshotHeight">Height</span><input id="crop-height" type="number" min="4" value="4"></label>
+        </div></details>
+        <div class="crop-actions"><button id="crop-confirm" class="primary" data-i18n="screenshotUseSelection" disabled>Use selection</button><button id="crop-all" class="secondary" data-i18n="screenshotUseAll">Use current image</button></div>
+      </div>
+      <button id="crop-reset" class="secondary" data-i18n="screenshotReselect" hidden>Adjust crop</button>
+      <p class="capture-note" data-i18n="screenshotPrivacy">Only the selected image is sent to your configured AI services after you click Translate. Screenshots are not saved to history.</p>
+    </section>
+    <section id="translation-host" aria-label="Translation"></section>
+  </div>
+  <script src="../shared/speech-client.js"></script><script src="../shared/translation-view.js"></script><script type="module" src="screenshot.js"></script>
+</body></html>

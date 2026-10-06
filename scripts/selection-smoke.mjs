@@ -1,3 +1,4 @@
+import { inspectSourceImageLayout, assertSourceImageLayout } from './source-image-layout.mjs';
 import { pinSmoke } from './pin-smoke.mjs';
 import { inspectSelectStyle, assertSelectStyle } from './select-style-smoke.mjs';
 import assert from 'node:assert/strict';
@@ -35,14 +36,14 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
     const box = await ui(selector, 'function(){const r=this.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}}');
     await sample.mouse.click(box.x, box.y);
   }
-  async function select(text = 'A little understanding brings us closer.') {
+  async function select(text = 'A little understanding brings us closer.', expectBubble = true) {
     await sample.evaluate(text => {
       const paragraph = document.getElementById('sample'); paragraph.textContent = text;
       const range = document.createRange(); range.selectNodeContents(paragraph);
       getSelection().removeAllRanges(); getSelection().addRange(range);
       paragraph.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
     }, text);
-    await until(async () => !await ui('.selection-bubble', 'function(){return this.hidden}'));
+    if (expectBubble) await until(async () => !await ui('.selection-bubble', 'function(){return this.hidden}'));
   }
   async function assertTailPosition(label) {
     const expected = await sample.evaluate(() => {
@@ -175,6 +176,69 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
   await ui('#source', 'function(){this.value="Edited text";this.dispatchEvent(new Event("input",{bubbles:true}))}');
   await click('#translate'); await until(async () => (await ui('#status')) === msg('complete'));
   assert.equal(requests.at(-1).body.messages[1].content, 'Edited text');
+  // The shared on-page source accepts clipboard images without clipboard-read permission.
+  const beforePaste = requests.length;
+  await ui('#source', `async function(){
+    const canvas = document.createElement('canvas'); canvas.width = 120; canvas.height = 60;
+    const ctx = canvas.getContext('2d'); ctx.fillStyle = '#268'; ctx.fillRect(0,0,120,60);
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    const clipboardData = new DataTransfer();
+    clipboardData.items.add(new File([blob], 'first.png', {type:'image/png'}));
+    clipboardData.items.add(new File([blob], 'second.png', {type:'image/png'}));
+    this.dispatchEvent(new ClipboardEvent('paste', {clipboardData, bubbles:true, cancelable:true}));
+  }`);
+  await until(async () => await ui('#source-images', 'function(){return this.querySelectorAll("img").length}') === 2 &&
+    !await ui('#translate', 'function(){return this.disabled}'));
+  assert.equal(requests.length, beforePaste, 'pasting in on-page panel does not upload');
+  assert.equal(await ui('#source', 'function(){return this.value}'), 'Edited text');
+  assert.equal(await ui('.source-thumbnail', 'function(){return this.getBoundingClientRect().width}'), 72);
+  const sourceLayout = () => ui('.translation-view', `function(){return (${inspectSourceImageLayout.toString()})(this)}`);
+  assertSourceImageLayout(await sourceLayout());
+  const deleteStyle = selector => ui(selector, 'function(){const s=getComputedStyle(this);return {cursor:s.cursor,opacity:s.opacity,pointerEvents:s.pointerEvents,width:s.width,height:s.height,background:s.backgroundColor,color:s.color,icon:getComputedStyle(this.querySelector("svg")).width}}');
+  await sample.mouse.move(1000, 900);
+  const hiddenDelete = {cursor:'default',opacity:'0',pointerEvents:'none',width:'18px',height:'18px',background:'rgb(255, 255, 255)',color:'rgb(17, 17, 17)',icon:'10px'};
+  assert.deepEqual(await deleteStyle('.remove-source-image'), hiddenDelete);
+  const thumbnailBox = await ui('.source-thumbnail', 'function(){const r=this.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}}');
+  await sample.mouse.move(thumbnailBox.x, thumbnailBox.y);
+  assert.deepEqual(await deleteStyle('.remove-source-image'), {...hiddenDelete,opacity:'1',pointerEvents:'auto'});
+  assert.deepEqual(await deleteStyle('.source-thumbnail:nth-child(2) .remove-source-image'), hiddenDelete, 'hover reveals only the corresponding delete control');
+  await sample.screenshot({ path: path.join(screenshotDir, 'selection-image-delete-hover.png'), fullPage: true });
+  await sample.mouse.move(1000, 900);
+  assert.deepEqual(await deleteStyle('.remove-source-image'), hiddenDelete, 'leaving the image hides the control');
+  await ui('#source', 'function(){this.focus()}');
+  await sample.keyboard.press('Shift+Tab');
+  assert.equal(await ui('.source-thumbnail:last-child .remove-source-image', 'function(){return this.matches(":focus-visible") && getComputedStyle(this).opacity === "1"}'), true, 'keyboard users can reveal and use the delete button');
+  await ui('#source', 'function(){this.focus()}');
+  await sample.screenshot({ path: path.join(screenshotDir, 'selection-image-thumbnails.png'), fullPage: true });
+  await click('#translate'); await until(async () => (await ui('#status')) === msg('complete'));
+  const pastedRequest = requests.at(-1).body.messages[1].content;
+  assert.equal(pastedRequest.filter(part => part.type === 'image_url').length, 2);
+  assert.ok(pastedRequest[0].text.includes('Edited text'));
+  await click('.remove-source-image');
+  assert.equal(await ui('#source-images', 'function(){return this.querySelectorAll("img").length}'), 1);
+  await click('#translate'); await until(async () => (await ui('#status')) === msg('complete'));
+  assert.equal(requests.at(-1).body.messages[1].content.filter(part => part.type === 'image_url').length, 1);
+  await click('.remove-source-image');
+  assert.equal(await ui('#source-image-wrap', 'function(){return this.hidden}'), true);
+  assertSourceImageLayout(await sourceLayout(), false);
+  assert.equal(await ui('#source', 'function(){return this.value}'), 'Edited text');
+  // Overflow stays within the thumbnail strip, not the floating panel.
+  await ui('#source', `async function(){
+    const canvas = document.createElement('canvas'); canvas.width = 40; canvas.height = 30;
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    const clipboardData = new DataTransfer();
+    for(let i=0;i<5;i++) clipboardData.items.add(new File([blob], i+'.png', {type:'image/png'}));
+    this.dispatchEvent(new ClipboardEvent('paste', {clipboardData, bubbles:true, cancelable:true}));
+  }`);
+  await until(async () => await ui('#source-images', 'function(){return this.querySelectorAll("img").length}') === 5 &&
+    !await ui('#translate', 'function(){return this.disabled}'));
+  const stripLayout = await sourceLayout(); assertSourceImageLayout(stripLayout);
+  assert.ok(stripLayout.scrollWidth > stripLayout.clientWidth);
+  assert.equal(await ui('#source-images', 'function(){this.scrollLeft=this.scrollWidth;return this.scrollLeft>0 && this.lastElementChild.getBoundingClientRect().right<=this.getBoundingClientRect().right}'), true);
+  assertSourceImageLayout(await sourceLayout());
+  assert.equal(await ui('.selection-panel', 'function(){return this.scrollWidth===this.clientWidth}'), true);
+  await sample.screenshot({ path: path.join(screenshotDir, 'selection-image-strip.png'), fullPage: true });
+  console.log('✓ On-page image paste: two thumbnails, no upload until translate, combined text/image request, individual removal');
   await click('#close-view'); assert.equal(await ui('.selection-panel', 'function(){return this.hidden}'), true);
   await select(); await click('.selection-bubble'); await until(async () => (await ui('#status')) === msg('complete'));
   await sample.keyboard.press('Escape'); assert.equal(await ui('.selection-panel', 'function(){return this.hidden}'), true);
@@ -298,6 +362,87 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
   await authOptions.close();
   setMode('success'); await click('#close-view');
   console.log('✓ Selection authentication settings link opens extension settings');
+  // Settings apply without reloading open webpages and without editing provider credentials.
+  const preferenceOptions = await context.newPage();
+  const origin = `chrome-extension://${new URL(worker.url()).host}`;
+  const preferenceBefore = await worker.evaluate(() => chrome.storage.local.get(['settings', 'selectionEnabled', 'credentialVault']));
+  try {
+    await preferenceOptions.goto(`${origin}/src/options/options.html`);
+    await preferenceOptions.locator('#save:enabled').waitFor();
+    assert.equal(await preferenceOptions.locator('#selection-enabled').isChecked(), true);
+    await select('Toggle selection translation');
+    await until(async () => (await ui('.selection-bubble', 'function(){return this.hidden}')) === false);
+    await preferenceOptions.locator('#selection-enabled').uncheck();
+    await until(async () => (await ui('.selection-bubble', 'function(){return this.hidden}')) === true);
+    await select('Disabled selection', false);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    assert.equal(await ui('.selection-bubble', 'function(){return this.hidden}'), true);
+    await preferenceOptions.reload();
+    await preferenceOptions.locator('#save:enabled').waitFor();
+    assert.equal(await preferenceOptions.locator('#selection-enabled').isChecked(), false);
+    await sample.reload();
+    await sample.waitForSelector('[data-transight="selection"]', { state: 'attached' });
+    await select('Disabled after reload', false);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    assert.equal(await ui('.selection-bubble', 'function(){return this.hidden}'), true);
+    // Explicit right-click translation is still allowed when the automatic trigger is off.
+    const opened = await worker.evaluate(tabId => chrome.tabs.sendMessage(tabId, { type: 'SELECTION_OPEN', text: 'Explicit translation' }, { frameId: 0 }), tabId);
+    assert.equal(opened.ok, true);
+    await until(async () => (await ui('#status')) === msg('complete'));
+    const originalTarget = await ui('#target', 'function(){return this.value}');
+    await ui('#target', 'function(){this.value="de";this.dispatchEvent(new Event("change",{bubbles:true}))}');
+    await until(async () => (await ui('#status')) === msg('complete'));
+    assert.equal(await ui('.selection-panel', 'function(){return this.hidden}'), false);
+    await ui('#target', 'function(value){this.value=value;this.dispatchEvent(new Event("change",{bubbles:true}))}', [originalTarget]);
+    await until(async () => (await ui('#status')) === msg('complete'));
+    await click('#close-view');
+    await preferenceOptions.locator('#selection-enabled').check();
+    await until(async () => (await worker.evaluate(() => chrome.storage.local.get('selectionEnabled'))).selectionEnabled === true);
+    const template = 'TEST Translate {{from}} to {{to}}. {{title_prompt}} {{summary_prompt}} {{terms_prompt}} {{imt_style_guide}}';
+    await preferenceOptions.locator('#system-prompt').fill(template);
+    await preferenceOptions.locator('#save').click();
+    await preferenceOptions.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('saved'));
+    await preferenceOptions.reload();
+    await preferenceOptions.locator('#save:enabled').waitFor();
+    assert.equal(await preferenceOptions.locator('#system-prompt').inputValue(), template);
+    await sample.evaluate(() => {
+      document.title = 'Template context title';
+      const meta = document.createElement('meta'); meta.name = 'description'; meta.content = 'Existing metadata summary'; document.head.append(meta);
+    });
+    await select('Use custom prompt'); await click('.selection-bubble');
+    await until(async () => (await ui('#status')) === msg('complete'));
+    const system = requests.at(-1).body.messages[0];
+    assert.equal(system.role, 'system');
+    assert.ok(system.content.startsWith('TEST Translate Automatically detect'));
+    assert.ok(system.content.includes('Template context title'));
+    assert.ok(system.content.includes('Existing metadata summary'));
+    assert.equal(system.content.includes('{{'), false);
+    await preferenceOptions.locator('#selection-enabled').uncheck();
+    await until(async () => (await ui('.selection-panel', 'function(){return this.hidden}')) === true);
+    await preferenceOptions.locator('#selection-enabled').check();
+    await page.locator('#source').fill('Manual toolbar translation');
+    await page.locator('#translate').click();
+    await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('complete'));
+    assert.ok(requests.at(-1).body.messages[0].content.startsWith('TEST Translate'));
+    assert.equal(requests.at(-1).body.messages[0].content.includes('Template context title'), false);
+    await preferenceOptions.locator('#reset-prompt').click();
+    assert.ok((await preferenceOptions.locator('#system-prompt').inputValue()).startsWith('You are a professional {{to}} native translator'));
+    assert.equal((await worker.evaluate(() => chrome.storage.local.get('settings'))).settings.systemPrompt, template, 'reset remains a draft until saved');
+    await preferenceOptions.locator('#save').click();
+    await preferenceOptions.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('saved'));
+    const after = await worker.evaluate(() => chrome.storage.local.get(['settings', 'credentialVault']));
+    assert.ok(after.settings.systemPrompt.startsWith('You are a professional {{to}}'));
+    assert.deepEqual(after.credentialVault, preferenceBefore.credentialVault);
+    await preferenceOptions.screenshot({ path: path.join(screenshotDir, 'settings-preferences.png'), fullPage: true });
+  } finally {
+    await preferenceOptions.close();
+    await worker.evaluate(async previous => {
+      await chrome.storage.local.set({ settings: previous.settings });
+      if (previous.selectionEnabled === undefined) await chrome.storage.local.remove('selectionEnabled');
+      else await chrome.storage.local.set({ selectionEnabled: previous.selectionEnabled });
+    }, preferenceBefore);
+  }
+  console.log('✓ Selection toggle: live hide, reload persistence, manual translation unaffected; custom prompt save/reload, popup/page requests, title/summary variables, restore default and credential isolation');
   await session.detach();
   console.log('✓ Selection: automatic all-site injection, shared popup, selection-tail positioning (pointer, reverse, multiline, nested and viewport edges), next-paint pointer/keyboard trigger, compact trigger and 2.5s expiry/reset, no request on selection, editing/target, close/Esc/outside, cancellation, narrow screen, editable exclusion, persisted injection, second hostname, credential isolation');
 }

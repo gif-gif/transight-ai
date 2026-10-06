@@ -13,6 +13,9 @@
     let entries = [], statusState, configured = false;
     let editVersion = 0, vaultState, waitingForUnlock = false, pendingRetry = null;
     let speakingEntry, speechId;
+    let inputImages = [], imageGeneration = 0, importingImages = 0, imageQueue = Promise.resolve();
+    // Same bounds are enforced independently by validateImages in the background.
+    const maxImages = 5, maxImageLength = 8 * 1024 * 1024, maxTotalImageLength = 20 * 1024 * 1024;
     const speech = new TransightSpeechClient(message => {
       if (disposed || message.id !== speechId || !speakingEntry) return;
       if (['ended', 'stopped', 'error'].includes(message.state)) {
@@ -69,12 +72,16 @@
     function setBusy(value) {
       busy = value;
       for (const id of ['translate', 'source', 'target', 'clear']) $(id).disabled = value;
+      $('translate').disabled = value || importingImages > 0;
+      if ($('screenshot')) $('screenshot').disabled = importingImages > 0;
       $('cancel-translation').hidden = !value;
       resultsList.setAttribute('aria-busy', String(value));
-      $('translate-label').textContent = t(value ? 'loading' : 'translate');
+      $('translate-label').textContent = t(value ? 'loading' : (adapter.imageMode || inputImages.length) ? 'screenshotTranslateImage' : 'translate');
       $('translate-icon').classList.toggle('spinner', value);
     }
-    function count() { $('count').textContent = `${$('source').value.length.toLocaleString('en-US')} / 12,000`; }
+    function count() {
+      $('count').textContent = $('source').value.length.toLocaleString('en-US') + ' / 12,000' + (inputImages.length ? ' · ' + inputImages.length + '/5' : '');
+    }
     function modelIds() { return settings.models ?? (settings.model ? [settings.model] : []); }
     function renderCopy(entry) {
       const button = entry.card.querySelector('.copy-result');
@@ -192,7 +199,7 @@
       entry.state = 'loading'; entry.error = undefined; entry.errorCode = undefined;
       renderEntry(entry); updateBatchStatus();
       try {
-        const result = await adapter.translate(entry.request.text, entry.request.target, entry.model);
+        const result = await adapter.translate(entry.request.text, entry.request.target, entry.model, entry.request.images);
         if (disposed || current !== revision) return;
         if (!result?.ok) {
           const error = new Error(result?.error || t('backgroundFailed'));
@@ -226,12 +233,13 @@
       return translateEntry(entry, revision);
     }
     async function translate() {
-      if (busy || disposed) return;
+      if (busy || disposed || importingImages) return;
       stopSpeech();
       if (!configured) { statusKey('connectFirst', true); return; }
-      if (!$('source').value.trim()) { statusKey('enterText', true); $('source').focus(); return; }
+      if (adapter.imageMode && !inputImages.length) { statusKey('screenshotSelectFirst', true); return; }
+      if (!adapter.imageMode && !inputImages.length && !$('source').value.trim()) { statusKey('enterText', true); $('source').focus(); return; }
       if ($('source').value.length > 12000) { statusKey('selectionTooLong', true); return; }
-      const current = ++revision, text = $('source').value, target = $('target').value;
+      const current = ++revision, text = $('source').value, target = $('target').value, images = [...inputImages];
       waitingForUnlock = false; pendingRetry = null;
       if (adapter.getVaultStatus) {
         setBusy(true);
@@ -251,7 +259,7 @@
         }
       }
       setBusy(true); resetResult('loading'); statusKey('waiting');
-      for (const entry of entries) entry.request = { text, target };
+      for (const entry of entries) entry.request = { text, target, images };
       await Promise.all(entries.map(entry => translateEntry(entry, current)));
     }
     function closeMenu(focus = false) {
@@ -268,7 +276,7 @@
         const option = document.createElement('option'); option.value = code; option.textContent = languageName(code); $('target').append(option);
       }
       $('target').value = target;
-      setBusy(busy);
+      renderSource(); setBusy(busy);
       for (const button of root.querySelectorAll('[data-language]')) button.setAttribute('aria-pressed', String(button.dataset.language === next.preference));
       entries.forEach(renderEntry);
       if (statusState) statusKey(statusState.key, statusState.error);
@@ -283,11 +291,90 @@
       if (changed || !entries.length) { resetResult(); status(''); }
       if (updateTarget && !busy) $('target').value = next.targetLanguage;
     }
+    function renderSource() {
+      const gallery = $('source-images'), wrap = $('source-image-wrap');
+      if (!gallery || !wrap) return;
+      wrap.hidden = !inputImages.length;
+      gallery.replaceChildren();
+      inputImages.forEach((image, index) => {
+        const item = document.createElement('div'); item.className = 'source-thumbnail'; item.setAttribute('role', 'listitem');
+        const preview = document.createElement('img'); preview.src = image; preview.alt = t('screenshotPreview') + ' ' + (index + 1);
+        const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'remove-source-image'; remove.dataset.index = String(index);
+        remove.title = t('removeImage', String(index + 1)); remove.setAttribute('aria-label', remove.title);
+        remove.innerHTML = '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m4 4 8 8M12 4l-8 8"/></svg>';
+        item.append(preview, remove); gallery.append(item);
+      });
+      count();
+    }
+    function resetImages() { imageGeneration++; importingImages = 0; inputImages = []; }
+    function setDraft(draft) {
+      input(draft.text || ''); inputImages = [...draft.images]; renderSource(); setBusy(false);
+    }
+    function setImage(image) { setDraft({ text: '', images: image ? [image] : [] }); }
+    function getDraft() {
+      if (importingImages) throw new Error(t('imageProcessing'));
+      return { text: $('source').value, images: [...inputImages] };
+    }
     function input(text, auto = false) {
-      cancel(); editVersion++; $('source').value = text; count(); resetResult(); status('');
+      resetImages(); renderSource(); cancel(); editVersion++; $('source').value = text; count(); resetResult(); status('');
       if (text.length > 12000) statusKey('selectionTooLong', true);
       else if (auto) translate();
     }
+    if ($('source-images')) listen($('source-images'), 'click', event => {
+      const button = event.target.closest('.remove-source-image'); if (!button) return;
+      const index = Number(button.dataset.index);
+      stopSpeech(); cancel(); editVersion++; inputImages.splice(index, 1); resetResult(); status(''); renderSource(); setBusy(false);
+      ($('source-images').querySelectorAll('button')[Math.min(index, inputImages.length - 1)] || $('source')).focus();
+    });
+    async function clipboardImage(file) {
+      if (!['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/bmp'].includes(file.type)) throw new Error('imageUnsupported');
+      if (file.size > 20 * 1024 * 1024) throw new Error('imageTooLarge');
+      let bitmap;
+      try { bitmap = await createImageBitmap(file); } catch { throw new Error('screenshotInvalid'); }
+      try {
+        if (bitmap.width * bitmap.height > 40000000) throw new Error('imageTooLarge');
+        const scale = Math.min(1, 2048 / Math.max(bitmap.width, bitmap.height));
+        const canvas = document.createElement('canvas'); canvas.width = Math.max(1, Math.round(bitmap.width * scale)); canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+        const context = canvas.getContext('2d'); context.fillStyle = '#fff'; context.fillRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        const image = canvas.toDataURL('image/jpeg', .92);
+        if (image.length > maxImageLength) throw new Error('imageTooLarge');
+        return image;
+      } finally { bitmap.close(); }
+    }
+    listen($('source'), 'paste', event => {
+      const data = event.clipboardData;
+      const files = Array.from(data?.items || []).filter(item => item.kind === 'file' && item.type.startsWith('image/')).map(item => item.getAsFile()).filter(Boolean);
+      if (!files.length) return; // Normal text paste remains entirely native.
+      event.preventDefault(); event.stopPropagation();
+      if (disposed || busy) return;
+      const text = data.getData('text/plain');
+      if (text) {
+        const source = $('source'), room = 12000 - source.value.length + source.selectionEnd - source.selectionStart;
+        source.setRangeText(text.slice(0, room), source.selectionStart, source.selectionEnd, 'end');
+      }
+      stopSpeech(); cancel(); editVersion++; resetResult(); count();
+      const generation = imageGeneration;
+      importingImages++; setBusy(false); statusKey('imageProcessing');
+      imageQueue = imageQueue.catch(() => {}).then(async () => {
+        if (disposed || generation !== imageGeneration) return;
+        let failure;
+        for (const file of files) {
+          if (inputImages.length >= maxImages) { failure = 'imageLimit'; break; }
+          try {
+            const image = await clipboardImage(file);
+            if (disposed || generation !== imageGeneration) return;
+            if (inputImages.reduce((sum, value) => sum + value.length, image.length) > maxTotalImageLength) throw new Error('imageTotalTooLarge');
+            inputImages.push(image); renderSource();
+          } catch (error) { failure = ['imageUnsupported', 'imageTooLarge', 'imageTotalTooLarge'].includes(error.message) ? error.message : 'screenshotInvalid'; }
+          if (disposed || generation !== imageGeneration) return;
+        }
+        if (failure) statusKey(failure, true); else status('');
+      }).finally(() => {
+        if (disposed || generation !== imageGeneration) return;
+        importingImages--; setBusy(busy);
+      });
+    });
     listen($('source'), 'input', () => { cancel(); editVersion++; count(); resetResult(); status(''); });
     listen($('target'), 'change', async () => {
       cancel(); resetResult(); status('');
@@ -359,7 +446,8 @@
     $('close-view').hidden = !adapter.close;
     if (adapter.close) listen($('close-view'), 'click', () => adapter.close());
     setLocale(locale); applySettings(settings); setVault(adapter.vault);
-    return { setLocale, applySettings, setVault, input, status, statusKey, cancel, get editVersion() { return editVersion; },
-      dispose() { stopSpeech(); speech.dispose(); $('inline-unlock').replaceChildren(); disposed = true; clearCopyTimers(); cancel(); events.abort(); } };
+    return { setLocale, applySettings, setVault, input, status, statusKey, cancel,
+      setImage, setDraft, getDraft, get editVersion() { return editVersion; },
+      dispose() { resetImages(); renderSource(); stopSpeech(); speech.dispose(); $('inline-unlock').replaceChildren(); disposed = true; clearCopyTimers(); cancel(); events.abort(); } };
   };
 })();

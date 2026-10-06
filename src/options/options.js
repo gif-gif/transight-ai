@@ -1,6 +1,7 @@
+import { DEFAULT_SYSTEM_PROMPT } from '../shared/prompt.js';
 import { t, localizePage, initI18n, onLanguageChanged } from '../shared/i18n.js';
 import { modelConnection } from '../shared/models.js';
-import { fillLanguages, getSettings, setTargetLanguage, permissionOrigin, validateSettings, parseModelInput, MAX_MODELS } from '../shared/settings.js';
+import { fillLanguages, getSettings, setTargetLanguage, setSelectionEnabled, permissionOrigin, validateSettings, parseModelInput, MAX_MODELS } from '../shared/settings.js';
 await initI18n();
 localizePage();
 const $ = id => document.getElementById(id);
@@ -97,7 +98,7 @@ function status(text, kind = '') { statusMessage = null; $('status').textContent
 function setBusy(value) { busy = value; updateButtons(); }
 function readForm() {
   return validateSettings({ baseUrl: $('base-url').value, apiKey: $('api-key').value, models: parseModelInput($('model').value),
-    targetLanguage: $('target-language').value, style: $('style').value, consent: $('consent').checked });
+    targetLanguage: $('target-language').value, style: $('style').value, systemPrompt: $('system-prompt').value, consent: $('consent').checked });
 }
 $('toggle-key').addEventListener('click', () => {
   const visible = $('api-key').type === 'password';
@@ -105,11 +106,23 @@ $('toggle-key').addEventListener('click', () => {
   $('toggle-key').textContent = visible ? t('hide') : t('show');
   $('toggle-key').setAttribute('aria-pressed', String(visible));
 });
-$('settings-form').addEventListener('input', event => { if (!busy && event.target.id !== 'target-language') statusKey('unsaved'); });
+$('settings-form').addEventListener('input', event => { if (!busy && !['target-language', 'selection-enabled'].includes(event.target.id)) statusKey('unsaved'); });
 $('target-language').addEventListener('change', async () => {
   try {
     await setTargetLanguage($('target-language').value);
   } catch { statusKey('targetLanguageSaveFailed', 'error'); }
+});
+$('selection-enabled').addEventListener('change', async () => {
+  const value = $('selection-enabled').checked;
+  $('selection-enabled').disabled = true;
+  try { await setSelectionEnabled(value); $('selection-status').textContent = ''; }
+  catch { $('selection-enabled').checked = !value; $('selection-status').textContent = t('selectionSaveFailed'); }
+  finally { $('selection-enabled').disabled = false; }
+});
+$('reset-prompt').addEventListener('click', () => {
+  $('system-prompt').value = DEFAULT_SYSTEM_PROMPT;
+  statusKey('unsaved'); $('system-prompt').focus();
+  $('system-prompt').setSelectionRange(0, 0); $('system-prompt').scrollTop = 0;
 });
 $('settings-form').addEventListener('submit', async event => {
   event.preventDefault();
@@ -129,6 +142,7 @@ $('settings-form').addEventListener('submit', async event => {
     savedSettings = { ...settings, apiKey: '' };
     await refreshVault();
     $('base-url').value = settings.baseUrl;
+    $('system-prompt').value = settings.systemPrompt;
     $('model').value = settings.models.join(', '); syncModelChecks();
     // HTTP(S) access is now a required global grant. Saving a provider must not
     // revoke it (or try to remove required permissions).
@@ -159,6 +173,8 @@ async function init() {
   const settings = await getSettings();
   $('base-url').value = settings.baseUrl; $('api-key').value = settings.apiKey; $('model').value = settings.models.join(', ');
   fillLanguages($('target-language'), settings.targetLanguage);
+  $('system-prompt').value = settings.systemPrompt || DEFAULT_SYSTEM_PROMPT;
+  $('selection-enabled').checked = settings.selectionEnabled;
   $('style').value = settings.style; $('consent').checked = settings.consent;
   savedSettings = settings;
   setBusy(false);
@@ -224,6 +240,7 @@ $('fetch-models').addEventListener('click', async () => {
 window.addEventListener('pagehide', () => modelController?.abort());
 
 chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.selectionEnabled) $('selection-enabled').checked = changes.selectionEnabled.newValue !== false;
   if (area === 'local' && (changes.targetLanguagePreference || changes.settings)) {
     getSettings().then(settings => {
       // Sync only the target; preserve unsaved provider, model and credential fields.

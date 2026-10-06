@@ -1,3 +1,4 @@
+import { DEFAULT_SYSTEM_PROMPT, MAX_PROMPT_LENGTH } from './prompt.js';
 import { t } from './i18n.js';
 export const MAX_TEXT_LENGTH = 12000;
 export const MAX_MODELS = 5;
@@ -15,7 +16,7 @@ export const LANGUAGES = Object.freeze({
 });
 export const DEFAULT_SETTINGS = Object.freeze({
   baseUrl: 'https://api.openai.com/v1', apiKey: '', model: '', targetLanguage: 'zh-CN',
-  style: 'natural', consent: false
+  style: 'natural', consent: false, systemPrompt: DEFAULT_SYSTEM_PROMPT, selectionEnabled: true
 });
 export const STYLES = Object.freeze({ natural: '自然流畅', faithful: '忠实原文', professional: '专业严谨' });
 
@@ -43,8 +44,10 @@ export function validateSettings(input) {
     models,
     baseUrl: normalizeBaseUrl(input.baseUrl), apiKey: String(input.apiKey ?? '').trim(),
     model: models[0] || '', targetLanguage: input.targetLanguage,
-    style: input.style, consent: input.consent === true
+    style: input.style, consent: input.consent === true,
+    systemPrompt: input.systemPrompt === undefined || (typeof input.systemPrompt === 'string' && !input.systemPrompt.trim()) ? DEFAULT_SYSTEM_PROMPT : input.systemPrompt
   };
+  if (typeof settings.systemPrompt !== 'string' || settings.systemPrompt.length > MAX_PROMPT_LENGTH) throw new Error(t('invalidSystemPrompt'));
   if (!models.length || models.some(model => model.length > 200 || /[\r\n]/.test(model))) throw new Error(t('invalidModel'));
   if (models.length > MAX_MODELS) throw new Error(t('tooManyModels', String(MAX_MODELS)));
   if (/[\r\n]/.test(settings.apiKey)) throw new Error(t('invalidKey'));
@@ -55,10 +58,10 @@ export function validateSettings(input) {
 }
 
 export async function getSettings() {
-  const [{ settings }, { targetLanguagePreference }] = await Promise.all([
-    chrome.storage.local.get('settings'), chrome.storage.local.get('targetLanguagePreference')
+  const [{ settings }, { targetLanguagePreference }, { selectionEnabled }] = await Promise.all([
+    chrome.storage.local.get('settings'), chrome.storage.local.get('targetLanguagePreference'), chrome.storage.local.get('selectionEnabled')
   ]);
-  const merged = { ...DEFAULT_SETTINGS, ...settings, apiKey: '' };
+  const merged = { ...DEFAULT_SETTINGS, ...settings, apiKey: '', selectionEnabled: selectionEnabled !== false };
   if (typeof targetLanguagePreference === 'string' && Object.hasOwn(LANGUAGES, targetLanguagePreference)) merged.targetLanguage = targetLanguagePreference;
   const models = selectedModels(merged);
   return { ...merged, models, model: models[0] || '' };
@@ -88,4 +91,9 @@ export function fillLanguages(select, selected) {
     select.append(option);
   }
   select.value = selected;
+}
+
+export async function setSelectionEnabled(value) {
+  if (typeof value !== 'boolean') throw new Error(t('selectionSaveFailed'));
+  await chrome.storage.local.set({ selectionEnabled: value });
 }

@@ -63,7 +63,7 @@
     "message": "你的 AI 譯文將在這裡出現"
   },
   "privacyHint": {
-    "message": "僅在你主動翻譯時傳送文字"
+    "message": "僅在你主動翻譯時傳送內容"
   },
   "closer": {
     "message": "讓理解，少一點距離。"
@@ -135,7 +135,7 @@
     "message": "專業嚴謹"
   },
   "consent": {
-    "message": "我了解：翻譯的文字會傳送到上述 AI 服務，依該服務的政策處理，並可能產生 API 費用。"
+    "message": "我了解主動翻譯的文字和截圖會傳送至此 AI 服務，依服務商政策處理，並可能產生 API 費用。"
   },
   "save": {
     "message": "儲存設定"
@@ -541,5 +541,131 @@
   },
   "authSettingsPrompt": {
     "message": "請設定。"
+  },
+  "selectionEnabled": {
+    "message": "啟用劃詞翻譯"
+  },
+  "selectionEnabledHint": {
+    "message": "切換後立即生效。關閉後不再顯示劃詞圖示，工具列和右鍵翻譯仍可使用。"
+  },
+  "selectionSaveFailed": {
+    "message": "劃詞翻譯設定儲存失敗，請重試。"
+  },
+  "systemPrompt": {
+    "message": "系統提示詞"
+  },
+  "systemPromptHint": {
+    "message": "隨設定儲存，留空使用預設範本，最多 16,000 個字元。所有已選模型共用此提示詞。"
+  },
+  "restoreDefaultPrompt": {
+    "message": "恢復預設提示詞"
+  },
+  "promptVariables": {
+    "message": "範本變數說明"
+  },
+  "promptVariablesHint": {
+    "message": "{{text}}：原文（同時以使用者訊息傳送）；{{from}}：自動偵測來源語言；{{to}}：目標語言；{{title_prompt}}：網頁標題；{{summary_prompt}}：網頁摘要；{{terms_prompt}}：專業術語；{{imt_style_guide}}：所選翻譯風格。"
+  },
+  "promptContextHint": {
+    "message": "網頁翻譯僅附帶目前頁面標題及既有的 description 摘要，不擷取全文或額外呼叫 AI。無可用資訊的變數替換為空；目前未設定術語表，術語變數為空。頁面資訊僅供參考，不作為指令。"
+  },
+  "invalidSystemPrompt": {
+    "message": "系統提示詞必須是文字，且不能超過 16,000 個字元。"
+  },
+  "screenshotTranslate": {
+    "message": "截圖翻譯"
+  },
+  "screenshotInstructions": {
+    "message": "這裡只顯示你框選的區域，檢查預覽後再翻譯。"
+  },
+  "screenshotClose": {
+    "message": "關閉"
+  },
+  "screenshotPreview": {
+    "message": "截圖預覽"
+  },
+  "screenshotCoordinates": {
+    "message": "使用座標精確選取"
+  },
+  "screenshotWidth": {
+    "message": "寬度"
+  },
+  "screenshotHeight": {
+    "message": "高度"
+  },
+  "screenshotUseSelection": {
+    "message": "使用選取範圍"
+  },
+  "screenshotUseAll": {
+    "message": "使用目前圖片"
+  },
+  "screenshotReselect": {
+    "message": "調整裁剪"
+  },
+  "screenshotPrivacy": {
+    "message": "僅在點擊「翻譯」後，將選取的圖片傳送給各模型對應的 AI 服務。截圖僅暫存在記憶體中，不寫入歷史紀錄。"
+  },
+  "screenshotVisionHint": {
+    "message": "請選用支援圖片輸入的模型。翻譯前請檢查預覽，避免傳送敏感資訊；圖片文字辨識可能存在誤差。"
+  },
+  "screenshotExpired": {
+    "message": "截圖已失效，請返回原網頁，從擴充功能彈出視窗重新截圖。"
+  },
+  "screenshotUnsupported": {
+    "message": "截圖翻譯僅支援一般 HTTP/HTTPS 網頁，請開啟網頁後重試。"
+  },
+  "screenshotInvalid": {
+    "message": "圖片無效或過大，請縮小選取範圍或瀏覽器視窗後重試。"
+  },
+  "screenshotFailed": {
+    "message": "無法擷取目前頁面，請保持網頁處於啟用狀態，檢查網站存取權限後重試。"
+  },
+  "screenshotCapturing": {
+    "message": "正在開啟區域截圖…"
+  },
+  "screenshotSelectFirst": {
+    "message": "請先確認裁剪範圍或使用目前圖片。"
+  },
+  "screenshotModelError": {
+    "message": "服務拒絕了圖片請求，請確認所選模型支援圖片輸入，且圖片大小符合服務要求。"
+  },
+  "screenshotTranslateImage": {
+    "message": "翻譯圖片"
+  },
+  "screenshotPickerHint": {
+    "message": "拖曳框選 · 按兩下選取區域內部或按 Enter 完成截圖 · Esc 取消"
+  },
+  "screenshotPickerCancel": {
+    "message": "取消"
+  },
+  "screenshotPickerConfirm": {
+    "message": "擷取選取區域"
+  },
+  "screenshotReady": {
+    "message": "截圖已完成，請在 60 秒內點擊工具列圖示，在原文框中檢視。"
+  },
+  "attachedImages": {
+    "message": "已新增的圖片"
+  },
+  "pasteImageHint": {
+    "message": "可貼上文字或圖片 · 最多 5 張"
+  },
+  "removeImage": {
+    "message": "刪除第 $1 張圖片"
+  },
+  "imageProcessing": {
+    "message": "正在新增圖片…"
+  },
+  "imageLimit": {
+    "message": "最多新增 5 張圖片，請先刪除部分圖片。"
+  },
+  "imageTotalTooLarge": {
+    "message": "圖片總大小超出限制，請刪除部分圖片後重試。"
+  },
+  "imageTooLarge": {
+    "message": "圖片過大，請使用小於 20 MB 的圖片，並適當縮小尺寸。"
+  },
+  "imageUnsupported": {
+    "message": "不支援此圖片格式，請貼上 PNG、JPEG、WebP、GIF 或 BMP 圖片。"
   }
 }

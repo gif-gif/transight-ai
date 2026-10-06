@@ -12,3 +12,5 @@
 .vault-panel{margin:20px 0;padding:18px;background:var(--tint);border:1px solid var(--line);border-radius:10px}.vault-panel h4{font-size:14px;margin:0 0 8px}.vault-panel p{font-size:12px;line-height:1.8;margin:8px 0}.vault-panel .field-grid{margin-top:14px}.vault-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.vault-panel .text-button{background:transparent;color:var(--accent);padding:8px;text-decoration:underline}.vault-panel [hidden]{display:none!important}#unlock-vault{margin-top:10px}
 
 #vault-status:empty{display:none}
+
+#system-prompt{border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);padding:12px;width:100%;min-height:220px;max-height:650px;resize:vertical;font:12px/1.7 ui-monospace,SFMono-Regular,monospace}#prompt-variables{margin-top:14px;font-size:12px}#prompt-variables summary{cursor:pointer;color:var(--accent)}#prompt-variables p{overflow-wrap:anywhere}.selection-preference label{display:flex;align-items:center;gap:10px;cursor:pointer}.selection-preference input{width:18px;height:18px;min-height:0;margin:0;accent-color:var(--accent)}#selection-status:empty{display:none}

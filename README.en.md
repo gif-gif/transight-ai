@@ -19,11 +19,38 @@ An AI translation Chrome extension MVP built with **Manifest V3 and vanilla Java
 - **Connection testing**, loading indicators, timeouts, and actionable authentication, rate-limit, and model error messages.
 - **All-site selection**: HTTP/HTTPS access is declared at installation/update, without per-site enable buttons. Only clicking the translate button sends the selected text.
 
+### Screenshot and clipboard image translation
+
+1. Open the toolbar popup on an HTTP/HTTPS webpage and click the scissors icon to select a region.
+2. **Double-click inside the selection**, click **Capture selection**, or press Enter. The popup reopens with a **72 × 72 thumbnail** in the source area, without a new tab. Esc or **Cancel** exits the capture.
+3. Capture again to append another image while keeping existing text and images. You can also press **Ctrl+V / Cmd+V in the source textarea** of the toolbar popup or on-page panel to paste clipboard images. Attach up to **5 images**; each top-right **×** removes only that image. **Clear** removes both text and images.
+4. Review the content, choose a target language, and click **Translate image**. Typed text and all remaining images are sent together in order. Multi-model results support individual retries, cancellation, copying, speech, and inline unlocking. If the popup cannot reopen automatically, click the toolbar icon within 60 seconds to recover the capture draft.
+
+Switching tabs, scrolling, or resizing cancels region selection. Confirmation temporarily captures the viewport and immediately crops it in the background; only the selected region reaches the popup or AI service. The full viewport is not displayed, stored, or uploaded. Capture covers the visible webpage, not browser chrome, scrolling pages, desktop, internal Chrome pages, or local files.
+
+Requires a Chat Completions-compatible image-input model; models are not switched automatically and no separate OCR service is used. Images are resized proportionally to a maximum longest edge of 2,048 pixels, without upscaling. Pasted PNG, JPEG, WebP, GIF, and BMP images are converted to static JPEG; SVG is not supported.
+
+**Capturing, pasting, and previewing do not upload images.** Only translation or retry sends text and images to the configured services; image charges may apply. Only paste events in the source textarea are handled, with no clipboard-read permission or background clipboard access. Images never enter local/session storage or translation history. Capture handoff drafts are memory-only, one-use, and expire after 60 seconds. Starting another capture temporarily preserves existing input, including after cancellation until expiry; ordinary closing does not persist images. Review sensitive information and translation accuracy. Custom prompts use typed text for `{{text}}` (empty for images alone); image requests omit page title/summary metadata.
+
 ### Read translations aloud
 
 Each model card has a speaker button next to Copy. Click to read, click again to stop; translation never autoplays. Completed results can be read while other models are still translating. Only one result plays across the extension at a time. Another model or window takes over playback. Closing the owning view, navigating, clearing, or retranslating stops it; pinning, dragging, and copying do not.
 
 Chrome `tts` selects a voice explicitly reported as local for the result’s original target language. Long results are read in chunks. No translation API key or cloud speech service is used, and audio or additional speech text is not persisted. If no matching local voice is available, install one in your system settings; there is no remote or wrong-language fallback. Availability and voice quality depend on the system. Pause, speed, voice selection, and download controls are not included. Reload the extension and refresh open webpages after updating.
+
+### Selection toggle and custom system prompt
+
+Settings can enable or disable the selection trigger (on by default). Changes save immediately and sync to open pages. Disabling hides the icon and closes the current panel; toolbar and explicit right-click translation remain available without reconfiguring credentials.
+
+Edit the system prompt or restore the default, then save settings. An empty prompt uses the default. The limit is 16,000 characters, shared across selected models. Restore only edits the draft until saved. The template is sent as a `system` message; source text is also sent separately as a `user` message.
+
+- `{{text}}`: source text; `{{from}}`: automatic source-language detection by the model; `{{to}}`: current target language.
+- `{{title_prompt}}`: webpage title; `{{summary_prompt}}`: existing `description` metadata. No full-page scraping or additional AI summarization request.
+- `{{terms_prompt}}`: relevant terminology, empty while no glossary is configured.
+- `{{imt_style_guide}}`: selected translation style.
+
+Unavailable context becomes empty. The default template includes title/summary variables, so available metadata accompanies webpage translation requests to your chosen provider. Remove these variables to omit it. Manual input carries no page context. Prompts are stored locally; do not put credentials in them.
+
 
 ## Screenshots
 
@@ -183,7 +210,7 @@ Input/password fields, editable regions, and the panel itself do not trigger sel
 - **API keys are password-encrypted in `chrome.storage.local`, never Chrome-synced.** AES-256-GCM uses a PBKDF2-SHA-256-derived key (600,000 iterations), a random salt and a fresh IV. Passwords and derived keys are never saved. Unlocked API keys live only in trusted-context `chrome.storage.session` until locked or the browser session/extension reload ends. This protects locked persistent data, not a compromised browser or device. Avoid storing highly privileged production keys in shared browsers, and use spending limits and least-privilege credentials.
 - Local storage access is restricted to `TRUSTED_CONTEXTS`, so injected content scripts cannot directly read API keys. Network requests run in the extension background.
 - Text is sent only when you explicitly translate or test a connection. The extension does not automatically scan entire pages, upload webpage URLs, store translation history, or include analytics tracking.
-- Your provider may process submitted text according to its own policies. Avoid sending sensitive information. The on-page panel is not a secure interface for displaying confidential content.
+- Your provider may process submitted text and explicitly submitted screenshots according to its own policies. Avoid sending sensitive information. The on-page panel is not a secure interface for displaying confidential content.
 - API requests omit browser cookies and do not follow redirects, preventing credentials from being forwarded to another address.
 - Translation output is rendered with `textContent`; returned HTML or Markdown is not executed.
 - When context-menu panel injection fails, the selection is temporarily stored in `chrome.storage.session` and deleted after the standalone window reads it. It is not written to persistent history.
@@ -195,7 +222,7 @@ Input/password fields, editable regions, and the panel itself do not trigger sel
 | --- | --- |
 | `storage` | Local settings and temporary selections for restricted-page fallback |
 | `contextMenus` | Add the selected-text translation command to the context menu |
-| `activeTab` | Temporarily access the current page after a user action |
+| `activeTab` | Temporarily access the current page and capture its visible area when screenshot translation is requested |
 | `scripting` | Read selected text or inject the translation panel |
 | `tts` | Read translations on request with local voices and manage playback/stop events |
 | `host_permissions`: all HTTP/HTTPS sites | Inject selection controls and access the configured API. Chrome may show an all-site access warning at install/update |
@@ -219,6 +246,8 @@ The toolbar popup root has an explicit width of 400px, without a viewport-width 
 Additional unit tests cover global manifest grants, legacy migration, authorization/revocation, early cancellation, and the public-settings allowlist. Browser tests cover selection without requests, source edits, target/UI language switching, close/Esc/outside click, late responses, narrow viewports, editable-region exclusion, persistent injection, and automatic activation on a second hostname.
 
 ### Optional Browser Smoke Tests
+
+Screenshot tests use a local mock AI service. Programmatic popup opening does not grant `activeTab` like a physical toolbar click, so only the disposable test copy receives `<all_urls>` to test the real capture API. Production manifest and `dist/` permissions stay unchanged; manually verify native toolbar authorization before release. Use `TEST_BROWSER_HEADLESS=1` if macOS cannot focus the test window (native browser language follows system settings), or `TEST_SCREENSHOT_ONLY=1` to run only screenshot cases.
 
 ```sh
 npm install --no-save playwright

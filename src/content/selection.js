@@ -35,7 +35,7 @@
       const result = await send({ type: 'SELECTION_INIT' });
       if (version !== lifecycle) return;
       if (!result?.ok) { disable(); return; }
-      config = result; enabled = true;
+      config = result; enabled = config.settings.selectionEnabled !== false;
       if (!host) mount();
       view?.setLocale(config.locale); view?.applySettings(config.settings, false); view?.setVault(config.vault);
     } catch { if (version === lifecycle) disable(); }
@@ -209,10 +209,10 @@
     }
     if (version !== opening) return true;
     if (!result?.ok) { disable(); return false; }
-    config = result; enabled = true;
+    config = result; enabled = config.settings.selectionEnabled !== false;
+    if (!explicit && !enabled) return false;
     if (!host) mount();
     panel.innerHTML = config.html;
-    panel.querySelector('[data-i18n="selectionHint"]').dataset.i18n = 'selectionEditHint';
     panel.hidden = false; panelAnchor = chosen.rect;
     const updatePinLocale = installPin();
     view = new TransightTranslationView(panel, {
@@ -222,9 +222,10 @@
         if (!response?.ok) throw new Error();
         return response.vault;
       },
-      async translate(text, targetLanguage, model) {
+      async translate(text, targetLanguage, model, images) {
         const id = crypto.randomUUID(); requestIds.add(id);
-        try { return await send({ type: 'SELECTION_TRANSLATE', id, text, targetLanguage, model }); }
+        try { return await send({ type: 'SELECTION_TRANSLATE', id, text, targetLanguage, model, images,
+          context: { title: document.title.slice(0, 500), summary: (document.querySelector('meta[name="description"]')?.content || '').slice(0, 1500) } }); }
         finally { requestIds.delete(id); }
       },
       cancel, close,
@@ -268,7 +269,12 @@
       panel?.setAttribute('aria-label', message.locale.messages.panelLabel);
     }
     if (message?.type === 'SELECTION_VAULT' && config) { config.vault = message.vault; view?.setVault(message.vault); }
-    if (message?.type === 'SELECTION_SETTINGS' && config) { config.settings = message.settings; view?.applySettings(message.settings); }
+    if (message?.type === 'SELECTION_SETTINGS' && config) {
+      const wasEnabled = enabled;
+      config.settings = message.settings; enabled = message.settings.selectionEnabled !== false;
+      if (wasEnabled && !enabled) close(false);
+      view?.applySettings(message.settings);
+    }
   });
   refresh();
 })();

@@ -1,3 +1,4 @@
+import { installScreenshot, SCREENSHOT_PAGE } from './shared/screenshot.js';
 import { installSpeech } from './shared/speech.js';
 import { openContextTranslation } from './shared/context-menu.js';
 import { installSelection } from './shared/selection-background.js';
@@ -14,6 +15,7 @@ const credentials = createCredentialStore(chrome.storage);
 const storageReady = Promise.all([chrome.storage.local, chrome.storage.session].map(area =>
   area.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' }))).then(() => credentials.migrate());
 const languageReady = storageReady.then(initI18n);
+installScreenshot(languageReady, t);
 onLanguageChanged(refreshContextMenu);
 languageReady.then(refreshContextMenu).catch(console.error);
 let menuRefresh = Promise.resolve();
@@ -43,7 +45,7 @@ async function withRequest(signal, callback) {
   finally { activeRequests.delete(controller); signal?.removeEventListener('abort', cancel); }
 }
 function abortRequests() { for (const controller of activeRequests) controller.abort(); }
-async function runTranslation(text, targetLanguage, signal, model) {
+async function runTranslation(text, targetLanguage, signal, model, context, image) {
   return withRequest(signal, async requestSignal => {
     await languageReady;
     const settings = validateSettings(await getSettings());
@@ -52,7 +54,7 @@ async function runTranslation(text, targetLanguage, signal, model) {
     if (!settings.models.includes(chosen)) throw new Error(t('modelNotConfigured'));
     const apiKey = await credentials.resolve(settings.baseUrl);
     if (requestSignal.aborted) throw new Error(t('vaultLockedError'));
-    return translate(text, { ...settings, apiKey, model: chosen, models: [chosen] }, targetLanguage, { signal: requestSignal });
+    return translate(text, { ...settings, apiKey, model: chosen, models: [chosen] }, targetLanguage, { signal: requestSignal, context, image });
   });
 }
 
@@ -96,17 +98,18 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
 const popupJobs = new Map();
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // Only our own extension pages may initiate requests; never trust page/content messages.
-  if (sender.id !== chrome.runtime.id || !['src/options/options.html', 'src/popup/popup.html'].some(path => sender.url?.split(/[?#]/)[0] === chrome.runtime.getURL(path))) return false;
+  if (sender.id !== chrome.runtime.id || !['src/options/options.html', 'src/popup/popup.html', SCREENSHOT_PAGE].some(path => sender.url?.split(/[?#]/)[0] === chrome.runtime.getURL(path))) return false;
   const owner = sender.documentId || sender.url;
   const key = `${owner}:${message?.id}`;
   if (message?.type === 'CANCEL_TRANSLATE') {
     popupJobs.get(key)?.abort(); popupJobs.delete(key); sendResponse({ ok: true }); return false;
   }
   if (message?.type !== 'TRANSLATE') return false;
+  if ((message.image !== undefined || message.images !== undefined) && !['src/popup/popup.html', SCREENSHOT_PAGE].some(path => sender.url?.split(/[?#]/)[0] === chrome.runtime.getURL(path))) return false;
   if (message.id !== undefined && (typeof message.id !== 'string' || message.id.length > 80)) return false;
   const controller = new AbortController();
   if (message.id) { popupJobs.get(key)?.abort(); popupJobs.set(key, controller); }
-  runTranslation(message.text, message.targetLanguage, controller.signal, message.model)
+  runTranslation(message.text, message.targetLanguage, controller.signal, message.model, message.context, message.images !== undefined ? message.images : message.image)
     .then(result => sendResponse({ ok: true, ...result }))
     .catch(error => sendResponse({ ok: false, error: error.message || t('translationFailed'), ...(error.code === 'AUTH_REQUIRED' ? { code: 'AUTH_REQUIRED' } : {}) }))
     .finally(() => { if (popupJobs.get(key) === controller) popupJobs.delete(key); });

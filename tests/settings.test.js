@@ -75,3 +75,20 @@ test('target preference persists independently, falls back to legacy settings an
     assert.equal((await getSettings()).targetLanguage, DEFAULT_SETTINGS.targetLanguage);
   } finally { chrome.storage = originalStorage; }
 });
+
+test('selection preference is independent of provider settings and works without credentials', async () => {
+  const { getSettings, setSelectionEnabled } = await import('../src/shared/settings.js');
+  const previous = chrome.storage;
+  const data = { settings: config, credentialVault: { ciphertext: 'keep' } };
+  chrome.storage = { local: { get: async key => ({ [key]: data[key] }), set: async values => Object.assign(data, values) } };
+  try {
+    assert.equal((await getSettings()).selectionEnabled, true);
+    await setSelectionEnabled(false);
+    assert.equal((await getSettings()).selectionEnabled, false);
+    assert.deepEqual(data.settings, config);
+    assert.deepEqual(data.credentialVault, { ciphertext: 'keep' });
+    await setSelectionEnabled(true);
+    assert.equal((await getSettings()).selectionEnabled, true);
+    for (const value of ['false', null, 0]) await assert.rejects(setSelectionEnabled(value));
+  } finally { chrome.storage = previous; }
+});

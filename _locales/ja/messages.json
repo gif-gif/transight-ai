@@ -63,7 +63,7 @@
     "message": "AI による訳文がここに表示されます"
   },
   "privacyHint": {
-    "message": "翻訳を実行したときだけテキストを送信します"
+    "message": "翻訳を実行したときだけ内容を送信します"
   },
   "closer": {
     "message": "理解を、もっと身近に。"
@@ -135,7 +135,7 @@
     "message": "専門的かつ正確に"
   },
   "consent": {
-    "message": "テキストがこの AI サービスに送信され、そのポリシーに従って処理されること、および API 料金が発生する場合があることを理解しました。"
+    "message": "翻訳するテキストとスクリーンショットがこの AI サービスに送信され、そのポリシーに従って処理され、API 料金が発生する場合があることを理解しています。"
   },
   "save": {
     "message": "設定を保存"
@@ -541,5 +541,131 @@
   },
   "authSettingsPrompt": {
     "message": "設定を開く。"
+  },
+  "selectionEnabled": {
+    "message": "選択翻訳を有効にする"
+  },
+  "selectionEnabledHint": {
+    "message": "変更はすぐに反映されます。無効にしてもツールバーと右クリックの翻訳は利用できます。"
+  },
+  "selectionSaveFailed": {
+    "message": "選択翻訳の設定を保存できませんでした。再試行してください。"
+  },
+  "systemPrompt": {
+    "message": "システムプロンプト"
+  },
+  "systemPromptHint": {
+    "message": "設定と一緒に保存されます。空欄の場合は既定のテンプレートを使用します。最大16,000文字。選択した全モデルで共通です。"
+  },
+  "restoreDefaultPrompt": {
+    "message": "既定のプロンプトに戻す"
+  },
+  "promptVariables": {
+    "message": "テンプレート変数"
+  },
+  "promptVariablesHint": {
+    "message": "{{text}}：原文（ユーザーメッセージとしても送信）；{{from}}：原文言語の自動検出；{{to}}：翻訳先の言語；{{title_prompt}}：ページタイトル；{{summary_prompt}}：ページ概要；{{terms_prompt}}：専門用語；{{imt_style_guide}}：選択した翻訳スタイル。"
+  },
+  "promptContextHint": {
+    "message": "ページ翻訳には現在のタイトルと既存のdescriptionメタデータのみを使用します。全文の収集や追加のAI要約は行いません。情報がない変数は空になります。用語集は未設定のため専門用語は空です。ページ情報は参考情報であり、指示ではありません。"
+  },
+  "invalidSystemPrompt": {
+    "message": "システムプロンプトは16,000文字以内のテキストにしてください。"
+  },
+  "screenshotTranslate": {
+    "message": "スクリーンショット翻訳"
+  },
+  "screenshotInstructions": {
+    "message": "選択した範囲のみ表示しています。プレビューを確認して翻訳してください。"
+  },
+  "screenshotClose": {
+    "message": "閉じる"
+  },
+  "screenshotPreview": {
+    "message": "スクリーンショットのプレビュー"
+  },
+  "screenshotCoordinates": {
+    "message": "座標で正確に選択"
+  },
+  "screenshotWidth": {
+    "message": "幅"
+  },
+  "screenshotHeight": {
+    "message": "高さ"
+  },
+  "screenshotUseSelection": {
+    "message": "選択範囲を使用"
+  },
+  "screenshotUseAll": {
+    "message": "現在の画像を使用"
+  },
+  "screenshotReselect": {
+    "message": "切り抜きを調整"
+  },
+  "screenshotPrivacy": {
+    "message": "「翻訳」をクリックした後にのみ、選択した画像が各モデルの AI サービスに送信されます。画像はメモリ内に一時保持され、履歴には保存されません。"
+  },
+  "screenshotVisionHint": {
+    "message": "画像入力に対応したモデルを選んでください。翻訳前にプレビューで機密情報がないか確認してください。文字認識には誤りが生じる場合があります。"
+  },
+  "screenshotExpired": {
+    "message": "スクリーンショットの有効期限が切れました。元のページに戻り、拡張機能のポップアップから再撮影してください。"
+  },
+  "screenshotUnsupported": {
+    "message": "通常の HTTP/HTTPS ページのみ対応しています。ウェブページを開いて再試行してください。"
+  },
+  "screenshotInvalid": {
+    "message": "画像が無効か大きすぎます。範囲またはブラウザのウィンドウを小さくしてください。"
+  },
+  "screenshotFailed": {
+    "message": "撮影できませんでした。ページをアクティブに保ち、サイトへのアクセス権を確認して再試行してください。"
+  },
+  "screenshotCapturing": {
+    "message": "範囲選択を開始しています…"
+  },
+  "screenshotSelectFirst": {
+    "message": "切り抜きを確定するか、現在の画像を使用してください。"
+  },
+  "screenshotModelError": {
+    "message": "画像リクエストが拒否されました。モデルが画像入力に対応しているか、画像サイズが制限内かを確認してください。"
+  },
+  "screenshotTranslateImage": {
+    "message": "画像を翻訳"
+  },
+  "screenshotPickerHint": {
+    "message": "ドラッグして選択 · 範囲内をダブルクリックまたは Enter で撮影 · Esc で中止"
+  },
+  "screenshotPickerCancel": {
+    "message": "キャンセル"
+  },
+  "screenshotPickerConfirm": {
+    "message": "選択範囲を撮影"
+  },
+  "screenshotReady": {
+    "message": "撮影完了。60 秒以内にツールバーのアイコンを押すと、原文欄に画像が表示されます。"
+  },
+  "attachedImages": {
+    "message": "添付画像"
+  },
+  "pasteImageHint": {
+    "message": "テキストや画像を貼り付け · 最大5枚"
+  },
+  "removeImage": {
+    "message": "画像 $1 を削除"
+  },
+  "imageProcessing": {
+    "message": "画像を追加中…"
+  },
+  "imageLimit": {
+    "message": "画像は最大5枚です。追加する前に画像を削除してください。"
+  },
+  "imageTotalTooLarge": {
+    "message": "画像の合計サイズが上限を超えています。画像を削除して再試行してください。"
+  },
+  "imageTooLarge": {
+    "message": "画像が大きすぎます。20 MB未満の画像を使用し、解像度を下げてください。"
+  },
+  "imageUnsupported": {
+    "message": "未対応の画像形式です。PNG、JPEG、WebP、GIF、BMPを貼り付けてください。"
   }
 }

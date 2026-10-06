@@ -63,7 +63,7 @@
     "message": "Your AI translation will appear here"
   },
   "privacyHint": {
-    "message": "Text is sent only when you translate"
+    "message": "Content is sent only when you translate"
   },
   "closer": {
     "message": "A LITTLE CLOSER."
@@ -135,7 +135,7 @@
     "message": "Professional and precise"
   },
   "consent": {
-    "message": "I understand that text will be sent to this AI service, processed under its policies, and may incur API charges."
+    "message": "I understand that text and screenshots I choose to translate will be sent to this AI service, processed under its policies, and may incur API charges."
   },
   "save": {
     "message": "Save settings"
@@ -541,5 +541,131 @@
   },
   "authSettingsPrompt": {
     "message": " Open settings."
+  },
+  "selectionEnabled": {
+    "message": "Enable selection translation"
+  },
+  "selectionEnabledHint": {
+    "message": "Applies immediately. Turn off the selection icon while keeping toolbar and right-click translation available."
+  },
+  "selectionSaveFailed": {
+    "message": "Could not save selection translation preference. Please retry."
+  },
+  "systemPrompt": {
+    "message": "System prompt"
+  },
+  "systemPromptHint": {
+    "message": "Saved with settings. Leave blank for the default template. Up to 16,000 characters; shared by all selected models."
+  },
+  "restoreDefaultPrompt": {
+    "message": "Restore default prompt"
+  },
+  "promptVariables": {
+    "message": "Template variables"
+  },
+  "promptVariablesHint": {
+    "message": "{{text}}: source text (also sent as a user message); {{from}}: automatic source-language detection; {{to}}: target language; {{title_prompt}}: page title; {{summary_prompt}}: page summary; {{terms_prompt}}: terminology; {{imt_style_guide}}: selected translation style."
+  },
+  "promptContextHint": {
+    "message": "Webpage translation includes only the current title and existing description metadata, not the full page or an extra AI summary request. Unavailable context becomes empty. There is no glossary configured yet, so terminology is empty. Page metadata is reference data, not instructions."
+  },
+  "invalidSystemPrompt": {
+    "message": "The system prompt must be text of no more than 16,000 characters."
+  },
+  "screenshotTranslate": {
+    "message": "Screenshot translation"
+  },
+  "screenshotInstructions": {
+    "message": "Only your selected area is shown. Check the preview, then translate."
+  },
+  "screenshotClose": {
+    "message": "Close"
+  },
+  "screenshotPreview": {
+    "message": "Screenshot preview"
+  },
+  "screenshotCoordinates": {
+    "message": "Select precisely with coordinates"
+  },
+  "screenshotWidth": {
+    "message": "Width"
+  },
+  "screenshotHeight": {
+    "message": "Height"
+  },
+  "screenshotUseSelection": {
+    "message": "Use selection"
+  },
+  "screenshotUseAll": {
+    "message": "Use current image"
+  },
+  "screenshotReselect": {
+    "message": "Adjust crop"
+  },
+  "screenshotPrivacy": {
+    "message": "Only after you click Translate will the selected image be sent to each configured AI service. Screenshots are kept in memory only, not saved to history."
+  },
+  "screenshotVisionHint": {
+    "message": "Select a model that supports image input. Check the preview for sensitive information before translating. Image recognition may be inaccurate."
+  },
+  "screenshotExpired": {
+    "message": "This screenshot has expired. Return to the webpage and capture it again using the extension popup."
+  },
+  "screenshotUnsupported": {
+    "message": "Screenshot translation supports ordinary HTTP/HTTPS webpages only. Open a webpage and try again."
+  },
+  "screenshotInvalid": {
+    "message": "The image is invalid or too large. Try a smaller region or a smaller browser window."
+  },
+  "screenshotFailed": {
+    "message": "Could not capture the page. Keep the page active, check site access, and try again."
+  },
+  "screenshotCapturing": {
+    "message": "Opening area selection…"
+  },
+  "screenshotSelectFirst": {
+    "message": "Choose a crop or use the current image first."
+  },
+  "screenshotModelError": {
+    "message": "The service rejected the image request. Check that the selected model supports images and that the image size is accepted."
+  },
+  "screenshotTranslateImage": {
+    "message": "Translate image"
+  },
+  "screenshotPickerHint": {
+    "message": "Drag to select · Double-click inside the selection or press Enter to capture · Esc to cancel"
+  },
+  "screenshotPickerCancel": {
+    "message": "Cancel"
+  },
+  "screenshotPickerConfirm": {
+    "message": "Capture selection"
+  },
+  "screenshotReady": {
+    "message": "Screenshot ready. Click the toolbar icon within 60 seconds to view it in the source box."
+  },
+  "attachedImages": {
+    "message": "Attached images"
+  },
+  "pasteImageHint": {
+    "message": "Paste text or images · Up to 5 images"
+  },
+  "removeImage": {
+    "message": "Remove image $1"
+  },
+  "imageProcessing": {
+    "message": "Adding images…"
+  },
+  "imageLimit": {
+    "message": "You can attach up to 5 images. Remove one before adding more."
+  },
+  "imageTotalTooLarge": {
+    "message": "Image attachments are too large. Remove an image and try again."
+  },
+  "imageTooLarge": {
+    "message": "This image is too large. Use an image under 20 MB and reduce its dimensions."
+  },
+  "imageUnsupported": {
+    "message": "Unsupported image format. Paste a PNG, JPEG, WebP, GIF or BMP image."
   }
 }

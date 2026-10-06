@@ -1,3 +1,4 @@
+import { screenshotSmoke } from './screenshot-smoke.mjs';
 import { speechSmoke } from './speech-smoke.mjs';
 import { credentialSmoke } from './credential-smoke.mjs';
 import { resolveBrowserLanguage } from '../src/shared/i18n.js';
@@ -17,6 +18,7 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const root = fileURLToPath(new URL('../', import.meta.url));
 const temp = await mkdtemp(path.join(tmpdir(), 'yijian-browser-'));
 const requestedLocale = process.env.TEST_BROWSER_LOCALE || 'en-US';
+const headless = process.env.TEST_BROWSER_HEADLESS === '1' || process.platform !== 'darwin';
 let context;
 let mode = 'success';
 let modelsMode = 'success';
@@ -56,9 +58,15 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 try {
   const extension = path.join(temp, 'extension'); await mkdir(extension);
   for (const name of ['src', 'assets', '_locales', 'manifest.json']) await cp(path.join(root, 'dist', name), path.join(extension, name), { recursive: true });
-  // Test the shipped manifest unchanged, including its global HTTP(S) grants.
+  // CDP/action.openPopup does not grant activeTab like a physical toolbar click.
+  // Only this disposable test copy gets <all_urls> to exercise real captureVisibleTab.
+  // The shipped manifest remains unchanged; native activeTab granting needs manual QA.
+  const testManifestPath = path.join(extension, 'manifest.json');
+  const testManifest = JSON.parse(await readFile(testManifestPath, 'utf8'));
+  testManifest.host_permissions = [...testManifest.host_permissions, '<all_urls>'];
+  await writeFile(testManifestPath, JSON.stringify(testManifest));
   let executablePath = process.env.CHROMIUM_EXECUTABLE || chromium.executablePath();
-  if (process.platform === 'darwin') {
+  if (process.platform === 'darwin' && !headless) {
     // NSUserDefaults requires separate -AppleLanguages and value arguments.
     // Use a temporary launcher because Playwright rejects bare value arguments.
     const quote = value => "'" + value.replaceAll("'", "'\\''") + "'";
@@ -69,7 +77,7 @@ try {
   const launch = () => chromium.launchPersistentContext(path.join(temp, 'profile'), {
     executablePath,
     // macOS language arguments are treated as an extra target in headless mode.
-    channel: 'chromium', headless: process.platform !== 'darwin',
+    channel: 'chromium', headless,
     locale: requestedLocale,
     args: [`--lang=${requestedLocale}`, `--disable-extensions-except=${extension}`, `--load-extension=${extension}`],
     viewport: { width: 1120, height: 980 }
@@ -88,6 +96,7 @@ try {
   assert.equal(await worker.evaluate(() => chrome.runtime.getManifest().name), msg('extensionName'));
   assert.equal(await worker.evaluate(() => chrome.i18n.getMessage('httpError', '503')), msg('httpError', '503'));
 
+  const screenshotDir = path.join(root, 'artifacts', 'screenshots', requestedLocale); await mkdir(screenshotDir, { recursive: true });
   const errors = [];
   const page = await context.newPage(); page.on('pageerror', error => errors.push(error.message));
   async function assertBrandMark() {
@@ -100,6 +109,15 @@ try {
     assert.deepEqual(mark, { text: '', width: 42, iconWidth: 28, paths: 3, hidden: 'true', color: 'rgb(255, 255, 255)' });
   }
 
+  if (process.env.TEST_SCREENSHOT_ONLY === '1') {
+    await worker.evaluate(baseUrl => chrome.storage.local.set({ settings: {
+      baseUrl, model: 'mock-translator', models: ['mock-translator', 'z-model'], targetLanguage: 'zh-CN', style: 'natural', consent: true
+    } }), `http://127.0.0.1:${server.address().port}/v1`);
+    await page.goto(`chrome-extension://${id}/src/popup/popup.html`);
+    const sample = await context.newPage();
+    await sample.goto(`http://127.0.0.1:${server.address().port}/sample`);
+    await screenshotSmoke({ context, worker, page, sample, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
+  } else {
   await page.goto(`chrome-extension://${id}/src/popup/popup.html`);
   await page.locator('#setup:visible').waitFor();
   await assertBrandMark();
@@ -114,7 +132,14 @@ try {
   await page.locator('#toggle-key').click();
   assert.equal(await page.locator('#style option[value="natural"]').innerText(), msg('styleNatural'));
   // Exercise Chrome's real toolbar popup auto-sizing instead of faking its viewport.
-  await worker.evaluate(() => chrome.action.openPopup());
+  await worker.evaluate(async () => {
+    const [window] = await chrome.windows.getAll({ windowTypes: ['normal'] });
+    await chrome.windows.update(window.id, { focused: true });
+    for (let attempt = 0; ; attempt++) {
+      try { await chrome.action.openPopup({ windowId: window.id }); break; }
+      catch (error) { if (attempt >= 19) throw error; await new Promise(resolve => setTimeout(resolve, 100)); }
+    }
+  });
   await page.waitForFunction(() => chrome.extension.getViews({ type: 'popup' })
     .some(view => view.document.readyState === 'complete' && view.innerWidth === 400));
   const popupSize = await page.evaluate(() => {
@@ -200,7 +225,6 @@ try {
   await page.locator('#test:enabled').waitFor();
   await page.locator('#test').click();
   await page.waitForFunction(expected => document.querySelector('#status').textContent === expected, msg('connectionSuccess', '多一点理解，让我们更靠近。'));
-  const screenshotDir = path.join(root, 'artifacts', 'screenshots', requestedLocale); await mkdir(screenshotDir, { recursive: true });
   for (const select of await page.locator('select:visible').all()) assertSelectStyle(await select.evaluate(inspectSelectStyle));
   await page.screenshot({ path: path.join(screenshotDir, 'options.png'), fullPage: true });
   await page.locator('#model').fill('unsaved'); await page.locator('#test').click();
@@ -315,6 +339,7 @@ try {
   await contextMenuSmoke({ context, worker, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
   assert.deepEqual(errors, []);
   await speechSmoke({ context, worker, page, sample, tabId, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
+  await screenshotSmoke({ context, worker, page, sample, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; } });
   await credentialSmoke({ context, worker, page, sample, tabId, requests, screenshotDir, msg, modelBehaviors, setMode: value => { mode = value; },
     restart: async () => {
       await context.close(); context = await launch();
@@ -325,6 +350,7 @@ try {
   });
   assert.deepEqual(errors, []);
   console.log('✓ Browser smoke: model discovery, selection, failure, permission denial and stale-response cancellation; real toolbar popup sizing and standalone narrow viewport, initial setup, consent, save, test connection, unsaved edits, translation, copy, HTTP errors, panel dismissal and credential isolation');
+  }
   console.log('Screenshots:', screenshotDir);
 } finally {
   await context?.close();

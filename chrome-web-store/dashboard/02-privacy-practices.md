@@ -1,11 +1,11 @@
 # Privacy practices / 隐私权规范填写指南
 
-核对日期：2026-10-04 · 基于当前 manifest 与源码。英文代码块可粘贴至相应栏位；中文说明用于开发者核对，**不是已通过审核或合规保证**。实现改变后必须同步修改申报与隐私政策。
+核对日期：2026-10-05 · 基于当前 manifest 与源码。英文代码块可粘贴至相应栏位；中文说明用于开发者核对，**不是已通过审核或合规保证**。实现改变后必须同步修改申报与隐私政策。
 
 ## 1. Single purpose / 单一用途
 
 ```text
-Translate text that the user types, pastes, or selects, using the user's configured AI service. Optional side-by-side model results help the user compare translations of the same text.
+Translate text that the user types, pastes, selects, or explicitly captures in a webpage screenshot, using the user's configured AI service. Optional side-by-side model results help the user compare translations of the same text.
 ```
 
 ## 2. Permission justification / 权限理由
@@ -27,7 +27,7 @@ Add a Translate selection command to the webpage context menu. The command sends
 ### activeTab
 
 ```text
-When the user opens the toolbar popup, access the active tab to read its current text selection and prefill the source field. This lets the user translate selected text without copying and pasting it. Protected browser pages can still use manual text input.
+When the user opens the toolbar popup, access the active tab to read its current text selection and prefill the source field. This lets the user translate selected text without copying and pasting it. When the user clicks Screenshot translation in the popup, let them freely select a region on the active HTTP/HTTPS webpage. Only after confirmation, temporarily capture the viewport through the browser API and immediately crop it in the background; only the selected region reaches the source box in the toolbar popup, without opening another tab. Capturing does not upload the image; translation sends only the confirmed image to the configured AI service. Protected browser pages can still use manual text input.
 ```
 
 **提交前最小权限复核**：当前同时申请全站 host access，可能覆盖上述注入所需权限。此说明对应实际用途，但不是证明 `activeTab` 在所有路径均不可替代。若复核后移除权限，应更新 manifest、回归测试、重新打包及同步本文件；本次仅准备材料，不修改权限。
@@ -66,6 +66,18 @@ All executable JavaScript and styles are packaged with the extension. Remote AI 
 
 ## 4. Data usage / 用户数据处理
 
+### 当前源码新增的数据处理说明（2026-10-05）
+
+- 图片粘贴：用户可在原文输入框主动粘贴图片，以缩略图预览、逐张删除，支持文字与最多 5 张图片一起翻译。仅处理粘贴事件，不增加读取剪贴板权限或后台读取；粘贴不上传，翻译/重试时才发送保留的文字与图片。图片仅在内存处理，不持久保存。
+- 截图翻译：用户主动通过工具栏进入当前网页自由框选，确认后底层接口临时捕获可视区域并立即在后台裁剪，仅选区图片进入工具栏弹窗的原文框，不打开新标签页；取消不截图，框选与截图均不上传，仅点击翻译/重试时发送确认后的图片到各模型对应服务。图片可能含个人、财务或其他敏感网页内容，用户需预览确认。图片使用临时内存，不写入 local/session storage 或持久历史；交接缓存限制数量、一次性读取、60 秒失效，弹窗关闭后丢弃。翻译结果沿用既有处理方式。图片不额外附加网页标题或摘要。商店网站内容数据申报及公开隐私政策需涵盖此路径；不要宣称“仅发送文本”。
+
+- 划词开关独立保存在本地，默认启用；关闭不影响工具栏或主动右键翻译。
+- 自定义系统提示词保存在本地，翻译时以 system 消息发送到用户配置的服务，不包含在网页内容脚本的设置快照中。
+- 默认模板的 `{{title_prompt}}` 和 `{{summary_prompt}}` 会包含当前网页标题（最多 500 字符）及已有 description 元数据（最多 1,500 字符），在主动网页翻译时随原文发送。删除模板中的对应变量即可不发送这些信息。不会抓取整页正文或额外调用 AI 生成摘要；纯手动输入没有页面上下文。
+- 目前没有术语表配置入口，`{{terms_prompt}}` 无可用信息时为空。
+- 下面旧版数据说明中涉及「原文、翻译风格」的范围，应同时包含上述自定义提示词及可用标题/摘要；发布前需同步更新线上隐私政策。本次未重新打包商店 ZIP。
+
+
 **不能选择“不收集或使用任何用户数据”**。以下是根据当前实现的建议；在实际后台按字段定义逐项核对。官方 FAQ 将纯本地处理也纳入需要披露的数据处理。
 
 | 后台类别 | 当前代码对应行为 / 建议 |
@@ -94,7 +106,7 @@ The extension processes user-provided source text, translations, AI service sett
 | 原文与译文 | 主要存在当前界面内存；没有持久翻译历史。关闭界面或清空输入可移除当前展示，但已发出的请求不能保证从服务端撤回 |
 | 备用窗口原文 | 临时写入 `chrome.storage.session.contextDraft`，读取后删除；窗口未读取时可能保留到当前浏览器会话结束 |
 | 偏好、同意状态、API 配置 | 保留在本地直到用户修改、清除扩展数据或卸载；不经 Chrome sync。当前没有专用“一键删除全部数据”按钮 |
-| 复制的译文 | 用户点击复制后写入系统剪贴板，之后由操作系统/其他剪贴板工具管理；扩展不读取剪贴板 |
+| 复制的译文 | 用户点击复制后写入系统剪贴板，之后由操作系统/其他剪贴板工具管理；扩展不主动读取剪贴板；仅在用户向原文框粘贴时接收粘贴事件中的图片/文字 |
 
 外部服务通常能接触请求网络元信息，例如来源 IP；当前代码不主动请求地理位置或附加用户身份。若开发者提供托管测试服务，它产生的访问日志和数据留存也必须如实补充。
 

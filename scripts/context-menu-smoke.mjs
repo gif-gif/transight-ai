@@ -56,7 +56,7 @@ export async function contextMenuSmoke({ context, worker, sample, tabId, request
     assert.equal(requests.length, before + 1, 'one right-click creates one translation, not two pipelines');
     assert.equal(await ui('function(){return this.querySelector("#source").value}'), 'Right-click selected text');
     assert.equal(await ui('function(){return this.querySelector(".result").textContent}'), literal);
-    assert.equal(await ui('function(){return this.querySelectorAll("img").length}'), 0, 'provider markup remains plain text');
+    assert.equal(await ui('function(){return this.querySelectorAll(".result img").length}'), 0, 'provider markup remains plain text');
     assert.equal(await sample.locator('[data-transight]').count(), 1);
     const single = await layout(); assert.equal(single.width, 400); assert.equal(single.overflow, false); assert.equal(single.cap, "");
     assert.ok(single.cards[0].bottom <= single.bottom);
@@ -120,7 +120,8 @@ export async function contextMenuSmoke({ context, worker, sample, tabId, request
     // Delayed, longer results must resize the cap even when the outer panel was already capped.
     modelBehaviors.set('z-model', { text: 'Longer translation line.\n'.repeat(30) });
     await open('Longer second model'); await success(3);
-    await until(async () => (await layout()).height > shortHeight);
+    // Wait for both content growth and the ResizeObserver's final two-card cap.
+    await until(async () => { const b = await layout(); return b.height > shortHeight && b.cards[1].bottom <= b.bottom; }, 'long second card fits after resize');
     box = await layout(); assert.ok(box.cards[1].bottom <= box.bottom, 'second long card stays visible within the available viewport');
     modelBehaviors.clear();
 

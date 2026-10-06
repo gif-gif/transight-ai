@@ -7,6 +7,6 @@ export function credentialAccess(message, sender, runtime) {
     return ['VAULT_STATUS', 'VAULT_SAVE', 'VAULT_UNLOCK', 'VAULT_LOCK', 'VAULT_RESET', 'FETCH_MODELS', 'CANCEL_MODELS'].includes(message?.type);
   }
   if (page === runtime.getURL('src/unlock/unlock.html')) return ['VAULT_STATUS', 'VAULT_UNLOCK'].includes(message?.type);
-  if (page === runtime.getURL('src/popup/popup.html')) return message?.type === 'VAULT_STATUS';
+  if (['src/popup/popup.html', 'src/screenshot/screenshot.html'].some(path => page === runtime.getURL(path))) return message?.type === 'VAULT_STATUS';
   return false;
 }

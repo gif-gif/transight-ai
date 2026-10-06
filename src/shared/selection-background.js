@@ -6,7 +6,7 @@ export function sitePattern(url) {
   catch { return null; }
 }
 export function publicSettings(settings) {
-  return { model: settings.model, models: selectedModels(settings), consent: settings.consent === true, targetLanguage: settings.targetLanguage };
+  return { model: settings.model, models: selectedModels(settings), consent: settings.consent === true, targetLanguage: settings.targetLanguage, selectionEnabled: settings.selectionEnabled !== false };
 }
 export function installSelection(ready, runTranslation, vaultStatus = async () => ({ state: 'empty' })) {
   const jobs = new Map();
@@ -77,7 +77,7 @@ export function installSelection(ready, runTranslation, vaultStatus = async () =
         case 'SELECTION_CANCEL': return {};
         case 'SELECTION_TRANSLATE': {
           if (job.controller.signal.aborted) return {};
-          return await runTranslation(message.text, message.targetLanguage, job.controller.signal, message.model);
+          return await runTranslation(message.text, message.targetLanguage, job.controller.signal, message.model, message.images?.length ? undefined : message.context, message.images);
         }
         default: throw new Error(t('selectionUnavailable'));
       }
@@ -88,7 +88,7 @@ export function installSelection(ready, runTranslation, vaultStatus = async () =
   chrome.permissions.onRemoved.addListener(() => serial(reconcile).catch(console.error));
   chrome.runtime.onStartup.addListener(() => serial(reconcile).catch(console.error));
   chrome.runtime.onInstalled.addListener(() => serial(reconcile).catch(console.error));
-  chrome.storage.onChanged.addListener((changes, area) => { if (area === 'local' && (changes.settings || changes.targetLanguagePreference)) ready.then(async () => broadcast('SELECTION_SETTINGS', { settings: publicSettings(await getSettings()) })).catch(() => {}); });
+  chrome.storage.onChanged.addListener((changes, area) => { if (area === 'local' && (changes.settings || changes.targetLanguagePreference || changes.selectionEnabled)) ready.then(async () => broadcast('SELECTION_SETTINGS', { settings: publicSettings(await getSettings()) })).catch(() => {}); });
   chrome.storage.onChanged.addListener((changes, area) => {
     if ((area === 'session' && changes.credentialSession) || (area === 'local' && (changes.credentialVault || changes.settings))) {
       ready.then(async () => broadcast('SELECTION_VAULT', { vault: await vaultStatus() })).catch(() => {});

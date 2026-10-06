@@ -63,7 +63,7 @@
     "message": "你的 AI 译文将在这里出现"
   },
   "privacyHint": {
-    "message": "仅在你主动翻译时发送文本"
+    "message": "仅在你主动翻译时发送内容"
   },
   "closer": {
     "message": "让理解，少一点距离。"
@@ -135,7 +135,7 @@
     "message": "专业严谨"
   },
   "consent": {
-    "message": "我了解：翻译的文本会发送到上述 AI 服务，按该服务的政策处理，并可能产生 API 费用。"
+    "message": "我了解主动翻译的文本和截图会发送至此 AI 服务，按服务商政策处理，并可能产生 API 费用。"
   },
   "save": {
     "message": "保存设置"
@@ -541,5 +541,131 @@
   },
   "authSettingsPrompt": {
     "message": "请设置。"
+  },
+  "selectionEnabled": {
+    "message": "启用划词翻译"
+  },
+  "selectionEnabledHint": {
+    "message": "切换后立即生效。关闭后不再显示划词图标，工具栏和右键翻译仍可使用。"
+  },
+  "selectionSaveFailed": {
+    "message": "划词翻译设置保存失败，请重试。"
+  },
+  "systemPrompt": {
+    "message": "系统提示词"
+  },
+  "systemPromptHint": {
+    "message": "随设置保存，留空使用默认模板，最多 16,000 个字符。所有已选模型共用此提示词。"
+  },
+  "restoreDefaultPrompt": {
+    "message": "恢复默认提示词"
+  },
+  "promptVariables": {
+    "message": "模板变量说明"
+  },
+  "promptVariablesHint": {
+    "message": "{{text}}：原文（同时以用户消息发送）；{{from}}：自动检测源语言；{{to}}：目标语言；{{title_prompt}}：网页标题；{{summary_prompt}}：网页摘要；{{terms_prompt}}：专业术语；{{imt_style_guide}}：所选翻译风格。"
+  },
+  "promptContextHint": {
+    "message": "网页翻译仅附带当前页面标题及已有的 description 摘要，不抓取全文或额外调用 AI。无可用信息的变量替换为空；当前未配置术语表，术语变量为空。页面信息仅供参考，不作为指令。"
+  },
+  "invalidSystemPrompt": {
+    "message": "系统提示词必须是文本，且不能超过 16,000 个字符。"
+  },
+  "screenshotTranslate": {
+    "message": "截图翻译"
+  },
+  "screenshotInstructions": {
+    "message": "这里只显示你框选的区域，检查预览后再翻译。"
+  },
+  "screenshotClose": {
+    "message": "关闭"
+  },
+  "screenshotPreview": {
+    "message": "截图预览"
+  },
+  "screenshotCoordinates": {
+    "message": "使用坐标精确选择"
+  },
+  "screenshotWidth": {
+    "message": "宽度"
+  },
+  "screenshotHeight": {
+    "message": "高度"
+  },
+  "screenshotUseSelection": {
+    "message": "使用选区"
+  },
+  "screenshotUseAll": {
+    "message": "使用当前图片"
+  },
+  "screenshotReselect": {
+    "message": "调整裁剪"
+  },
+  "screenshotPrivacy": {
+    "message": "仅在点击“翻译”后，将选中的图片发送给各模型对应的 AI 服务。截图仅临时保存在内存中，不写入历史记录。"
+  },
+  "screenshotVisionHint": {
+    "message": "请选用支持图片输入的模型。翻译前请检查预览，避免发送敏感信息；图片文字识别可能存在误差。"
+  },
+  "screenshotExpired": {
+    "message": "截图已失效，请返回原网页，从插件弹出窗口重新截图。"
+  },
+  "screenshotUnsupported": {
+    "message": "截图翻译仅支持普通 HTTP/HTTPS 网页，请打开网页后重试。"
+  },
+  "screenshotInvalid": {
+    "message": "图片无效或过大，请缩小选区或浏览器窗口后重试。"
+  },
+  "screenshotFailed": {
+    "message": "无法截取当前页面，请保持网页处于激活状态，检查网站访问权限后重试。"
+  },
+  "screenshotCapturing": {
+    "message": "正在开启区域截图…"
+  },
+  "screenshotSelectFirst": {
+    "message": "请先确认裁剪范围或使用当前图片。"
+  },
+  "screenshotModelError": {
+    "message": "服务拒绝了图片请求，请确认所选模型支持图片输入，且图片大小符合服务要求。"
+  },
+  "screenshotTranslateImage": {
+    "message": "翻译图片"
+  },
+  "screenshotPickerHint": {
+    "message": "拖动框选 · 双击选区内部或按 Enter 完成截图 · Esc 取消"
+  },
+  "screenshotPickerCancel": {
+    "message": "取消"
+  },
+  "screenshotPickerConfirm": {
+    "message": "截取选区"
+  },
+  "screenshotReady": {
+    "message": "截图已完成，请在 60 秒内点击工具栏图标，在原文框中查看。"
+  },
+  "attachedImages": {
+    "message": "已添加的图片"
+  },
+  "pasteImageHint": {
+    "message": "可粘贴文字或图片 · 最多 5 张"
+  },
+  "removeImage": {
+    "message": "删除第 $1 张图片"
+  },
+  "imageProcessing": {
+    "message": "正在添加图片…"
+  },
+  "imageLimit": {
+    "message": "最多添加 5 张图片，请先删除部分图片。"
+  },
+  "imageTotalTooLarge": {
+    "message": "图片总大小超出限制，请删除部分图片后重试。"
+  },
+  "imageTooLarge": {
+    "message": "图片过大，请使用小于 20 MB 的图片，并适当缩小尺寸。"
+  },
+  "imageUnsupported": {
+    "message": "不支持此图片格式，请粘贴 PNG、JPEG、WebP、GIF 或 BMP 图片。"
   }
 }
