@@ -37,8 +37,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 14626,
-      "sha256": "c07b97ce7fa88d74324554f27ef8e21e2fd2c591007eb33c51a8091cd16b049e"
+      "bytes": 14643,
+      "sha256": "a058f0211d9382fe4289ec91fb8eb38334c3806ce2956e5c56f732bcda41cc1a"
     },
     {
       "path": "dashboard/01-store-listing.md",

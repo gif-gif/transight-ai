@@ -103,3 +103,7 @@ SITE_URL=https://your-domain.com npm --prefix web run build
 - 文案集中在 `src/i18n/privacy/`，按 `chrome-web-store/dashboard/02-privacy-practices.md` 和当前扩展源码核对。修改实现时同步更新文案、`privacyUpdated`、各语言日期和商店申报；各语言 section ID 必须一致，以便切换语言保留锚点。
 - 覆盖请求触发、原文与密钥去向、模型发现和连接测试、本地存储及删除、权限、安全限制、第三方处理、官网语言偏好和联系渠道。明确披露密码加密保存、会话解锁、旧版迁移和锁定/删除方式，不承诺第三方零留存或不训练。
 - 当前联系渠道为项目 GitHub Issues（`src/config/site.ts`），页面提醒其公开性。发布前由维护者确认实际运营主体与联系安排；如有专用隐私邮箱，应补充该私密渠道。代码无法证明托管商日志留存或第三方的运营行为，需按真实部署核实，不能据此声称已通过商店审核或完成法律合规认证。
+
+## 本地化截图
+
+当前官网截图于 2026-10-09 重新拍摄，统一使用无版本号素材，覆盖五种语言。同步前核对 `artifacts/screenshots/{locale}/capture-info.json` 中的版本与根目录 `manifest.json` 一致；除 README 引用的图片外，也需更新繁体中文的 Simple / 多图 / 设置等原图及各语言 `selection-trigger.png`，避免混用旧截图。
