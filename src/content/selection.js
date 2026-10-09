@@ -228,7 +228,7 @@
         return response.vault;
       },
       async translate(text, targetLanguage, model, images, sourceLanguage) {
-        const id = crypto.randomUUID(); requestIds.add(id);
+        const id = TransightRequestId(); requestIds.add(id);
         try { return await send({ type: 'SELECTION_TRANSLATE', id, text, targetLanguage, model, images, sourceLanguage,
           context: { title: document.title.slice(0, 500), summary: (document.querySelector('meta[name="description"]')?.content || '').slice(0, 1500) } }); }
         finally { requestIds.delete(id); }

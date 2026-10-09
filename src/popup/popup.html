@@ -17,9 +17,9 @@ Let language bring you closer." data-i18n-placeholder="sourcePlaceholder" aria-d
     <div id="status" class="status" role="status" aria-live="polite"></div>
     <div id="results-list" class="results-list" aria-busy="false"><section class="result-card" aria-busy="false" id="result-card"><div class="card-head"><div class="result-title"><span class="dot"></span><h3 data-i18n="translation">Translation</h3></div><div class="result-actions"><button class="icon-button speak-result" type="button" disabled aria-label="Read translation aloud" title="Read translation aloud"></button><button id="copy" class="icon-button copy-result" type="button" disabled aria-label="Copy translation" title="Copy translation"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg></button></div></div><div id="result" class="result" aria-live="polite"><div class="empty-state"><span class="empty-glyph" aria-hidden="true">文<span>A</span></span><p data-i18n="emptyTitle">Good translation goes beyond words.</p><small data-i18n="emptyHint">Your AI translation will appear here</small></div></div><div id="result-meta" class="result-meta" hidden></div></section></div>
   </main>
-  <footer><span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg><span data-i18n="privacyHint">Text is sent only when you translate</span></span><span class="version">v0.1.2</span></footer>
+  <footer><span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg><span data-i18n="privacyHint">Text is sent only when you translate</span></span><span class="version">v0.1.3</span></footer>
   </div>
-  <script src="../shared/speech-client.js"></script>
+  <script src="../shared/request-id.js"></script><script src="../shared/speech-client.js"></script>
   <script src="../shared/translation-view.js"></script>
   <script type="module" src="popup.js"></script>
 </body></html>

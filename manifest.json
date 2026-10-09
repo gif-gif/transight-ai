@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "__MSG_extensionDescription__",
   "minimum_chrome_version": "114",
   "permissions": [
@@ -47,6 +47,7 @@
         "https://*/*"
       ],
       "js": [
+        "src/shared/request-id.js",
         "src/shared/speech-client.js",
         "src/shared/translation-view.js",
         "src/content/selection.js"

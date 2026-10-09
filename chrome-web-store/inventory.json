@@ -1,12 +1,12 @@
 {
-  "prepared_date": "2026-10-06",
-  "version": "0.1.2",
-  "archive": "package/transight-0.1.2.zip",
+  "prepared_date": "2026-10-09",
+  "version": "0.1.3",
+  "archive": "package/transight-0.1.3.zip",
   "checks": {
     "manifest_at_zip_root": true,
     "runtime_and_license_only": true,
     "archive_source_match_except_store_icon": true,
-    "runtime_file_count": 42,
+    "runtime_file_count": 43,
     "release_version_consistent": true,
     "description_limit_132": true,
     "dimensions_and_image_modes_valid": true,
@@ -37,13 +37,13 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 13830,
-      "sha256": "02df101043db7be6424a4351fd7f1e1edaeedd941b36ed1658481992b2697feb"
+      "bytes": 14626,
+      "sha256": "c07b97ce7fa88d74324554f27ef8e21e2fd2c591007eb33c51a8091cd16b049e"
     },
     {
       "path": "dashboard/01-store-listing.md",
       "bytes": 4737,
-      "sha256": "b59d90e0955664403a31565c04a2801a4b01acbdd8b0d021046e7c39b685e641"
+      "sha256": "a554ec28bb9bdb13fbfbf597a9e92d2d0ee63cba3d415a5a3830b00b77e76f98"
     },
     {
       "path": "dashboard/02-privacy-practices.md",
@@ -58,7 +58,7 @@
     {
       "path": "dashboard/04-test-instructions.md",
       "bytes": 11197,
-      "sha256": "73e3d8de97cadbc29302630321b83bd79315160fb183abedd665f474bc9e29f5"
+      "sha256": "983b82ac78ef2ccba5e07733693aed19ba68233098a9fc190e63ec109adb8af0"
     },
     {
       "path": "icons/icon-128.png",
@@ -71,32 +71,32 @@
     {
       "path": "listing/description.en.txt",
       "bytes": 4595,
-      "sha256": "acc35545997450804faa369f3ecb78115e91cd194e20903a9d1f771bf392c101"
+      "sha256": "cebc30f11f2e90ea9b44cbc6bf001206ce5556bf5240725a6bf69873d62d75bc"
     },
     {
       "path": "listing/description.ja.txt",
       "bytes": 5018,
-      "sha256": "ace28bbba46181c608de1fe0ea0ebc7a5529a082eef07a99a91fc61e9e5f1e83"
+      "sha256": "268e0482f83852d536c75b3550f7c95103817ec4d5f18ae9813b2c08397f5073"
     },
     {
       "path": "listing/description.ko.txt",
       "bytes": 5047,
-      "sha256": "76ff54e30f60e5412c62680fe26ee2c2eddd43eb4d1dabdff328e9ce35933ba7"
+      "sha256": "da4c18a4445bdf360b18b3aee7cd3cebd9695482ab3b5a86a3ac97e8ef3d2bc4"
     },
     {
       "path": "listing/description.zh-CN.txt",
       "bytes": 3867,
-      "sha256": "889101a60e7ad4da45a35c5156891f4d73a272968380c7bf4d294da531be40d4"
+      "sha256": "051d5e080792c1f37c8ee470604b9a2d7871efe289edd3d9b1d7232cb03e2148"
     },
     {
       "path": "listing/description.zh-TW.txt",
       "bytes": 3894,
-      "sha256": "22c3157f2a2f6a961fbe2e869b4bd7e0ffffb998bad8bd15859f154ec18b78fd"
+      "sha256": "0ce2f8e48970bc5848a85ed5741342051048b1b7237f6bb562745c5f8d9cf7ae"
     },
     {
       "path": "listing/metadata.json",
       "bytes": 1793,
-      "sha256": "25ebe0798a76ae7ceb417ab8ce4d139f69881fb03615f901a1dbda1803722421"
+      "sha256": "3d44aee9f924a7d3f83ed4e33494b4d2d341f6a3e6761a0106ec1d8907fec36a"
     },
     {
       "path": "package/transight-0.1.0.zip",
@@ -110,43 +110,48 @@
     },
     {
       "path": "package/transight-0.1.2.zip",
-      "bytes": 116468,
-      "sha256": "13f69ef55140a0703e4b0b8c388fc3c5d0e4f50e785fa689f5881687622d1fab"
+      "bytes": 117087,
+      "sha256": "12eee54db0ec87ee4d11b2257b2f1776738640393622c6b12313437610a6a72e"
+    },
+    {
+      "path": "package/transight-0.1.3.zip",
+      "bytes": 117090,
+      "sha256": "fcb5dd6bbd104d4aa3883c9e7d92d590721958df092403151c7276ba3fef514c"
     },
     {
       "path": "permission-justifications/01-storage.md",
       "bytes": 2021,
-      "sha256": "3a3e8987dbacda9f087f29d94e9064f466fa35de6f1d4d27ee7ebf042a8e47a0"
+      "sha256": "6055ca1c66ffe893a3517c43001cf593544e0e649e6b51a15fc5d2d05c30de3d"
     },
     {
       "path": "permission-justifications/02-contextMenus.md",
       "bytes": 1001,
-      "sha256": "ee97752fe3cc4cb47d298f2f6b3cf43260bc5b6b8a0cdd6bdc7d5e59a80b146e"
+      "sha256": "1a2175fccfa64f6fa361fcbb3937b4c17e8fccb3be4ec622e5e35b61c7612a78"
     },
     {
       "path": "permission-justifications/03-activeTab.md",
       "bytes": 1934,
-      "sha256": "9806bee79b05be579ef0e23e7f231a9491a6d69bb8831703ec9924907261bca4"
+      "sha256": "c5cb3aaf0108bfde957a30b04812866fecd2361de9ca2b34472d4c60b468c771"
     },
     {
       "path": "permission-justifications/04-scripting.md",
       "bytes": 1359,
-      "sha256": "9cc0d19da6a23e5e55722e902e5fffa73ff8137f3d4ed3b8f5552dbfd1247a56"
+      "sha256": "210c7e4a1e542673aa50a92617cca32f56631c1d32a197e1ca3428c5fb022670"
     },
     {
       "path": "permission-justifications/05-host-permissions.md",
       "bytes": 2437,
-      "sha256": "481c6876c809bedd5e79b03b7ee4d222e0aea329703535dd96732f557a3d3d40"
+      "sha256": "0a1b62b22fb07b9a0dbffc2f0b02575d3da4def4fff3d6840331f49d18d7ce9d"
     },
     {
       "path": "permission-justifications/06-tts.md",
       "bytes": 1875,
-      "sha256": "c388def47852b762b1d4b6c0decb7cf11ef8f592210cff594303360a24fbd27e"
+      "sha256": "6ce70b334c619addd7ea9f6e99079e832df0bb3a92b2b79658735785414f5cc1"
     },
     {
       "path": "permission-justifications/README.md",
       "bytes": 2245,
-      "sha256": "dc08ae85601105a9cfa64c8516a7e25966da500bf21a53a59b02c6efbc4d8abd"
+      "sha256": "dc6082cacb7776892e9642c6aad7b7354895af4874a93ad7dfe1b68824b5c44b"
     },
     {
       "path": "promo/marquee-1400x560.png",
@@ -166,8 +171,8 @@
     },
     {
       "path": "screenshots/en/01-multi-model.png",
-      "bytes": 94892,
-      "sha256": "ae8725249e9a85ed83aa7bdbb77f72fb905ce470f3d7ca8ad1dc768be823db6f",
+      "bytes": 94452,
+      "sha256": "3174a4cf46919c5cd95d675fe0a428034226e741fad3e47ec8d79554a50e9bba",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -190,8 +195,8 @@
     },
     {
       "path": "screenshots/en/04-inline-unlock.png",
-      "bytes": 145539,
-      "sha256": "7e8e82c82f9f832d9030554f1770a5c8579806bb64e22329a86a8768779ff678",
+      "bytes": 144867,
+      "sha256": "a68ed463a2fb3e1ff989921c4c976c7b170de85d0711d3e42c381805bf5ba8eb",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -206,8 +211,8 @@
     },
     {
       "path": "screenshots/ja/01-multi-model.png",
-      "bytes": 124939,
-      "sha256": "9dcaf3d92ffbc03c4e450f11fdc6186cfbd6b1d2705092fbb906d17a830c4127",
+      "bytes": 124487,
+      "sha256": "8ce0f35fd71161922b3280c951107a3fe7fbdf4824e68e6f91af6d23370a39ec",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -230,8 +235,8 @@
     },
     {
       "path": "screenshots/ja/04-inline-unlock.png",
-      "bytes": 175186,
-      "sha256": "9730e4adb629173b5477e92207c61087d7228d2925d7cffa3cd877a5e816c6c4",
+      "bytes": 174534,
+      "sha256": "527b2b9b0376a97f6adc1d077fb4f835efc404b35b8055484251c1247cdf6453",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -246,16 +251,16 @@
     },
     {
       "path": "screenshots/ko/01-multi-model.png",
-      "bytes": 94351,
-      "sha256": "6e72e947bfe4e528cdf7cd8fec67bc39911950e70d47bf7689f01d201dece1fc",
+      "bytes": 93879,
+      "sha256": "e4e0f0fceed7f6d4a3fb30219c0c62b7803a7651e6dfb49372a226c8da94ed53",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/ko/02-on-page.png",
-      "bytes": 123863,
-      "sha256": "ed53b8e8d181724fd03c2a55b8b5e657b154d59c82bf921c79338d9ea938093c",
+      "bytes": 123828,
+      "sha256": "8d0139c3036f51f79253bf90ef15756ed03227ae541a5c94cc18d9e726e372ac",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -270,8 +275,8 @@
     },
     {
       "path": "screenshots/ko/04-inline-unlock.png",
-      "bytes": 146915,
-      "sha256": "c7b5f32e40ae2d43c5dbd2cb68a1468f082bc54da7814b130b9e5eac05485d81",
+      "bytes": 146243,
+      "sha256": "e7987441a9116dd7445cd6355103f242c797aad58fd4b6e14bc7b77932602684",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -286,16 +291,16 @@
     },
     {
       "path": "screenshots/zh-CN/01-multi-model.png",
-      "bytes": 115280,
-      "sha256": "2d530c37fa402e1abe8ce3300ec9b785be496dfbc77492fc939f1b230e4b7456",
+      "bytes": 114830,
+      "sha256": "177f6db05e142c9240a5e61864fc6b248df79d638fca8ecf8891adca6142845d",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-CN/02-on-page.png",
-      "bytes": 135117,
-      "sha256": "68ee14217b9417189c1246f402285e7c7d02a7f3cca49065b87dd6b5903256b3",
+      "bytes": 135119,
+      "sha256": "ae5d09b7b469110c34da425e9fe65565f5c9c43ff5d1063e4388cd23ffc8f536",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -310,8 +315,8 @@
     },
     {
       "path": "screenshots/zh-CN/04-inline-unlock.png",
-      "bytes": 155908,
-      "sha256": "d01cd27fdbc290f7c0d534b93e6693487af3f8f8f4b4c4b9d2809d0532089fb5",
+      "bytes": 155132,
+      "sha256": "c7c497171872f8d50753a3891536dbb1d1c685fa8f00a52e46255d3d9cec7c1f",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -326,8 +331,8 @@
     },
     {
       "path": "screenshots/zh-TW/01-multi-model.png",
-      "bytes": 119202,
-      "sha256": "05c6f9ddeac130c8373cd96a4e33029d4ad6baac5406a0c64a286a7796d94405",
+      "bytes": 118728,
+      "sha256": "c8cd087e8c36fbc650fa4ee142569901223046cb18e3547217206a63842c8dc1",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -350,8 +355,8 @@
     },
     {
       "path": "screenshots/zh-TW/04-inline-unlock.png",
-      "bytes": 161475,
-      "sha256": "c73df942ad6613441dc305ebeb6b4a8d5aa999f10f96559604c0aa699dd227ac",
+      "bytes": 160787,
+      "sha256": "a79ae1b4cc8be8172ace4793915154639f85ac83ee59a281776a5ba7f1496bd9",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -366,8 +371,8 @@
     },
     {
       "path": "tools/prepare-images.py",
-      "bytes": 13135,
-      "sha256": "1794e83f9753ad3070b4f36fd3b61965d26eb29ee6f0548d8278d7f791ca0979"
+      "bytes": 13443,
+      "sha256": "babb6b3c6c54b88a49a14db8857d6d04817ec4c5b5cd1095ac06c482be47ef91"
     },
     {
       "path": "tools/validate.py",

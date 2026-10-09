@@ -1,6 +1,6 @@
 """Adapt existing artwork and actual UI screenshots; no new UI captures or AI images.
 Run after the five-locale browser suite with Python 3 + Pillow.
-Updates store assets and only screenshots referenced by the root README files.
+Updates store assets, root README screenshots and existing localized extension screenshots.
 """
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -62,7 +62,9 @@ release_version=json.loads((ROOT/'manifest.json').read_text())['version']
 for locale in ['en-US','zh-CN','zh-TW','ja-JP','ko-KR']:
     provenance=ROOT/'artifacts/screenshots'/locale/'capture-info.json'
     assert provenance.is_file(), f'Missing capture provenance: {provenance}'
-    assert json.loads(provenance.read_text())['version']==release_version, f'Stale screenshots: {locale}'
+    info=json.loads(provenance.read_text())
+    assert info['version']==release_version, f'Stale screenshots: {locale}'
+    assert info.get('versionWatermarks')=='hidden', f'Recapture without version labels: {locale}'
 
 icon=Image.new('RGBA',(128,128))
 art=Image.open(ROOT/'assets/icon-128.png').convert('RGBA').resize((96,96),Image.Resampling.LANCZOS)
@@ -175,12 +177,14 @@ for w,h,filename in [(440,280,'small-440x280.png'),(1400,560,'marquee-1400x560.p
         # Reuse the brand artwork, not an invented translation/chat symbol.
         logo(im,(1080*scale,190*scale),200*scale)
     save_if_changed(im.resize((w,h),Image.Resampling.LANCZOS), OUT/'promo'/filename)
-# Synchronize only root-README image references, never unrelated website images.
+# Synchronize README references and every existing extension screenshot; website captures are refreshed separately.
 import re, shutil
 readme_images = set()
 for readme in ROOT.glob('README*.md'):
     readme_images.update(re.findall(r'docs/screenshots/[^\s"<>\)]+\.png', readme.read_text()))
 locale_dirs = {'en':'en-US','ja':'ja-JP','ko':'ko-KR','zh-TW':'zh-TW'}
+for folder in ['', *locale_dirs]:
+    readme_images.update(str(p.relative_to(ROOT)) for p in (ROOT/'docs/screenshots'/folder).glob('*.png'))
 for relative in sorted(readme_images):
     target=ROOT/relative
     tail=target.relative_to(ROOT/'docs/screenshots')
@@ -190,4 +194,4 @@ for relative in sorted(readme_images):
     assert source.exists(), f'Missing fresh browser screenshot: {source}'
     target.parent.mkdir(parents=True,exist_ok=True)
     if not target.exists() or source.read_bytes()!=target.read_bytes(): shutil.copyfile(source,target)
-print(f'Prepared 25 store screenshots and {len(readme_images)} README screenshots; unchanged brand assets reused.')
+print(f'Prepared 25 store screenshots and {len(readme_images)} documentation screenshots; unchanged brand assets reused.')

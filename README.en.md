@@ -4,7 +4,7 @@
 
 An AI translation Chrome extension MVP built with **Manifest V3 and vanilla JavaScript / HTML / CSS**. It has no runtime dependencies or embedded API keys. Run `npm run build` to generate an unpacked extension in `dist/`, ready to load into Chrome. No ZIP is generated.
 
-**Current version: 0.1.2** (2026-10-06). Documentation, UI screenshots, and store materials are synchronized. Store package: [`transight-0.1.2.zip`](chrome-web-store/package/transight-0.1.2.zip). For developer mode, load `dist/`; reload the extension and refresh open webpages after updating.
+**Current version: 0.1.3** (2026-10-09). Documentation, UI screenshots, and store materials are synchronized. Store package: [`transight-0.1.3.zip`](chrome-web-store/package/transight-0.1.3.zip). For developer mode, load `dist/`; reload the extension and refresh open webpages after updating.
 
 ## Features
 

@@ -1,4 +1,4 @@
-Transight AI — Across languages. Closer in meaning. · v0.1.2
+Transight AI — Across languages. Closer in meaning. · v0.1.3
 
 Translate text and pasted images using your own AI service. Open the toolbar popup, click the icon near selected webpage text, or use the right-click translation command.
 

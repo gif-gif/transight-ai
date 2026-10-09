@@ -5,7 +5,7 @@ export async function openContextTranslation(info, tab) {
   try {
     await chrome.scripting.executeScript({
       target: { tabId: tab.id, frameIds: [frameId] },
-      files: ['src/shared/speech-client.js', 'src/shared/translation-view.js', 'src/content/selection.js']
+      files: ['src/shared/request-id.js', 'src/shared/speech-client.js', 'src/shared/translation-view.js', 'src/content/selection.js']
     });
     const response = await chrome.tabs.sendMessage(tab.id, {
       type: 'SELECTION_OPEN', text: info.selectionText

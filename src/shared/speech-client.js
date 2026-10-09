@@ -30,7 +30,7 @@
     return {
       play(text, language) {
         stop();
-        const id = crypto.randomUUID(); activeId = id;
+        const id = TransightRequestId(); activeId = id;
         try {
           connect().postMessage({ type: 'PLAY', id, text, language });
           // Messages keep the MV3 worker alive while speaking (Chrome 114+).

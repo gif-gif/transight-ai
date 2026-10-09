@@ -128,7 +128,9 @@ test('client filters stale events, stops by ID, reconnects after worker loss and
   const sandbox = { chrome: { runtime: { connect() { const p = port(); ports.push(p); return p; } } },
     crypto: { randomUUID: () => String(++seq) }, queueMicrotask,
     setInterval(fn) { intervals.set(seq, fn); return seq; }, clearInterval(id) { intervals.delete(id); } };
-  vm.runInNewContext(await readFile(new URL('../src/shared/speech-client.js', import.meta.url), 'utf8'), sandbox);
+  vm.createContext(sandbox);
+  vm.runInContext(await readFile(new URL('../src/shared/request-id.js', import.meta.url), 'utf8'), sandbox);
+  vm.runInContext(await readFile(new URL('../src/shared/speech-client.js', import.meta.url), 'utf8'), sandbox);
   const client = new sandbox.TransightSpeechClient(message => states.push(message));
   const a = client.play('one', 'en'); const b = client.play('two', 'ja');
   assert.equal(ports.length, 1); assert.equal(ports[0].messages[1].type, 'STOP'); assert.equal(ports[0].messages[1].id, a);

@@ -1,16 +1,16 @@
 # Transight AI · Chrome Web Store 提交材料
 
-> **安装包状态：已同步当前源码。** ZIP 已包含所有译文统一使用本地中文语音的调整。 `package/transight-0.1.2.zip` 包含 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。更新后运行完整校验，文件来源与哈希见 `inventory.json`。版本号已从 `0.1.1` 升至 `0.1.2`，本次未向商店提交审核。
+> **安装包状态：已同步当前源码。** `package/transight-0.1.3.zip` 已包含部分网页缺少 `crypto.randomUUID()` 时的划词翻译和语音播报兼容性修复，以及 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。文件来源、哈希和完整校验结果见 `inventory.json`。本次版本由 **0.1.2** 升至 **0.1.3**，未向商店提交审核。
 
-准备日期：2026-10-01；最新功能与五语言材料更新：2026-10-06。当前提交版本：**0.1.2**。
+准备日期：2026-10-01；无版本号截图与安装包更新：2026-10-09。当前提交版本：**0.1.3**。
 
-本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.2.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip` 和 `transight-0.1.1.zip` 仅作历史保留；若商店已接收过 0.1.2，提交下一次更新前须提升源码版本再打包。
+本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.3.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip`、`transight-0.1.1.zip` 和 `transight-0.1.2.zip` 仅作历史保留；若商店已接收过 0.1.3，提交下一次更新前须提升源码版本再打包。
 
 ## 逐项上传清单
 
 | 项目 | 材料 | 说明 |
 | --- | --- | --- |
-| 插件安装包 | `package/transight-0.1.2.zip` | **当前源码构建，已包含中文语音播报调整**；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
+| 插件安装包 | `package/transight-0.1.3.zip` | **已同步请求 ID 兼容性修复**；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
 | 名称 / 简短描述 / 版本 | ZIP 内 `manifest.json` 和 `_locales/`；便于复制的汇总见 `listing/metadata.json` | 沿用现有版本和国际化配置，没有创建重复 manifest |
 | 英文详细介绍 | `listing/description.en.txt` | 可直接粘贴到英文商品介绍 |
 | 简体中文详细介绍 | `listing/description.zh-CN.txt` | 可直接粘贴到简体中文商品介绍 |
@@ -36,7 +36,7 @@
 - 英文名称：**Transight AI**。
 - 简体中文名称：**译见 AI · 随手翻译**。
 - 繁体中文名称：**譯見 AI · 隨手翻譯**。
-- 版本：**0.1.2**。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
+- 版本：**0.1.3**。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
 - 英文简短描述：**99** 个字符；简体中文及繁体中文简短描述各 **35** 个字符，日语与韩语长度见 `listing/metadata.json`；五种语言均在 132 字符以内。
 - `manifest.json` 中的 `__MSG_extensionName__` / `__MSG_extensionDescription__` 是现有国际化引用；对应内容已随 `_locales/` 打包，不需要改成固定英文。
 
@@ -125,7 +125,7 @@ npm run package
 
 该命令先执行静态检查及单元测试，再从当前源码白名单打包，并包含根目录 `LICENSE`；ZIP 输出到本目录的 `package/`，**不写入、不清理 `dist/`**。`npm run build` 仍只构建开发者模式加载目录，不生成 ZIP。
 
-截图从实际扩展界面采集，不重建或修改界面像素。本次 0.1.2 使用隔离的无界面 Chromium、本地模拟服务及插件自身的显示语言偏好，重新采集五语言界面（需要 Playwright 与 Chromium；自定义路径见根 README）：
+截图从实际扩展界面采集，不重建界面；仅在截图时临时隐藏版本标签、去掉设置页品牌文字后的版本号，保留原有布局，正常使用插件时仍显示版本。采集记录保留实际版本号，并标记 `versionWatermarks: hidden`，图片适配脚本会检查该标记，避免重新使用带版本号的旧截图。0.1.3 复用 2026-10-09 基于 0.1.2 采集的五语言无版本号截图（本次仅升级版本号，界面未变），未重复生成图片。以下命令使用隔离的无界面 Chromium、本地模拟服务及插件自身的显示语言偏好采集当前源码界面（需要 Playwright 与 Chromium；自定义路径见根 README）：
 
 ```sh
 npm run build
@@ -134,7 +134,7 @@ for locale in en-US zh-CN zh-TW ja-JP ko-KR; do
 done
 ```
 
-采集脚本检查实际版本号、语言、多模型结果、Simple / Full 切换、图片粘贴、固定拖动和内嵌解锁，并刷新 README 引用的截图。回复来自本地模拟服务；仅使用测试凭据，密码以掩码显示。该流程不代替真实工具栏尺寸、浏览器自动语言及第三方 AI 服务测试。
+采集脚本检查实际版本号、语言、多模型结果、Simple / Full 切换、图片粘贴、固定拖动和内嵌解锁，输出到 `artifacts/screenshots/`，再由图片适配脚本同步至 README 和商店素材。回复来自本地模拟服务；仅使用测试凭据，密码以掩码显示。该流程不代替真实工具栏尺寸、浏览器自动语言及第三方 AI 服务测试。
 
 需要完整界面回归时，可单独执行 `TEST_STORE_ASSETS=1 TEST_BROWSER_LOCALE=en-US npm run test:browser`。macOS 的原生语言回归使用有界面浏览器，可能受窗口焦点影响。`TEST_STORE_ASSETS=1` 仅跳过无用户入口的旧截图后台测试；后台可另行用 `TEST_SCREENSHOT_ONLY=1 TEST_BROWSER_HEADLESS=1 TEST_BROWSER_LOCALE=zh-CN npm run test:browser` 检查（原生浏览器语言需匹配测试环境）。
 
@@ -145,7 +145,7 @@ python3 chrome-web-store/tools/prepare-images.py
 python3 chrome-web-store/tools/validate.py --assets-only
 ```
 
-图片脚本同时同步根目录四份 README 已引用的截图，不改动网站截图。以上仅更新素材与清单，不生成 ZIP。准备正式提交时再显式执行：
+图片脚本同时同步根目录 README 已引用的截图及 `docs/screenshots/` 下现有的五语言插件截图。官网复用图片通过 `npm --prefix web run screenshots:sync` 同步；构建并启动本地预览后，可运行 `web/scripts/browser-smoke.mjs` 更新 `docs/screenshots/website/` 下的展示截图（用 `SITE_PREVIEW_URL` 指定预览地址）。以上仅更新素材与清单，不生成 ZIP。准备正式提交时再显式执行：
 
 ```sh
 npm run package

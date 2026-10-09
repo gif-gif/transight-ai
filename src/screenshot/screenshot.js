@@ -34,7 +34,7 @@ try {
     imageMode: true, vault: await vaultStatus(), getVaultStatus: vaultStatus,
     unlockUrl: chrome.runtime.getURL('src/unlock/unlock.html'),
     async translate(text, targetLanguage, model, image, sourceLanguage) {
-      const id = crypto.randomUUID(); requests.add(id);
+      const id = TransightRequestId(); requests.add(id);
       try { return await chrome.runtime.sendMessage({ type: 'TRANSLATE', id, text, targetLanguage, model, image, sourceLanguage }); }
       finally { requests.delete(id); }
     },

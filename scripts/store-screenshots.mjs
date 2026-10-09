@@ -30,6 +30,19 @@ const server = http.createServer(async (req, res) => {
   const request = JSON.parse(body);
   res.end(JSON.stringify({ choices: [{ message: { content: fixtureReply ?? (request.model === 'z-model' ? '多一份理解，便少一分距离。' : '多一点理解，让我们更靠近。') } }] }));
 });
+// Hide release labels only while capturing; runtime UI and layout remain unchanged.
+async function capture(page, options) {
+  const brands = page.locator('[data-i18n="versionBrand"]');
+  const original = await brands.allTextContents();
+  try {
+    await brands.evaluateAll(nodes => nodes.forEach(node => {
+      node.textContent = node.textContent.replace(/\s*[·•]?\s*v\d+(?:\.\d+)*\s*$/, '');
+    }));
+    await page.screenshot({ ...options, style: '.version { visibility: hidden !important; }' });
+  } finally {
+    await brands.evaluateAll((nodes, values) => nodes.forEach((node, i) => { node.textContent = values[i]; }), original);
+  }
+}
 let context;
 try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -48,6 +61,18 @@ try {
   } }), { baseUrl: `${base}/v1`, language });
   const errors = [];
   context.on('page', page => page.on('pageerror', error => errors.push(error.message)));
+  let sample;
+  // Closed shadow roots are not covered by screenshot styles in every browser.
+  // Keep the shared capture helper and temporarily hide page-panel labels via CDP.
+  async function capturePanelSafe(page, options) {
+    let versionStyle;
+    try {
+      if (page === sample) versionStyle = await ui('.version', 'function(){const old=this.getAttribute("style");this.style.setProperty("visibility","hidden","important");return old}');
+      await capture(page, options);
+    } finally {
+      if (page === sample && versionStyle !== undefined) await ui('.version', 'function(old){if(old===null)this.removeAttribute("style");else this.setAttribute("style",old)}', [versionStyle]);
+    }
+  }
   const popup = await context.newPage();
   await popup.setViewportSize({ width: 400, height: 800 });
   await popup.goto(`${origin}/src/popup/popup.html`);
@@ -57,7 +82,7 @@ try {
   assert.equal(await popup.locator('#screenshot').count(), 0);
   await popup.locator('#translate').click();
   await popup.locator('.result-card[data-state="success"]').nth(1).waitFor();
-  await popup.screenshot({ path: path.join(output, 'popup-multi.png') });
+  await capturePanelSafe(popup, { path: path.join(output, 'popup-multi.png') });
   async function models(values) {
     await worker.evaluate(async models => {
       const { settings } = await chrome.storage.local.get('settings');
@@ -69,7 +94,7 @@ try {
   await popup.locator('#source').fill('A little understanding brings us closer.');
   await popup.locator('#translate').click();
   await popup.locator('.result-card[data-state="success"]').waitFor();
-  await popup.screenshot({ path: path.join(output, 'popup.png') });
+  await capturePanelSafe(popup, { path: path.join(output, 'popup.png') });
   await models(['mock-translator', 'z-model']);
   console.log('✓ localized popup, single/two model results and version', language, manifest.version);
   const options = await context.newPage();
@@ -82,10 +107,10 @@ try {
   await options.waitForFunction(text => document.querySelector('#status').textContent === text, catalog.saved.message);
   assert.equal(await options.locator('#api-key').inputValue(), '');
   assert.ok((await options.locator('[data-i18n="versionBrand"]').innerText()).endsWith(`v${manifest.version}`));
-  await options.screenshot({ path: path.join(output, 'options.png'), fullPage: true });
-  await options.screenshot({ path: path.join(output, 'options-multi.png'), fullPage: true });
-  await options.screenshot({ path: path.join(output, 'settings-preferences.png'), fullPage: true });
-  const sample = await context.newPage(); await sample.goto(`${base}/sample`);
+  await capturePanelSafe(options, { path: path.join(output, 'options.png'), fullPage: true });
+  await capturePanelSafe(options, { path: path.join(output, 'options-multi.png'), fullPage: true });
+  await capturePanelSafe(options, { path: path.join(output, 'settings-preferences.png'), fullPage: true });
+  sample = await context.newPage(); await sample.goto(`${base}/sample`);
   await sample.waitForSelector('[data-transight="selection"]', { state: 'attached' });
   const session = await context.newCDPSession(sample);
   async function ui(selector, fn = 'function(){return this.textContent}', args = []) {
@@ -117,11 +142,11 @@ try {
     p.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
   });
   await until(async () => await ui('.selection-bubble', 'function(){return !this.hidden}'));
-  await sample.screenshot({ path: path.join(output, 'selection-trigger.png') });
+  await capturePanelSafe(sample, { path: path.join(output, 'selection-trigger.png') });
   await click('.selection-bubble'); await done(2);
   assert.equal(await ui('.version'), `v${manifest.version}`);
   assert.equal(await ui('.translation-view', 'function(){return this.lang}'), language);
-  await sample.screenshot({ path: path.join(output, 'selection.png') });
+  await capturePanelSafe(sample, { path: path.join(output, 'selection.png') });
   await click('#pin-view');
   assert.equal(await ui('#pin-view', 'function(){return this.getAttribute("aria-pressed")}'), 'true');
   const point = await ui('.topbar', 'function(){const r=this.getBoundingClientRect();return {x:r.x+30,y:r.y+24}}');
@@ -129,14 +154,14 @@ try {
   await sample.mouse.move(point.x+140, point.y+40, { steps: 8 }); await sample.mouse.up();
   const moved = await ui('.topbar', 'function(){const r=this.getBoundingClientRect();return {x:r.x+30,y:r.y+24}}');
   assert.ok(Math.abs(moved.x-point.x-140)<1 && Math.abs(moved.y-point.y-40)<1);
-  await sample.screenshot({ path: path.join(output, 'selection-pinned.png') });
+  await capturePanelSafe(sample, { path: path.join(output, 'selection-pinned.png') });
   // Restore the selection-anchored position before the Simple-mode capture.
   await sample.mouse.move(moved.x, moved.y); await sample.mouse.down();
   await sample.mouse.move(point.x, point.y, { steps: 8 }); await sample.mouse.up();
   await click('#pin-view');
   await click('#translation-mode'); await done(1);
   assert.equal(await ui('#translate', 'function(){return this.getBoundingClientRect().height === 0}'), true);
-  await sample.screenshot({ path: path.join(output, 'selection-simple.png') });
+  await capturePanelSafe(sample, { path: path.join(output, 'selection-simple.png') });
   await click('#translation-mode'); await done(2);
   await ui('#source', `async function(){
     const canvas=document.createElement('canvas');canvas.width=420;canvas.height=220;
@@ -146,7 +171,7 @@ try {
     this.dispatchEvent(new ClipboardEvent('paste',{clipboardData:data,bubbles:true,cancelable:true}));
   }`);
   await until(async () => await ui('#source-images', 'function(){return this.querySelectorAll("img").length}') === 5);
-  await sample.screenshot({ path: path.join(output, 'selection-image-strip.png') });
+  await capturePanelSafe(sample, { path: path.join(output, 'selection-image-strip.png') });
   await click('#close-view');
   // Reload to discard pasted draft images before capturing the context-menu panel.
   await sample.reload(); await sample.waitForSelector('[data-transight="selection"]', { state: 'attached' });
@@ -158,14 +183,14 @@ try {
     }, { tabId, handler: openContextTranslation.toString() });
   }
   await openContext(); await done(2);
-  await sample.screenshot({ path: path.join(output, 'context-multi.png') });
+  await capturePanelSafe(sample, { path: path.join(output, 'context-multi.png') });
   await click('#close-view');
   await models(['mock-translator']);
   fixtureReply = '<img src=x onerror=alert(1)> Translation remains plain text.';
   await openContext(); await done(1);
   assert.equal(await ui('.result'), fixtureReply);
   assert.equal(await ui('.result', 'function(){return this.querySelectorAll("img").length}'), 0);
-  await sample.screenshot({ path: path.join(output, 'panel.png') });
+  await capturePanelSafe(sample, { path: path.join(output, 'panel.png') });
   fixtureReply = undefined;
   await click('#close-view');
   await models(['mock-translator', 'z-model']);
@@ -176,9 +201,9 @@ try {
   const unlock = sample.frames().find(frame => frame.url() === `${origin}/src/unlock/unlock.html`);
   await unlock.locator('#unlock-password').fill('local-test-unlock-password');
   await unlock.waitForFunction(() => innerHeight < 125 && document.body.getBoundingClientRect().height <= innerHeight);
-  await sample.screenshot({ path: path.join(output, 'selection-locked.png') });
+  await capturePanelSafe(sample, { path: path.join(output, 'selection-locked.png') });
   assert.deepEqual(errors, []);
-  await writeFile(path.join(output, 'capture-info.json'), JSON.stringify({ version: manifest.version, locale, language, method: 'isolated Chromium; saved extension language preference; local mock API', capturedAt: new Date().toISOString() }, null, 2)+'\n');
+  await writeFile(path.join(output, 'capture-info.json'), JSON.stringify({ version: manifest.version, versionWatermarks: 'hidden', locale, language, method: 'isolated Chromium; saved extension language preference; local mock API', capturedAt: new Date().toISOString() }, null, 2)+'\n');
   console.log('PASS: actual localized popup/settings, Simple/Full, pasted images, context panel, masked inline unlock.');
   console.log('Screenshots:', output);
 } finally {

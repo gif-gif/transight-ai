@@ -112,5 +112,5 @@ test('manifest injects selection UI on every ordinary website without per-site o
   const manifest = JSON.parse(readFileSync(new URL('../manifest.json', import.meta.url)));
   assert.deepEqual(manifest.host_permissions.sort(), ['http://*/*', 'https://*/*']);
   assert.equal(manifest.optional_host_permissions, undefined);
-  assert.deepEqual(manifest.content_scripts, [{ matches: ['http://*/*', 'https://*/*'], js: ['src/shared/speech-client.js', 'src/shared/translation-view.js', 'src/content/selection.js'], run_at: 'document_idle', all_frames: false }]);
+  assert.deepEqual(manifest.content_scripts, [{ matches: ['http://*/*', 'https://*/*'], js: ['src/shared/request-id.js', 'src/shared/speech-client.js', 'src/shared/translation-view.js', 'src/content/selection.js'], run_at: 'document_idle', all_frames: false }]);
 });

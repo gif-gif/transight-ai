@@ -14,7 +14,7 @@ const initialVault = await getVaultStatus().catch(() => null);
 const view = new TransightTranslationView(document, {
   vault: initialVault, getVaultStatus, unlockUrl: chrome.runtime.getURL('src/unlock/unlock.html'),
   async translate(text, targetLanguage, model, images, sourceLanguage) {
-    const id = crypto.randomUUID(); requestIds.add(id);
+    const id = TransightRequestId(); requestIds.add(id);
     try { return await chrome.runtime.sendMessage({ type: 'TRANSLATE', id, text, targetLanguage, model, images, sourceLanguage, context: !images?.length && text === selectedText ? selectedContext : undefined }); }
     finally { requestIds.delete(id); }
   },
