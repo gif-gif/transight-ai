@@ -174,7 +174,7 @@
     "message": "No automatic page scanning, translation history, or analytics. It works only when you ask."
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.3"
+    "message": "Transight AI · v0.1.4"
   },
   "builtFor": {
     "message": "Built for a world worth reading."
@@ -672,7 +672,7 @@
     "message": "Use Simple Translate"
   },
   "translationModeHint": {
-    "message": "Off: Full Translate (default). On: Simple Translate automatically translates with your first model. Applies immediately to page panels; the toolbar keeps its full layout."
+    "message": "Off: Full Translate (default). On: Simple Translate automatically translates with your first model. Applies immediately to the toolbar popup and page panels."
   },
   "switchFullMode": {
     "message": "Switch to Full Translate"

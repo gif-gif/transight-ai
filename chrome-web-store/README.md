@@ -1,16 +1,16 @@
 # Transight AI · Chrome Web Store 提交材料
 
-> **安装包状态：已同步当前源码。** `package/transight-0.1.3.zip` 已包含部分网页缺少 `crypto.randomUUID()` 时的划词翻译和语音播报兼容性修复，以及 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。文件来源、哈希和完整校验结果见 `inventory.json`。本次版本由 **0.1.2** 升至 **0.1.3**，未向商店提交审核。
+> **安装包状态：已同步当前源码。** `package/transight-0.1.4.zip` 已包含部分网页缺少 `crypto.randomUUID()` 时的划词翻译和语音播报兼容性修复，以及 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。文件来源、哈希和完整校验结果见 `inventory.json`。本次版本由 **0.1.3** 升至 **0.1.4**，新增 popup Simple / Full 切换并调整顶部按钮顺序，沿用已有截图，未向商店提交审核。
 
-准备日期：2026-10-01；无版本号截图与安装包更新：2026-10-09。当前提交版本：**0.1.3**。
+准备日期：2026-10-01；无版本号截图更新：2026-10-09；安装包更新：2026-10-10。当前提交版本：**0.1.4**。
 
-本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.3.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip`、`transight-0.1.1.zip` 和 `transight-0.1.2.zip` 仅作历史保留；若商店已接收过 0.1.3，提交下一次更新前须提升源码版本再打包。
+本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.4.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip`、`transight-0.1.1.zip`、`transight-0.1.2.zip` 和 `transight-0.1.3.zip` 仅作历史保留；若商店已接收过 0.1.4，提交下一次更新前须提升源码版本再打包。
 
 ## 逐项上传清单
 
 | 项目 | 材料 | 说明 |
 | --- | --- | --- |
-| 插件安装包 | `package/transight-0.1.3.zip` | **已同步请求 ID 兼容性修复**；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
+| 插件安装包 | `package/transight-0.1.4.zip` | **已同步请求 ID 兼容性修复**；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
 | 名称 / 简短描述 / 版本 | ZIP 内 `manifest.json` 和 `_locales/`；便于复制的汇总见 `listing/metadata.json` | 沿用现有版本和国际化配置，没有创建重复 manifest |
 | 英文详细介绍 | `listing/description.en.txt` | 可直接粘贴到英文商品介绍 |
 | 简体中文详细介绍 | `listing/description.zh-CN.txt` | 可直接粘贴到简体中文商品介绍 |
@@ -36,7 +36,7 @@
 - 英文名称：**Transight AI**。
 - 简体中文名称：**译见 AI · 随手翻译**。
 - 繁体中文名称：**譯見 AI · 隨手翻譯**。
-- 版本：**0.1.3**。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
+- 版本：**0.1.4**。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
 - 英文简短描述：**99** 个字符；简体中文及繁体中文简短描述各 **35** 个字符，日语与韩语长度见 `listing/metadata.json`；五种语言均在 132 字符以内。
 - `manifest.json` 中的 `__MSG_extensionName__` / `__MSG_extensionDescription__` 是现有国际化引用；对应内容已随 `_locales/` 打包，不需要改成固定英文。
 

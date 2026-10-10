@@ -174,7 +174,7 @@
     "message": "ページの自動スキャン、翻訳履歴、アクセス解析はありません。操作したときだけ動作します。"
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.3"
+    "message": "Transight AI · v0.1.4"
   },
   "builtFor": {
     "message": "読みたい世界を、もっと身近に。"
@@ -672,7 +672,7 @@
     "message": "Simple Translate を使う"
   },
   "translationModeHint": {
-    "message": "オフ：Full Translate（既定）。オン：Simple Translate は最初のモデルで自動翻訳します。ページ内パネルに即時反映され、ツールバーの表示は変わりません。"
+    "message": "オフ：Full Translate（既定）。オン：Simple Translate は最初のモデルで自動翻訳します。ツールバーのポップアップとページ内パネルに即時反映されます。"
   },
   "switchFullMode": {
     "message": "Full Translate に切り替え"

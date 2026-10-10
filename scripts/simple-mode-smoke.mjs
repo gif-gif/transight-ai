@@ -137,9 +137,10 @@ export async function simpleModeSmoke({ context, worker, sample, ui, until, clic
     try {
       await toolbar.goto(`${origin}/src/popup/popup.html`);
       await toolbar.locator('#target option').first().waitFor({ state: 'attached' });
-      assert.equal(await toolbar.locator('.simple-translate').count(), 0);
-      assert.equal(await toolbar.locator('#translation-mode').isVisible(), false);
-      assert.equal(await toolbar.locator('#translate').isVisible(), true);
+      assert.equal(await toolbar.locator('.simple-translate').count(), 1);
+      assert.equal(await toolbar.locator('#translation-mode').isVisible(), true);
+      assert.equal(await toolbar.locator('#translate').isVisible(), false);
+      assert.equal(await toolbar.locator('#ui-language').isVisible(), true);
     } finally { await toolbar.close(); }
     const stored = await worker.evaluate(() => chrome.storage.local.get('settings'));
     assert.deepEqual(stored.settings.models, ['simple-first', 'simple-second', 'simple-third']);
@@ -190,5 +191,5 @@ export async function simpleModeSmoke({ context, worker, sample, ui, until, clic
     }, before);
     await options.close();
   }
-  console.log('✓ Simple Translate: default Full, persisted switch, first model only, copy/speech, bidirectional icons, editable/debounced/IME source, toolbar spacing, automatic source/target, superseded request, retry/settings link, Full restores all models, toolbar unchanged, five locales, long source, narrow viewport');
+  console.log('✓ Simple Translate: default Full, persisted switch, first model only, copy/speech, bidirectional icons, editable/debounced/IME source, toolbar spacing, automatic source/target, superseded request, retry/settings link, Full restores all models, toolbar mode preference, five locales, long source, narrow viewport');
 }

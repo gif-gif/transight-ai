@@ -444,6 +444,9 @@ export async function selectionSmoke({ context, worker, page, sample, tabId, req
     }, preferenceBefore);
   }
   console.log('✓ Selection toggle: live hide, reload persistence, manual translation unaffected; custom prompt save/reload, popup/page requests, title/summary variables, restore default and credential isolation');
+  // The persistent test popup now follows mode changes too. Clear its previous
+  // source so page-only request counts exclude unrelated popup translations.
+  await page.locator('#clear').click();
   await simpleModeSmoke({ context, worker, sample, ui, until, click, select, requests, screenshotDir, msg, setMode });
   await session.detach();
   console.log('✓ Selection: automatic all-site injection, shared popup, selection-tail positioning (pointer, reverse, multiline, nested and viewport edges), next-paint pointer/keyboard trigger, compact trigger and 2.5s expiry/reset, no request on selection, editing/target, close/Esc/outside, cancellation, narrow screen, editable exclusion, persisted injection, second hostname, credential isolation');

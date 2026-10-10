@@ -1,6 +1,6 @@
 # Test instructions / 测试说明
 
-核对日期：2026-10-06 · 版本：0.1.3。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
+核对日期：2026-10-06 · 版本：0.1.4。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
 
 ## 提交前必须补齐
 
@@ -17,7 +17,7 @@
 ## 可粘贴的英文审核说明
 
 ```text
-Transight AI 0.1.3 — reviewer instructions
+Transight AI 0.1.4 — reviewer instructions
 
 Purpose: translate user-provided text using the user's configured AI service. No Transight AI account or extension login is required. AI service access is needed for successful translations.
 

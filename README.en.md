@@ -4,14 +4,14 @@
 
 An AI translation Chrome extension MVP built with **Manifest V3 and vanilla JavaScript / HTML / CSS**. It has no runtime dependencies or embedded API keys. Run `npm run build` to generate an unpacked extension in `dist/`, ready to load into Chrome. No ZIP is generated.
 
-**Current version: 0.1.3** (2026-10-09). Documentation, UI screenshots, and store materials are synchronized. Store package: [`transight-0.1.3.zip`](chrome-web-store/package/transight-0.1.3.zip). For developer mode, load `dist/`; reload the extension and refresh open webpages after updating.
+**Current version: 0.1.4** (2026-10-10). The popup now supports Simple / Full switching. Version and store package updated; existing screenshots retained. Store package: [`transight-0.1.4.zip`](chrome-web-store/package/transight-0.1.4.zip). For developer mode, load `dist/`; reload the extension and refresh open webpages after updating.
 
 ## Features
 
 - **Simplified Chinese, Traditional Chinese, English, Japanese, and Korean UI**: follows Chrome’s UI language automatically, with English as the fallback for unsupported languages.
 
 - **Toolbar translation**: automatically detect or explicitly select the source language, type or paste text, choose a target language, translate, and copy the result.
-- **Selected text**: select text on a webpage before opening the extension to populate the source field. The text is not sent automatically.
+- **Selected text**: select text on a webpage before opening the extension to populate the source field. Full mode waits for you to click Translate; Simple mode translates the selection automatically.
 - **Selection translation**: enabled by default on all ordinary HTTP/HTTPS webpages. Select text, then click the green globe-and-exchange-arrow icon. Only clicking sends a request; the panel shares the toolbar UI.
 - **Context-menu translation**: right-click selected text and choose “用译见 AI 翻译选中文字” (Translate selected text with Transight AI) to display the translation in an on-page panel.
 - **10 target languages**: Simplified Chinese, Traditional Chinese, English, Japanese, Korean, French, German, Spanish, Russian, and Portuguese.
@@ -23,15 +23,15 @@ An AI translation Chrome extension MVP built with **Manifest V3 and vanilla Java
 
 ### Simple Translate / Full Translate
 
-The **Use Simple Translate** switch in settings is off by default (**Full Translate**). When enabled, selection and context-menu panels automatically translate with **only the first selected model**. The compact panel shows source language (auto-detect by default), target language, editable source text, and translation—no Translate button. Changing either language or pausing typing for about 0.6 seconds translates again; the target preference is remembered.
+The **Use Simple Translate** switch in settings is off by default (**Full Translate**). When enabled, the toolbar popup and selection/context-menu panels automatically translate with **only the first selected model**. The compact panel shows source language (auto-detect by default), target language, editable source text, and translation—no Translate button. Changing either language or pausing typing for about 0.6 seconds translates again; the target preference is remembered.
 
-Use the top bar to open settings or switch between **Simple Translate / Full Translate** with the layout icon, preserving the source and restoring all selected models. Mode changes persist immediately and synchronize open page panels; the toolbar popup keeps its full layout. Retry, authentication settings links, and inline unlocking remain available. Copying and speech are also available in Simple mode; use Full mode for image tools.
+Use the top bar to open settings or switch between **Simple Translate / Full Translate** with the layout icon, preserving the source and restoring all selected models. Mode changes persist immediately and synchronize the toolbar popup, open page panels, and Settings. Retry, authentication settings links, and inline unlocking remain available. Copying and speech are also available in Simple mode; use Full mode for image tools.
 
 ### Screenshot and clipboard image translation
 
 The popup no longer has a screenshot entry: neither scissors nor a Screenshot translation button is shown. **Starting an in-page region capture from the popup is no longer available.** The underlying capture/cropping implementation remains, but is not a visible user entry. Use your system screenshot tool to copy an image, then paste it into the source field.
 
-1. Press **Ctrl+V / Cmd+V** in the source field of the toolbar popup or a **Full Translate** page panel. Simple mode supports text only.
+1. Press **Ctrl+V / Cmd+V** in the source field of a toolbar popup or page panel in **Full Translate** mode. Simple mode supports text only.
 2. Attach up to **5 images**, shown as **72 × 72 thumbnails** at the top-left of the input. They stay on one horizontally scrollable row; text begins beneath them.
 3. Hover over an image to reveal its small white **×** button, also accessible by keyboard focus. Remove images individually or use **Clear** to remove text and images together.
 4. Choose source (automatic or explicit) and target languages, then click **Translate image**. Text and all retained images are sent together to each selected model. Retry, cancel, copy, speech, and inline unlocking remain available.
@@ -64,7 +64,7 @@ Unavailable context becomes empty. The default template includes title/summary v
 - Full and Simple both provide a source-language dropdown, defaulting to auto-detect. Switching modes preserves the source text and source language.
 - The target language is remembered across popup, page panels, and settings. Full mode has a cancellation button; editing text/languages in Simple cancels obsolete work and retranslates.
 - Change interface language in the toolbar popup or Settings. Page panels no longer show a globe language button, but still follow the saved preference.
-- Simple uses only the first selected model and keeps copy/local speech; the toolbar popup always uses the full layout.
+- Simple uses only the first selected model and keeps copy/local speech; the toolbar popup also supports Simple / Full switching.
 
 ## Screenshots
 

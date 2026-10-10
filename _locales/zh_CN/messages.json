@@ -174,7 +174,7 @@
     "message": "不自动扫描网页，不保存翻译历史，没有分析追踪。只在你主动使用时工作。"
   },
   "versionBrand": {
-    "message": "译见 AI · v0.1.3"
+    "message": "译见 AI · v0.1.4"
   },
   "builtFor": {
     "message": "为值得阅读的世界而造。"
@@ -672,7 +672,7 @@
     "message": "启用 Simple Translate"
   },
   "translationModeHint": {
-    "message": "关闭：Full Translate（默认）。开启：Simple Translate 自动使用第一个模型翻译。立即应用于页面浮窗，工具栏弹窗保持完整布局。"
+    "message": "关闭：Full Translate（默认）。开启：Simple Translate 自动使用第一个模型翻译。立即应用于工具栏弹窗和页面浮窗。"
   },
   "switchFullMode": {
     "message": "切换到 Full Translate"

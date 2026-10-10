@@ -2,6 +2,8 @@
    constrain the initial small viewport and prevent the popup from growing. */
 html{width:400px;min-width:400px}
 body{width:100%;min-height:600px}
+/* Simple toolbar popups shrink to their content instead of leaving a blank footer. */
+body:has(>.translation-view.simple-translate){min-height:0}
 /* Only the explicitly opened standalone window may shrink with its viewport. */
 html.standalone{width:auto;min-width:0}
 html.standalone body{width:400px;max-width:100%}
@@ -62,7 +64,7 @@ html.standalone body{width:400px;max-width:100%}
 .source-thumbnail:hover .remove-source-image,.remove-source-image:focus-visible{opacity:1;pointer-events:auto}
 .remove-source-image svg{width:10px;height:10px}
 
-/* Page-only Simple Translate: the same request/error/unlock lifecycle, less chrome. */
+/* Shared Simple Translate: the same request/error/unlock lifecycle, less chrome. */
 .mode-button svg{width:18px;height:18px}
 .simple-translate .brand small,
 

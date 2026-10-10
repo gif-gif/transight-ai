@@ -9,6 +9,7 @@
   globalThis.TransightTranslationView = function (root, adapter, initialLocale, settings) {
     const $ = id => root.querySelector(`#${id}`);
     const container = root.querySelector('.translation-view') || root.documentElement;
+    const supportsModes = typeof adapter.setTranslationMode === 'function';
     let locale = initialLocale, busy = false, disposed = false, revision = 0;
     let entries = [], statusState, configured = false;
     let editVersion = 0, vaultState, waitingForUnlock = false, pendingRetry = null;
@@ -84,7 +85,7 @@
     function count() {
       $('count').textContent = $('source').value.length.toLocaleString('en-US') + ' / 12,000' + (inputImages.length ? ' · ' + inputImages.length + '/5' : '');
     }
-    function isSimple() { return adapter.selectionMode && settings.translationMode === 'simple'; }
+    function isSimple() { return supportsModes && settings.translationMode === 'simple'; }
     function modelIds() {
       const models = settings.models ?? (settings.model ? [settings.model] : []);
       return isSimple() ? models.slice(0, 1) : models;
@@ -95,7 +96,7 @@
       root.querySelector('.ui-language-control').hidden = Boolean(adapter.selectionMode);
       $('source').readOnly = false;
       const button = $('translation-mode');
-      button.hidden = !adapter.selectionMode;
+      button.hidden = !supportsModes;
       // Static layout icons: stacked model cards for Full, one result for Simple.
       button.innerHTML = `<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${isSimple()
         ? '<rect x="4" y="3" width="16" height="7" rx="2"/><rect x="4" y="14" width="16" height="7" rx="2"/><path d="M8 6.5h8M8 17.5h8"/>'
@@ -322,7 +323,7 @@
       adapter.localized?.(locale);
     }
     function applySettings(next, updateTarget = true) {
-      const modeChanged = adapter.selectionMode && settings.translationMode !== next.translationMode;
+      const modeChanged = supportsModes && settings.translationMode !== next.translationMode;
       const changed = JSON.stringify(settings) !== JSON.stringify(next);
       if (changed) cancel();
       settings = next; renderMode(); configured = Boolean(modelIds().length && next.consent); $('setup').hidden = configured;
@@ -347,17 +348,17 @@
     }
     function resetImages() { imageGeneration++; importingImages = 0; inputImages = []; }
     function setDraft(draft) {
-      input(draft.text || ''); inputImages = [...draft.images]; renderSource(); setBusy(false);
+      input(draft.text || '', false); inputImages = [...draft.images]; renderSource(); setBusy(false);
     }
     function setImage(image) { setDraft({ text: '', images: image ? [image] : [] }); }
     function getDraft() {
       if (importingImages) throw new Error(t('imageProcessing'));
       return { text: $('source').value, images: [...inputImages] };
     }
-    function input(text, auto = false) {
+    function input(text, auto = isSimple()) {
       resetImages(); renderSource(); cancel(); editVersion++; $('source').value = text; renderMode(); count(); resetResult(); status('');
       if (text.length > 12000) statusKey('selectionTooLong', true);
-      else if (auto) translate();
+      else if (auto && text.trim()) translate();
     }
     if ($('source-images')) listen($('source-images'), 'click', event => {
       const button = event.target.closest('.remove-source-image'); if (!button) return;
@@ -446,7 +447,7 @@
       settings = { ...settings, targetLanguage: target };
       try { await adapter.setTargetLanguage(target); }
       catch { if (!disposed && current === revision) statusKey('targetLanguageSaveFailed', true); return; }
-      if (!disposed && current === revision && adapter.autoTranslateTarget) translate();
+      if (!disposed && current === revision && (isSimple() || adapter.autoTranslateTarget)) translate();
     });
     listen($('clear'), 'click', () => { input(''); $('source').focus(); });
     listen($('translate'), 'click', translate);

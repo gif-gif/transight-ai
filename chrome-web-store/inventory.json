@@ -1,7 +1,7 @@
 {
-  "prepared_date": "2026-10-09",
-  "version": "0.1.3",
-  "archive": "package/transight-0.1.3.zip",
+  "prepared_date": "2026-10-10",
+  "version": "0.1.4",
+  "archive": "package/transight-0.1.4.zip",
   "checks": {
     "manifest_at_zip_root": true,
     "runtime_and_license_only": true,
@@ -37,13 +37,13 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 14643,
-      "sha256": "a058f0211d9382fe4289ec91fb8eb38334c3806ce2956e5c56f732bcda41cc1a"
+      "bytes": 14770,
+      "sha256": "1fff9dfcb4843a1e86fa3cdf3e0122d7059afaa4cb7b778526e0ff8609369875"
     },
     {
       "path": "dashboard/01-store-listing.md",
       "bytes": 4737,
-      "sha256": "a554ec28bb9bdb13fbfbf597a9e92d2d0ee63cba3d415a5a3830b00b77e76f98"
+      "sha256": "80af4c0bae7bef2de5317afb2f5eed8ac70aa1f829585acafc8923a3e8cc2c75"
     },
     {
       "path": "dashboard/02-privacy-practices.md",
@@ -58,7 +58,7 @@
     {
       "path": "dashboard/04-test-instructions.md",
       "bytes": 11197,
-      "sha256": "983b82ac78ef2ccba5e07733693aed19ba68233098a9fc190e63ec109adb8af0"
+      "sha256": "c1c3b6130737eac0a7dc3cb7a980de04c4c0f19cd25098c5a14f44701b3e3d91"
     },
     {
       "path": "icons/icon-128.png",
@@ -96,7 +96,7 @@
     {
       "path": "listing/metadata.json",
       "bytes": 1793,
-      "sha256": "3d44aee9f924a7d3f83ed4e33494b4d2d341f6a3e6761a0106ec1d8907fec36a"
+      "sha256": "486f88d91b7f5ac06bdce7cb4fe2e990653bb7eea0eada6cbeedf812b31a2acc"
     },
     {
       "path": "package/transight-0.1.0.zip",
@@ -119,39 +119,44 @@
       "sha256": "fcb5dd6bbd104d4aa3883c9e7d92d590721958df092403151c7276ba3fef514c"
     },
     {
+      "path": "package/transight-0.1.4.zip",
+      "bytes": 117124,
+      "sha256": "3b62e7b56541fcdcf3f37522ebfcc5a2a1ed29fccfff982ff6c751be242a24a7"
+    },
+    {
       "path": "permission-justifications/01-storage.md",
       "bytes": 2021,
-      "sha256": "6055ca1c66ffe893a3517c43001cf593544e0e649e6b51a15fc5d2d05c30de3d"
+      "sha256": "12529b2feaa03ce5d0b4089b49103778a495c3d5fe3e80b99956c63814494433"
     },
     {
       "path": "permission-justifications/02-contextMenus.md",
       "bytes": 1001,
-      "sha256": "1a2175fccfa64f6fa361fcbb3937b4c17e8fccb3be4ec622e5e35b61c7612a78"
+      "sha256": "afafc1f61c00b5ccc1829250cf072222ca34b503af6b4c5e9cd081609e30d54d"
     },
     {
       "path": "permission-justifications/03-activeTab.md",
       "bytes": 1934,
-      "sha256": "c5cb3aaf0108bfde957a30b04812866fecd2361de9ca2b34472d4c60b468c771"
+      "sha256": "5d7c02a1bcf7a4d0ed0fdf8d753d91e416852d584ecb128c6ec57f5d2737b88e"
     },
     {
       "path": "permission-justifications/04-scripting.md",
       "bytes": 1359,
-      "sha256": "210c7e4a1e542673aa50a92617cca32f56631c1d32a197e1ca3428c5fb022670"
+      "sha256": "4b4fe753f86b537169055ad95a0925d437c74b51adbe1aa773cacff69255a0ff"
     },
     {
       "path": "permission-justifications/05-host-permissions.md",
       "bytes": 2437,
-      "sha256": "0a1b62b22fb07b9a0dbffc2f0b02575d3da4def4fff3d6840331f49d18d7ce9d"
+      "sha256": "7ad20a7773d98c4870087360e342ea7c7821c0a0f7ab9d692ba88c491c2fb980"
     },
     {
       "path": "permission-justifications/06-tts.md",
       "bytes": 1875,
-      "sha256": "6ce70b334c619addd7ea9f6e99079e832df0bb3a92b2b79658735785414f5cc1"
+      "sha256": "2be7f99c0518abe6debb9cd093c017e610aa045592b40f6c0926fa4043933bfd"
     },
     {
       "path": "permission-justifications/README.md",
       "bytes": 2245,
-      "sha256": "dc6082cacb7776892e9642c6aad7b7354895af4874a93ad7dfe1b68824b5c44b"
+      "sha256": "0eb42e64f81c00aa7d2705266e5e8c5b04181e4caa45c7b0d43c26236e9ace10"
     },
     {
       "path": "promo/marquee-1400x560.png",
