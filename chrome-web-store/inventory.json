@@ -37,8 +37,8 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 14770,
-      "sha256": "1fff9dfcb4843a1e86fa3cdf3e0122d7059afaa4cb7b778526e0ff8609369875"
+      "bytes": 15169,
+      "sha256": "9726203e019375f9527ee426c3cb47e2ee00dc3135399497ba98ca5ccada446a"
     },
     {
       "path": "dashboard/01-store-listing.md",
@@ -176,8 +176,8 @@
     },
     {
       "path": "screenshots/en/01-multi-model.png",
-      "bytes": 94452,
-      "sha256": "3174a4cf46919c5cd95d675fe0a428034226e741fad3e47ec8d79554a50e9bba",
+      "bytes": 95571,
+      "sha256": "a3562955d26d1b055c790446529f36097cdfac88802df2d98fbc0823806ce4c9",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -192,8 +192,8 @@
     },
     {
       "path": "screenshots/en/03-settings.png",
-      "bytes": 187212,
-      "sha256": "b5b4bf0094384bdf1e94d1fb4b164d2bc3b4ce1e4911aae452748525d5bdd954",
+      "bytes": 186520,
+      "sha256": "9cf8a97dee4fbfc205b8abe591d2bceebc214cf5d81e82cb1ca63cff99deb67c",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -216,8 +216,8 @@
     },
     {
       "path": "screenshots/ja/01-multi-model.png",
-      "bytes": 124487,
-      "sha256": "8ce0f35fd71161922b3280c951107a3fe7fbdf4824e68e6f91af6d23370a39ec",
+      "bytes": 124419,
+      "sha256": "a93503cc641df12715e3c8ec56310412c778596e9e7074539190c94562eb29a8",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -232,16 +232,16 @@
     },
     {
       "path": "screenshots/ja/03-settings.png",
-      "bytes": 201366,
-      "sha256": "ee1c2a1ef46e03771681d20ec8836281d2384c1f7168683220dae46431f316cc",
+      "bytes": 200767,
+      "sha256": "b9e2e8c5bd1fd52491f156192a3f019bb7fc6f3876415c54eaad3fe82085276c",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/ja/04-inline-unlock.png",
-      "bytes": 174534,
-      "sha256": "527b2b9b0376a97f6adc1d077fb4f835efc404b35b8055484251c1247cdf6453",
+      "bytes": 174545,
+      "sha256": "12bfcbf1b45f00fd0cd848cfb154eb79bc59d76aaf5d5d2e2a16a085fa41ca7a",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -256,24 +256,24 @@
     },
     {
       "path": "screenshots/ko/01-multi-model.png",
-      "bytes": 93879,
-      "sha256": "e4e0f0fceed7f6d4a3fb30219c0c62b7803a7651e6dfb49372a226c8da94ed53",
+      "bytes": 93405,
+      "sha256": "cc633f89bb460b16cffaeb0651db641d2fed767a0a6f0a673699d2ff4e971ace",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/ko/02-on-page.png",
-      "bytes": 123828,
-      "sha256": "8d0139c3036f51f79253bf90ef15756ed03227ae541a5c94cc18d9e726e372ac",
+      "bytes": 123863,
+      "sha256": "ed53b8e8d181724fd03c2a55b8b5e657b154d59c82bf921c79338d9ea938093c",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/ko/03-settings.png",
-      "bytes": 185646,
-      "sha256": "0e9fc9244c2e59eaed1de4f34be86afb0306fd1f33df146f6eadda4a16e60c5f",
+      "bytes": 183381,
+      "sha256": "4576ba329d1fd96d9cf115fd7709dda519bfcb243759b0a0e387b61f0f64c031",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -296,24 +296,24 @@
     },
     {
       "path": "screenshots/zh-CN/01-multi-model.png",
-      "bytes": 114830,
-      "sha256": "177f6db05e142c9240a5e61864fc6b248df79d638fca8ecf8891adca6142845d",
+      "bytes": 115746,
+      "sha256": "52f956748936c62bda472b0406d3a63ce6a3e7a82c871381e86a6e23849a11d1",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-CN/02-on-page.png",
-      "bytes": 135119,
-      "sha256": "ae5d09b7b469110c34da425e9fe65565f5c9c43ff5d1063e4388cd23ffc8f536",
+      "bytes": 135117,
+      "sha256": "68ee14217b9417189c1246f402285e7c7d02a7f3cca49065b87dd6b5903256b3",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
     },
     {
       "path": "screenshots/zh-CN/03-settings.png",
-      "bytes": 202014,
-      "sha256": "154cebe675b56698287bd1dd30f82d5eafa7e0818b1caa2699ebc076d8f54285",
+      "bytes": 200537,
+      "sha256": "d95253b459667e5d4344ae4b3976b9bd7ca2a1d24a32346d3d6e03e9056422db",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -336,8 +336,8 @@
     },
     {
       "path": "screenshots/zh-TW/01-multi-model.png",
-      "bytes": 118728,
-      "sha256": "c8cd087e8c36fbc650fa4ee142569901223046cb18e3547217206a63842c8dc1",
+      "bytes": 119334,
+      "sha256": "af80b0999e98a4631aa4e78b1ccaaba5c0c6c61a68dac9c363ec8282e0f0715f",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -352,8 +352,8 @@
     },
     {
       "path": "screenshots/zh-TW/03-settings.png",
-      "bytes": 206300,
-      "sha256": "68d832172f70847ea08f56513352cf6180f28c080b1a905a3417511580f972c9",
+      "bytes": 204955,
+      "sha256": "d38475cd23fc8a13af04cb2ac7739ca3b125bddbf0a7e511175a5b7f6f403d03",
       "width": 1280,
       "height": 800,
       "mode": "RGB"
@@ -376,8 +376,8 @@
     },
     {
       "path": "tools/prepare-images.py",
-      "bytes": 13443,
-      "sha256": "babb6b3c6c54b88a49a14db8857d6d04817ec4c5b5cd1095ac06c482be47ef91"
+      "bytes": 13870,
+      "sha256": "7c10daf48b770bf5c0405688e83f8104f8ae8fbabc6c977ae5d735ca44e4f28d"
     },
     {
       "path": "tools/validate.py",

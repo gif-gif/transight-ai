@@ -1,8 +1,8 @@
 # Transight AI · Chrome Web Store 提交材料
 
-> **安装包状态：已同步当前源码。** `package/transight-0.1.4.zip` 已包含部分网页缺少 `crypto.randomUUID()` 时的划词翻译和语音播报兼容性修复，以及 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。文件来源、哈希和完整校验结果见 `inventory.json`。本次版本由 **0.1.3** 升至 **0.1.4**，新增 popup Simple / Full 切换并调整顶部按钮顺序，沿用已有截图，未向商店提交审核。
+> **安装包状态：已同步当前源码。** `package/transight-0.1.4.zip` 已包含部分网页缺少 `crypto.randomUUID()` 时的划词翻译和语音播报兼容性修复，以及 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。文件来源、哈希和完整校验结果见 `inventory.json`。本次版本由 **0.1.3** 升至 **0.1.4**，新增 popup Simple / Full 切换并调整顶部按钮顺序，商店截图已重新采集，未向商店提交审核。
 
-准备日期：2026-10-01；无版本号截图更新：2026-10-09；安装包更新：2026-10-10。当前提交版本：**0.1.4**。
+准备日期：2026-10-01；无版本号截图更新：2026-10-10；安装包更新：2026-10-10。当前提交版本：**0.1.4**。
 
 本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.4.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip`、`transight-0.1.1.zip`、`transight-0.1.2.zip` 和 `transight-0.1.3.zip` 仅作历史保留；若商店已接收过 0.1.4，提交下一次更新前须提升源码版本再打包。
 
@@ -69,7 +69,7 @@
 
 每种语言保留 5 张（共 25 张），全部为 1280 × 800 RGB PNG；同一顺序对应：
 
-1. `01-multi-model.png`：Full 多模型译文，源语言下拉框、复制和本地朗读。
+1. `01-multi-model.png`：Full 多模型译文，源语言下拉框、复制和本地朗读；顶部依次为模式切换、显示语言和设置。
 2. `02-on-page.png`：Simple 可编辑原文与单模型译文；无翻译按钮，顶部图标切换 Full。
 3. `03-settings.png`：目标语言、划词开关、Simple / Full 模式和自定义系统提示词。
 4. `04-inline-unlock.png`：浮窗内紧凑解锁，测试密码遮挡。
@@ -79,7 +79,7 @@
 README 另展示图片粘贴和单行缩略图，不再额外增加商店截图数量。
 所有译文来自本机模拟服务，用于展示界面，并不代表实际模型质量；示例目标语言与固定模拟回复可能不同。
 
-当前 popup 已移除截图入口，不再引导用户点击剪刀或“截图翻译”。图片使用系统截图后粘贴到 popup / Full 浮窗原文框；Simple 只处理文字。浮窗不再显示界面语言按钮，仍可在 popup 和设置中切换界面语言。工具栏 popup 始终使用 Full 布局。
+当前 popup 已移除截图入口，不再引导用户点击剪刀或“截图翻译”。图片使用系统截图后粘贴到 Full 模式的 popup 或浮窗原文框；Simple 只处理文字。浮窗不再显示界面语言按钮，仍可在 popup 和设置中切换界面语言。工具栏 popup 支持 Simple / Full 切换，与浮窗和设置同步保存；Simple 使用第一个模型并自动翻译。
 
 ## 提交前还需你确认
 
@@ -163,3 +163,5 @@ python3 chrome-web-store/tools/validate.py
 - 图片规格、图标留白、宣传图、截图：https://developer.chrome.com/docs/webstore/images
 - 商店商品信息、分类和语言：https://developer.chrome.com/docs/webstore/cws-dashboard-listing
 - 上传与发布流程：https://developer.chrome.com/docs/webstore/publish
+
+仅更新商店截图时，先用 `scripts/store-screenshots.mjs` 采集五种语言，再运行 `python3 chrome-web-store/tools/prepare-images.py --store-only` 和 `python3 chrome-web-store/tools/validate.py`；不会覆盖 README 截图。

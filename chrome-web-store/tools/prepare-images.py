@@ -3,6 +3,11 @@ Run after the five-locale browser suite with Python 3 + Pillow.
 Updates store assets, root README screenshots and existing localized extension screenshots.
 """
 from pathlib import Path
+import argparse
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--store-only", action="store_true", help="Update store assets only; leave README screenshots unchanged")
+args = parser.parse_args()
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 OUT = Path(__file__).resolve().parents[1]
@@ -76,31 +81,31 @@ save_if_changed(icon, OUT/'icons/icon-128.png')
 # the isolated browser suite; the mock replies do not represent model quality.
 SHOT_COPY = {
 'en': [
- ('One text.\nMore perspectives.', ['Full mode: compare up to 5 models.', 'Copy, listen, or retry each result.', 'Your AI service. Your choice.']),
+ ('One text.\nMore perspectives.', ['Full mode: compare up to 5 models.', 'Copy, listen, or retry each result.', 'Switch Simple / Full in the popup.']),
  ('Less interface.\nMore understanding.', ['Simple mode uses your first model.', 'Edit the source. Translation follows.', 'Copy and local speech stay close.']),
  ('Translate\nyour way.', ['Choose Simple or Full mode.', 'Turn the selection trigger on or off.', 'Write your own system prompt.']),
  ('Unlock here.\nKeep translating.', ['Unlock in the popup or page panel.', 'Your API key stays encrypted at rest.', 'Passwords are not sent to AI services.']),
  ('Select a passage.\nStart right there.', ['A small icon near the selection end.', 'Click to open the translation panel.', 'Selection alone sends no request.'])],
 'zh-CN': [
- ('一段原文，\n多种模型对照。', ['Full 模式，最多对比 5 个模型。','独立译文、复制、朗读与重试。','使用你自己选择的 AI 服务。']),
+ ('一段原文，\n多种模型对照。', ['Full 模式，最多对比 5 个模型。','独立译文、复制、朗读与重试。','弹窗中也能切换 Simple / Full。']),
  ('少一点界面，\n多一点理解。', ['Simple 模式，只用第一个模型。','编辑原文，停笔后自动翻译。','保留复制与本地语音朗读。']),
  ('按你的方式，\n开始翻译。', ['选择 Simple 或 Full 模式。','随时开启或关闭划词入口。','自定义翻译系统提示词。']),
  ('就地解锁，\n继续翻译。', ['在弹窗或页面浮窗直接解锁。','API Key 在本地加密保存。','解锁密码不发送给 AI 服务。']),
  ('选中一段，\n从这里开始。', ['小图标贴近选中文字的末尾。','点击打开翻译浮窗。','仅选中文字，不发送翻译请求。'])],
 'zh-TW': [
- ('一段原文，\n多種模型對照。', ['Full 模式，最多比較 5 個模型。','獨立譯文、複製、朗讀與重試。','使用你自己選擇的 AI 服務。']),
+ ('一段原文，\n多種模型對照。', ['Full 模式，最多比較 5 個模型。','獨立譯文、複製、朗讀與重試。','彈窗中也能切換 Simple / Full。']),
  ('少一點介面，\n多一點理解。', ['Simple 模式，只用第一個模型。','編輯原文，停筆後自動翻譯。','保留複製與本機語音朗讀。']),
  ('按你的方式，\n開始翻譯。', ['選擇 Simple 或 Full 模式。','隨時開啟或關閉選取翻譯入口。','自訂翻譯系統提示詞。']),
  ('就地解鎖，\n繼續翻譯。', ['在彈出視窗或頁面浮窗直接解鎖。','API Key 在本機加密儲存。','解鎖密碼不傳送給 AI 服務。']),
  ('選取一段，\n從這裡開始。', ['小圖示靠近所選文字的末尾。','點擊開啟翻譯浮動視窗。','僅選取文字，不傳送翻譯請求。'])],
 'ja': [
- ('ひとつの文章を、\n複数の視点で。', ['Full モードで最大 5 モデルを比較。','結果ごとにコピー・読み上げ・再試行。','自分で選んだ AI サービスを利用。']),
+ ('ひとつの文章を、\n複数の視点で。', ['Full モードで最大 5 モデルを比較。','結果ごとにコピー・読み上げ・再試行。','ポップアップも Simple / Full に対応。']),
  ('シンプルに、\n理解を深く。', ['Simple は最初のモデルだけを使用。','原文を編集すると、自動で再翻訳。','コピーとローカル読み上げも利用可能。']),
  ('あなたに合った\n翻訳体験を。', ['Simple / Full モードを切り替え。','選択翻訳のオン・オフを設定。','システムプロンプトを自由に編集。']),
  ('その場で解除。\n翻訳を続けよう。', ['ポップアップやパネルでロック解除。','API キーはローカルで暗号化保存。','解除用パスワードは AI に送信しません。']),
  ('文章を選択。\nそこから翻訳。', ['選択範囲の末尾に小さなアイコン。','クリックで翻訳パネルを表示。','選択するだけでは送信しません。'])],
 'ko': [
- ('하나의 원문,\n다양한 관점.', ['Full 모드에서 최대 5개 모델 비교.','결과별 복사, 읽기, 다시 시도.','내가 선택한 AI 서비스를 사용하세요.']),
+ ('하나의 원문,\n다양한 관점.', ['Full 모드에서 최대 5개 모델 비교.','결과별 복사, 읽기, 다시 시도.','팝업에서도 Simple / Full 전환.']),
  ('더 간결하게,\n더 깊이 이해하기.', ['Simple은 첫 번째 모델만 사용합니다.','원문을 수정하면 자동으로 번역합니다.','복사와 로컬 음성 읽기도 그대로.']),
  ('나에게 맞는\n번역 방식.', ['Simple / Full 모드를 선택하세요.','선택 번역을 켜거나 끄세요.','시스템 프롬프트를 직접 작성하세요.']),
  ('여기서 잠금 해제,\n번역은 계속.', ['팝업이나 페이지 패널에서 바로 해제.','API 키는 로컬에 암호화 저장됩니다.','해제 비밀번호는 AI에 보내지 않습니다.']),
@@ -177,21 +182,24 @@ for w,h,filename in [(440,280,'small-440x280.png'),(1400,560,'marquee-1400x560.p
         # Reuse the brand artwork, not an invented translation/chat symbol.
         logo(im,(1080*scale,190*scale),200*scale)
     save_if_changed(im.resize((w,h),Image.Resampling.LANCZOS), OUT/'promo'/filename)
-# Synchronize README references and every existing extension screenshot; website captures are refreshed separately.
-import re, shutil
-readme_images = set()
-for readme in ROOT.glob('README*.md'):
-    readme_images.update(re.findall(r'docs/screenshots/[^\s"<>\)]+\.png', readme.read_text()))
-locale_dirs = {'en':'en-US','ja':'ja-JP','ko':'ko-KR','zh-TW':'zh-TW'}
-for folder in ['', *locale_dirs]:
-    readme_images.update(str(p.relative_to(ROOT)) for p in (ROOT/'docs/screenshots'/folder).glob('*.png'))
-for relative in sorted(readme_images):
-    target=ROOT/relative
-    tail=target.relative_to(ROOT/'docs/screenshots')
-    assert len(tail.parts) in (1,2), relative
-    locale='zh-CN' if len(tail.parts)==1 else locale_dirs[tail.parts[0]]
-    source=ROOT/'artifacts/screenshots'/locale/tail.name
-    assert source.exists(), f'Missing fresh browser screenshot: {source}'
-    target.parent.mkdir(parents=True,exist_ok=True)
-    if not target.exists() or source.read_bytes()!=target.read_bytes(): shutil.copyfile(source,target)
-print(f'Prepared 25 store screenshots and {len(readme_images)} documentation screenshots; unchanged brand assets reused.')
+if args.store_only:
+    print("Prepared 25 store screenshots; unchanged brand assets reused. README screenshots not modified.")
+else:
+    # Synchronize README references and every existing extension screenshot; website captures are refreshed separately.
+    import re, shutil
+    readme_images = set()
+    for readme in ROOT.glob('README*.md'):
+        readme_images.update(re.findall(r'docs/screenshots/[^\s"<>\)]+\.png', readme.read_text()))
+    locale_dirs = {'en':'en-US','ja':'ja-JP','ko':'ko-KR','zh-TW':'zh-TW'}
+    for folder in ['', *locale_dirs]:
+        readme_images.update(str(p.relative_to(ROOT)) for p in (ROOT/'docs/screenshots'/folder).glob('*.png'))
+    for relative in sorted(readme_images):
+        target=ROOT/relative
+        tail=target.relative_to(ROOT/'docs/screenshots')
+        assert len(tail.parts) in (1,2), relative
+        locale='zh-CN' if len(tail.parts)==1 else locale_dirs[tail.parts[0]]
+        source=ROOT/'artifacts/screenshots'/locale/tail.name
+        assert source.exists(), f'Missing fresh browser screenshot: {source}'
+        target.parent.mkdir(parents=True,exist_ok=True)
+        if not target.exists() or source.read_bytes()!=target.read_bytes(): shutil.copyfile(source,target)
+    print(f'Prepared 25 store screenshots and {len(readme_images)} documentation screenshots; unchanged brand assets reused.')
