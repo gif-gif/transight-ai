@@ -22,8 +22,8 @@ for (const frameId of [undefined, 4]) test(`context menu opens the shared floati
 });
 for (const failure of ['inject', 'send', 'init']) test(`context ${failure} failure preserves the standalone fallback`, async () => {
   const calls = setup(failure);
-  await openContextTranslation({ menuItemId: 'yijian-translate', selectionText: 'selected text' }, { id: 8 });
-  assert.deepEqual(calls.drafts, [{ contextDraft: 'selected text' }]);
+  await openContextTranslation({ menuItemId: 'yijian-translate', selectionText: 'selected text' }, { id: 8, url: 'https://example.com/article' });
+  assert.deepEqual(calls.drafts, [{ contextDraft: 'selected text', contextPageUrl: 'https://example.com/article' }]);
   assert.deepEqual(calls.windows, [{ url: 'chrome-extension://test/src/popup/popup.html?fallback=1', type: 'popup', width: 400, height: 740 }]);
 });
 test('unrelated, empty and tabless context-menu events are ignored', async () => {

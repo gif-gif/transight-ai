@@ -26,7 +26,9 @@ for locale, record in metadata['localizations'].items():
     assert record['short_description']==strings['extensionDescription']['message']
     assert len(record['short_description'])==record['description_character_count']<=132
 for filename in ['description.en.txt','description.zh-CN.txt','description.zh-TW.txt','description.ja.txt','description.ko.txt']:
-    assert (OUT/'listing'/filename).stat().st_size>0
+    description=(OUT/'listing'/filename).read_text()
+    assert f'v{manifest["version"]}' in description.splitlines()[0], f'Stale listing version: {filename}'
+    assert 'Google' in description, f'Missing Google translation disclosure: {filename}'
 dashboard_docs=['01-store-listing.md','02-privacy-practices.md','03-distribution.md','04-test-instructions.md']
 for filename in dashboard_docs:
     assert (OUT/'dashboard'/filename).stat().st_size>0, filename

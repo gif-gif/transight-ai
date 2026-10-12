@@ -174,7 +174,7 @@
     "message": "不自動掃描網頁，不儲存翻譯紀錄，沒有分析追蹤。只在你主動使用時運作。"
   },
   "versionBrand": {
-    "message": "譯見 AI · v0.1.4"
+    "message": "譯見 AI · v0.1.5"
   },
   "builtFor": {
     "message": "為值得閱讀的世界而造。"
@@ -688,5 +688,50 @@
   },
   "switchSimpleMode": {
     "message": "切換到 Simple Translate"
+  },
+  "translateWebsite": {
+    "message": "翻譯整個網頁"
+  },
+  "websiteTranslationProvider": {
+    "message": "Google · 新分頁"
+  },
+  "websiteTranslationHint": {
+    "message": "使用目前目標語言在新分頁開啟 Google 翻譯。目前網頁網址將傳送給 Google。"
+  },
+  "websiteTranslationUnavailable": {
+    "message": "此頁面不支援整頁翻譯，請先開啟 HTTP 或 HTTPS 網頁。"
+  },
+  "websiteTranslationFailed": {
+    "message": "無法開啟 Google 翻譯，請重試。"
+  },
+  "googleFreeTranslation": {
+    "message": "免費翻譯"
+  },
+  "googleTranslationSetting": {
+    "message": "啟用 Google 免費翻譯"
+  },
+  "googleTranslationSettingHint": {
+    "message": "預設開啟，切換後立即儲存。在彈出視窗和網頁浮窗顯示免費文字翻譯按鈕；僅點擊時將文字交給 Google 並在新分頁開啟，無需 API Key。不影響整個網頁翻譯功能。"
+  },
+  "googleTranslationHint": {
+    "message": "僅將原文文字（不含圖片）傳送給 Google，在新分頁翻譯為目前目標語言。無需 API Key。"
+  },
+  "googleTranslationSaveFailed": {
+    "message": "Google 翻譯偏好儲存失敗，請重試。"
+  },
+  "googleTextRequired": {
+    "message": "請先輸入原文文字。Google 免費翻譯不會傳送附加圖片。"
+  },
+  "googleTextTooLong": {
+    "message": "此 Google 翻譯入口每次最多支援 5,000 個字元，請縮短原文後重試。"
+  },
+  "googleTranslationDisabled": {
+    "message": "Google 免費翻譯已關閉，請在設定中開啟。"
+  },
+  "googleTranslationFailed": {
+    "message": "無法開啟 Google 翻譯，請重試。"
+  },
+  "googleFreeTranslationAction": {
+    "message": "Google 免費翻譯（新分頁）"
   }
 }

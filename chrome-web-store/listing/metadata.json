@@ -1,5 +1,5 @@
 {
-  "version": "0.1.4",
+  "version": "0.1.5",
   "primary_language": "English (en)",
   "recommended_category": "Productivity",
   "recommended_subcategory_if_available": "Tools",
@@ -39,5 +39,19 @@
     "繁體中文 (zh-TW)",
     "日本語 (ja)",
     "한국어 (ko)"
-  ]
+  ],
+  "materials_updated": "2026-10-11",
+  "package_status": "current",
+  "google_translation": {
+    "whole_page": "opens original HTTP/HTTPS URL in Google Translate in a new tab",
+    "free_text": "opens source text (up to 5000 characters) and selected languages in a new tab; enabled by default, optional in Settings",
+    "layout": "Full: beside Translate; Simple: together below language selectors",
+    "surfaces": [
+      "toolbar popup",
+      "selection panel",
+      "right-click panel",
+      "right-click fallback window"
+    ]
+  },
+  "package_updated": "2026-10-12"
 }

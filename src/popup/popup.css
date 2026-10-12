@@ -84,3 +84,17 @@ html.standalone body{width:400px;max-width:100%}
 
 /* Both modes expose source and target languages without crowding the toolbar. */
 .language-row select{width:0;flex:1;min-width:0}
+
+/* Shared Google actions: next to AI Translate in Full; together above the source in Simple. */
+.external-translation-actions{display:flex;align-items:stretch;gap:6px;flex-shrink:0}
+.website-translation,.google-translation{display:flex;align-items:stretch}
+.external-translation-actions button{display:flex;align-items:center;justify-content:center;gap:7px;width:40px;min-width:40px;min-height:40px;padding:0;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--accent)}
+.external-translation-actions button:hover:not(:disabled){background:var(--tint)}
+.external-translation-actions svg{width:18px;height:18px;flex-shrink:0}
+.website-translation-button span,.website-translation-button small{display:none}
+.website-translation-status{margin:5px 2px 8px;color:var(--muted);font-size:12px;line-height:1.5}
+.translation-actions:has(#cancel-translation:not([hidden])) kbd{display:none}
+.simple-translate #external-translation-actions{margin:0 0 10px}
+.simple-translate .website-translation{flex:1;min-width:0}
+.simple-translate .website-translation-button{width:100%;justify-content:flex-start;padding:5px 8px;font-size:12px;text-align:left}
+.simple-translate .website-translation-button span{display:inline}

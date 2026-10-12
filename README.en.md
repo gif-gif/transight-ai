@@ -4,7 +4,7 @@
 
 An AI translation Chrome extension MVP built with **Manifest V3 and vanilla JavaScript / HTML / CSS**. It has no runtime dependencies or embedded API keys. Run `npm run build` to generate an unpacked extension in `dist/`, ready to load into Chrome. No ZIP is generated.
 
-**Current version: 0.1.4** (2026-10-10). The popup now supports Simple / Full switching. Version and store package updated; existing screenshots retained. Store package: [`transight-0.1.4.zip`](chrome-web-store/package/transight-0.1.4.zip). For developer mode, load `dist/`; reload the extension and refresh open webpages after updating.
+**Current version: 0.1.5** (docs and screenshots updated October 11, 2026). Google whole-page translation and optional free text translation are available in the popup, selection panel, and right-click panel. Full mode places both beside Translate; Simple groups them below the language selectors. Load `dist/` for development, reload the extension, and refresh existing pages. [`transight-0.1.5.zip`](chrome-web-store/package/transight-0.1.5.zip) was rebuilt from the current source on October 12, 2026, including these features and the latest tooltip wording.
 
 ## Features
 
@@ -20,6 +20,18 @@ An AI translation Chrome extension MVP built with **Manifest V3 and vanilla Java
 - **Multi-model comparison**: select up to 5 models using checkboxes or comma-separated IDs. Requests run in parallel with independent result, loading/error, and copy controls. Legacy single-model settings remain compatible.
 - **Connection testing**, loading indicators, timeouts, and actionable authentication, rate-limit, and model error messages.
 - **All-site selection**: HTTP/HTTPS access is declared at installation/update, without per-site enable buttons. Only clicking the translate button sends the selected text.
+
+### Whole-page translation (Google)
+
+Click **Translate entire page** in the toolbar popup, selection panel, or right-click translation panel to open Google website translation in a **new tab**. Both Simple and Full modes use the currently selected target language, synchronized with panels and Settings; source language is automatic. No AI model, API key, or vault unlock is required.
+
+Only a click sends the current page URL (including query parameters) to Google—not your API key, source input, or screenshots. Avoid URLs containing sensitive information. This does not translate in place. Only HTTP/HTTPS addresses are accepted; internal browser pages are unsupported. Private/login-only pages, intranet sites, and some websites may not work; availability and results depend on Google.
+
+### Free text translation (Google)
+
+The toolbar popup, selection panel, and right-click panel have a **Google free translation** icon button (hover for its label). In Full mode, whole-page and free translation sit beside the green Translate button. In Simple mode, they share a row below the language selectors. Clicking opens Google Translate with the source text, selected source language (auto-detect by default), and current target language. No AI model, API key, or vault unlock is required. Results are viewed on Google, not inserted into the extension.
+
+**Enable Google free translation** is on by default in Settings; changes save immediately and sync to open views without affecting AI or whole-page translation. Only an explicit click sends text; images, API keys, and page context are excluded. This entry limits each request to 5,000 characters and rejects longer text rather than truncating it. Use AI translation for image-only input. Text appears in the Google page URL and may remain in browser history, so avoid sensitive content.
 
 ### Simple Translate / Full Translate
 
@@ -220,7 +232,7 @@ Chrome internal pages, the Chrome Web Store, some PDF viewers, and restricted em
 
 1. Reload the extension and refresh open webpages. If Chrome requests confirmation of the new website permissions, allow them.
 2. Select text on any ordinary HTTP/HTTPS webpage. A compact green translate button appears nearby and hides automatically after 2.5 seconds; selecting again restarts the timer. **No per-site setup is needed; selection alone never sends an AI request.**
-3. Click the button to populate the source and translate automatically in the shared toolbar interface. You can edit the source, change the target, translate/copy, switch UI languages, and open settings.
+3. Click the button to populate the source and translate automatically in the shared toolbar interface. You can edit the source, change the target, translate/copy, switch Simple / Full modes, and open settings.
 4. Close using the close button, Esc, or an outside click when unpinned. Superseded requests are cancelled where possible; late responses cannot overwrite newer content or reopen a dismissed panel.
 
 The panel is 400px wide, shrinks on narrow screens, and adapts its height to the content for one or two models. With three or more models, its height fits the first two result cards; the third and subsequent cards are accessed by scrolling. Long translations can also scroll inside their cards. The available viewport height remains the upper limit on small screens, and header controls stay visible. It appears below the selection when possible, otherwise above or clamped inside the viewport. Changing the target language retranslates. Selections exceeding 12,000 characters show an error without sending or silently truncating the text.
@@ -232,19 +244,19 @@ Input/password fields, editable regions, and the panel itself do not trigger sel
 ## Privacy and Security Boundaries
 
 - **API keys are password-encrypted in `chrome.storage.local`, never Chrome-synced.** AES-256-GCM uses a PBKDF2-SHA-256-derived key (600,000 iterations), a random salt and a fresh IV. Passwords and derived keys are never saved. Unlocked API keys live only in trusted-context `chrome.storage.session` until locked or the browser session/extension reload ends. This protects locked persistent data, not a compromised browser or device. Avoid storing highly privileged production keys in shared browsers, and use spending limits and least-privilege credentials.
-- Local storage access is restricted to `TRUSTED_CONTEXTS`, so injected content scripts cannot directly read API keys. Network requests run in the extension background.
-- Text is sent only when you explicitly translate or test a connection. The extension does not automatically scan entire pages, upload webpage URLs, store translation history, or include analytics tracking.
+- Local storage access is restricted to `TRUSTED_CONTEXTS`, so injected content scripts cannot directly read API keys. AI API requests run in the extension background; Google entries open normal browser tabs.
+- AI requests are triggered by translation actions, including Simple-mode edits, language/mode changes and retries; connection tests and model discovery also contact the configured service. Google buttons send the source text or page URL only when clicked. Google navigation URLs may remain in browser history. The extension does not automatically scan entire pages, keep persistent translation history, or include analytics tracking.
 - Your provider may process submitted text and explicitly submitted screenshots according to its own policies. Avoid sending sensitive information. The on-page panel is not a secure interface for displaying confidential content.
-- API requests omit browser cookies and do not follow redirects, preventing credentials from being forwarded to another address.
+- AI API requests omit browser cookies and do not follow redirects, preventing credentials from being forwarded to another address.
 - Translation output is rendered with `textContent`; returned HTML or Markdown is not executed.
-- When context-menu panel injection fails, the selection is temporarily stored in `chrome.storage.session` and deleted after the standalone window reads it. It is not written to persistent history.
+- When context-menu panel injection fails, the selection and original page URL are temporarily stored in `chrome.storage.session` and deleted after the standalone window reads it. It is not written to persistent history.
 - AI output may be inaccurate regardless of prompt design. Verify important information yourself.
 
 ### Permissions
 
 | Permission | Purpose |
 | --- | --- |
-| `storage` | Local settings and temporary selections for restricted-page fallback |
+| `storage` | Local settings and temporary selections/original page URLs for restricted-page fallback |
 | `contextMenus` | Add the selected-text translation command to the context menu |
 | `activeTab` | Read the active page selection and applicable context after user action; capture handlers remain packaged but have no visible entry |
 | `scripting` | Read selected text or inject the translation panel |

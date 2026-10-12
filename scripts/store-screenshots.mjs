@@ -44,6 +44,7 @@ async function capture(page, options) {
   }
 }
 let context;
+const cropBoxes = {};
 try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const extension = path.join(temp, 'extension');
@@ -68,6 +69,10 @@ try {
     let versionStyle;
     try {
       if (page === sample) versionStyle = await ui('.version', 'function(){const old=this.getAttribute("style");this.style.setProperty("visibility","hidden","important");return old}');
+      if (page === sample) {
+        const box = await ui('.translation-view', 'function(){const r=this.getBoundingClientRect();return r.width && r.height ? [Math.max(0,Math.floor(r.left)-8),Math.max(0,Math.floor(r.top)-8),Math.min(innerWidth,Math.ceil(r.right)+8),Math.min(innerHeight,Math.ceil(r.bottom)+8)] : undefined}');
+        if (box) cropBoxes[path.basename(options.path)] = box;
+      }
       await capture(page, options);
     } finally {
       if (page === sample && versionStyle !== undefined) await ui('.version', 'function(old){if(old===null)this.removeAttribute("style");else this.setAttribute("style",old)}', [versionStyle]);
@@ -203,7 +208,7 @@ try {
   await unlock.waitForFunction(() => innerHeight < 125 && document.body.getBoundingClientRect().height <= innerHeight);
   await capturePanelSafe(sample, { path: path.join(output, 'selection-locked.png') });
   assert.deepEqual(errors, []);
-  await writeFile(path.join(output, 'capture-info.json'), JSON.stringify({ version: manifest.version, versionWatermarks: 'hidden', locale, language, method: 'isolated Chromium; saved extension language preference; local mock API', capturedAt: new Date().toISOString() }, null, 2)+'\n');
+  await writeFile(path.join(output, 'capture-info.json'), JSON.stringify({ version: manifest.version, versionWatermarks: 'hidden', locale, language, cropBoxes, method: 'isolated Chromium; saved extension language preference; local mock API', capturedAt: new Date().toISOString() }, null, 2)+'\n');
   console.log('PASS: actual localized popup/settings, Simple/Full, pasted images, context panel, masked inline unlock.');
   console.log('Screenshots:', output);
 } finally {

@@ -174,7 +174,7 @@
     "message": "No automatic page scanning, translation history, or analytics. It works only when you ask."
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.4"
+    "message": "Transight AI · v0.1.5"
   },
   "builtFor": {
     "message": "Built for a world worth reading."
@@ -688,5 +688,50 @@
   },
   "switchSimpleMode": {
     "message": "Switch to Simple Translate"
+  },
+  "translateWebsite": {
+    "message": "Translate entire page"
+  },
+  "websiteTranslationProvider": {
+    "message": "Google · New tab"
+  },
+  "websiteTranslationHint": {
+    "message": "Open Google Translate in a new tab using the selected target language. The current page URL will be sent to Google."
+  },
+  "websiteTranslationUnavailable": {
+    "message": "This page cannot be translated. Open an HTTP or HTTPS webpage first."
+  },
+  "websiteTranslationFailed": {
+    "message": "Could not open Google Translate. Please try again."
+  },
+  "googleFreeTranslation": {
+    "message": "Free translation"
+  },
+  "googleTranslationSetting": {
+    "message": "Enable Google free translation"
+  },
+  "googleTranslationSettingHint": {
+    "message": "On by default and saved immediately. Shows a free text translation button in popups and page panels. Sends text to Google in a new tab only when clicked; no API key required. Does not affect whole-page translation."
+  },
+  "googleTranslationHint": {
+    "message": "Send only the source text (not images) to Google in a new tab, using the selected target language. No API key required."
+  },
+  "googleTranslationSaveFailed": {
+    "message": "Could not save the Google translation preference. Please try again."
+  },
+  "googleTextRequired": {
+    "message": "Enter some source text first. Google free translation does not send attached images."
+  },
+  "googleTextTooLong": {
+    "message": "This Google translation entry supports up to 5,000 characters per request. Shorten the source text and try again."
+  },
+  "googleTranslationDisabled": {
+    "message": "Google free translation is disabled. Enable it in settings."
+  },
+  "googleTranslationFailed": {
+    "message": "Could not open Google Translate. Please try again."
+  },
+  "googleFreeTranslationAction": {
+    "message": "Google free translation (new tab)"
   }
 }

@@ -116,3 +116,24 @@ test('translation mode defaults to full and persists independently without chang
     assert.equal((await getSettings()).translationMode, 'simple');
   } finally { chrome.storage = previous; }
 });
+
+test('Google free translation defaults on and saves independently of AI settings and vault', async () => {
+  const { getSettings, setGoogleTranslationEnabled } = await import('../src/shared/settings.js');
+  const previous = chrome.storage;
+  const data = { settings: config, credentialVault: { ciphertext: 'keep' } };
+  const snapshot = structuredClone(data);
+  chrome.storage = { local: { get: async key => ({ [key]: data[key] }), set: async values => Object.assign(data, values) } };
+  try {
+    assert.equal((await getSettings()).googleTranslationEnabled, true);
+    for (const value of [false, true, false]) {
+      await setGoogleTranslationEnabled(value);
+      assert.equal((await getSettings()).googleTranslationEnabled, value);
+      assert.deepEqual(data.settings, snapshot.settings);
+      assert.deepEqual(data.credentialVault, snapshot.credentialVault);
+    }
+    for (const value of ['false', null, 0]) await assert.rejects(setGoogleTranslationEnabled(value));
+    delete data.settings;
+    await setGoogleTranslationEnabled(true);
+    assert.equal((await getSettings()).googleTranslationEnabled, true);
+  } finally { chrome.storage = previous; }
+});

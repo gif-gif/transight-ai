@@ -1,12 +1,18 @@
-Transight AI — Across languages. Closer in meaning. · v0.1.3
+Transight AI — Across languages. Closer in meaning. · v0.1.5
 
 Translate text and pasted images using your own AI service. Open the toolbar popup, click the icon near selected webpage text, or use the right-click translation command.
+
+GOOGLE TRANSLATION — NO API KEY REQUIRED
+• Translate entire page opens Google's website translator in a new tab, using the current target language and the original page URL. Available in the popup, selection panel, and right-click panel; it does not replace content in the original page.
+• Google free translation opens the source text (up to 5,000 characters), selected source language, and target language in a new Google tab. Results are not inserted into the extension. Images and AI credentials are not sent.
+• Full mode places both icons next to the green Translate button. Simple groups them below the language selectors. Hover for labels. Settings can disable free text translation (on by default), without affecting AI or whole-page translation.
+• Only clicking a Google entry sends its text or URL. These values can appear in browser history; avoid sensitive content and private URLs. Google's policies and service availability apply. Whole-page translation accepts HTTP/HTTPS only; private, login-only, and intranet pages may not work. No Google translation API or availability guarantee is included.
 
 SIMPLE OR FULL — YOUR CHOICE
 • Full Translate is the default: compare up to 5 selected models in independent result cards, with per-model copying and retry.
 • Enable Simple Translate in Settings or use the page panel’s layout icon. It uses only the first selected model and shows editable source text, translation, and source/target language selectors, without a Translate button.
 • In Simple mode, changing either language or pausing typing for about 0.6 seconds starts a new translation. Copy and local speech remain available.
-• Switch back to Full from the same icon. The mode preference is saved; the toolbar popup always keeps the full layout.
+• Switch back to Full from the same icon. The mode preference is saved and synchronized across the toolbar popup, page panels, and Settings.
 
 READ WITHOUT LEAVING THE PAGE
 • Select webpage text to show a compact translation icon near the selection end for about 2.5 seconds. Selecting alone does not upload text; clicking opens translation.
@@ -30,7 +36,7 @@ SET UP YOUR SERVICE
 Five interface languages: English, Simplified Chinese, Traditional Chinese, Japanese, Korean. The interface follows the browser with English fallback. Change it in the popup or Settings; page panels follow that preference without a separate language button. Ten translation languages include Chinese (both scripts), English, Japanese, Korean, French, German, Spanish, Russian, and Portuguese.
 
 PRIVACY AND LIMITATIONS
-No subscription, key, or credits are included. Provider charges may apply; each model receives a separate request. Selected text, images, and applicable prompt/page metadata are sent only to your configured AI endpoint for translation. Editing in Simple mode, switching languages or modes, and retrying may send new requests. Model discovery contacts /models and may send the key; connection testing sends sample text. Canceling cannot retract data already received by the provider.
+No subscription, key, or credits are included. Provider charges may apply; each model receives a separate request. For AI translation, text, images, and applicable prompt/page metadata are sent to your configured AI endpoint. Google entries instead open Google with text or a page URL as described above. Editing in Simple mode, switching languages or modes, and retrying may send new requests. Model discovery contacts /models and may send the key; connection testing sends sample text. Canceling cannot retract data already received by the provider.
 
 Keys are encrypted locally with AES-256-GCM and a password-derived key; unlocked keys are held in restricted session storage. Unlock again after browser restart or extension reload/update. Passwords are not saved or sent to AI providers. There is no Chrome sync, built-in analytics, persistent translation history, or audio storage. Images remain in memory, and speech uses only voices reported as local. Third-party provider policies still apply.
 

@@ -1,6 +1,8 @@
 # Test instructions / 测试说明
 
-核对日期：2026-10-06 · 版本：0.1.4。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
+核对日期：2026-10-11 · 版本：0.1.5。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
+
+Google 两个入口可在没有 AI 配置时检查；自动化素材测试仅拦截导航并使用本机模拟 AI，不代表已验证真实 Google/AI 服务可达。若审核 AI 功能仍需下列测试资料。
 
 ## 提交前必须补齐
 
@@ -17,7 +19,7 @@
 ## 可粘贴的英文审核说明
 
 ```text
-Transight AI 0.1.4 — reviewer instructions
+Transight AI 0.1.5 — reviewer instructions
 
 Purpose: translate user-provided text using the user's configured AI service. No Transight AI account or extension login is required. AI service access is needed for successful translations.
 
@@ -50,7 +52,7 @@ Support contact: <REVIEW_SUPPORT_CONTACT>
 
 10. Optional retry check: open the popup, temporarily disconnect the network, and translate the sample text. Expect an error card. Restore connectivity and click that card's Retry link; only that model is retried. If the key is locked before retrying, unlock within the panel; only that pending model retry should resume. Provider errors, unavailable models, or quota limits may also produce error cards. Do not change real credentials for this check.
 
-11. Simple mode: turn on Use Simple Translate in Settings, then select text and click its icon. Expect only the first selected model, editable source and result, source/target dropdowns, copy and speaker controls, and no Translate button. Edit the source: after about 0.6 seconds without typing, expect a new request; IME composition does not send partial input. Changing either language also translates. Use the layout icon to switch back to Full and restore all selected models; switch back again to verify preference persistence. The toolbar popup always remains Full.
+11. Simple mode: turn on Use Simple Translate in Settings, then select text and click its icon. Expect only the first selected model, editable source and result, source/target dropdowns, copy and speaker controls, and no Translate button. Edit the source: after about 0.6 seconds without typing, expect a new request; IME composition does not send partial input. Changing either language also translates. Use the layout icon to switch back to Full and restore all selected models; switch back again to verify preference persistence. The toolbar popup also supports both modes, synchronized with panels and Settings.
 
 12. Full source language and cancellation: choose an explicit source language from its dropdown and translate. In a page panel, changing source or target language requests translation again. Verify the target preference in Settings and the toolbar popup. For a long-running request, click Cancel next to Translate; a canceled batch must not overwrite newer results. Cancel cannot retract data already received by the provider.
 
@@ -60,9 +62,15 @@ Support contact: <REVIEW_SUPPORT_CONTACT>
 
 15. Selection toggle and prompt: disable selection translation in Settings. Its automatic icon and panel disappear, but toolbar and explicit right-click translation still work. Re-enable it. Edit the system prompt, save, translate, then restore the default and save again. Source/target language, text, available page title/description, and style placeholders are supported. The terms placeholder is empty because no glossary UI is implemented. Keep credentials out of prompts. Default text requests may include page title/description when available; image requests omit them.
 
-Limitations: on-page controls cannot run on chrome:// pages, the Chrome Web Store, or other protected pages. Use manual input in the toolbar popup there. Automatic selection controls are intended for ordinary webpage text, not editable fields. Allow the extension's requested site access for on-page tests. Model discovery depends on provider support; manual model entry is supported. There is no phonetic transcription, full-page translation, or persistent translation-history feature. Speech requires an installed local Chinese voice; foreign-language pronunciation depends on that engine. The popup no longer has a screenshot capture entry; test images by pasting them into Full mode.
+16. Google without AI setup: in a fresh extension profile, type harmless sample text. In Full, find the whole-page and free-text icons beside Translate; in Simple, find them together below the language selectors. Free text opens a Google tab with the exact source and selected source/target languages; it must not prompt for an API key or insert results back into the extension. Empty input and more than 5,000 characters show errors without opening a tab. Attached images are not sent to Google.
 
-Data handling: submitted text, pasted images, applicable prompt/page metadata, and credentials go to the configured endpoint. Editing in Simple mode and changing languages or modes can start new translations. Models receive separate requests; quota usage can therefore increase with the number of selected models. There is no built-in analytics or persistent translation history. API configuration is saved locally; API keys are encrypted with AES-256-GCM and a PBKDF2-SHA-256 password-derived key. Unlocked keys are cached only in restricted session storage. Passwords and derived keys are not persisted.
+17. Whole-page Google translation: on a public HTTP/HTTPS page, test the toolbar, selection panel and right-click panel in both modes. Click the page icon and check the new Google tab uses that original page URL and current target language, even when the selection is in an iframe. A right-click fallback window must use the original page URL, not its extension URL. Protected/non-web URLs show an unavailable message. Login-only/intranet pages may not translate; external service availability is not guaranteed.
+
+18. Free-text toggle: disable Google free translation in Settings. Its icon disappears immediately in open popup/panels, while whole-page and AI translation remain available and ongoing AI work/results stay intact. Reload to confirm persistence, then enable it again. Hover and accessible labels should match each of the five interface languages. Neither Google entry sends content merely by appearing.
+
+Limitations: on-page controls cannot run on chrome:// pages, the Chrome Web Store, or other protected pages. Use manual input in the toolbar popup there. Automatic selection controls are intended for ordinary webpage text, not editable fields. Allow the extension's requested site access for on-page tests. Model discovery depends on provider support; manual model entry is supported. There is no phonetic transcription, in-place webpage translation, or persistent translation history. Google whole-page translation opens a new tab. Speech requires an installed local Chinese voice; foreign-language pronunciation depends on that engine. The popup no longer has a screenshot capture entry; test images by pasting them into Full mode.
+
+Data handling: AI requests send submitted text, pasted images, applicable prompt/page metadata, and credentials to the configured endpoint. Clicking Google free text instead sends source text/languages via a Google navigation URL; whole-page translation sends the original page URL/target. No AI key, password, image or custom prompt is sent to Google. Navigation may be stored in browser history; Google website policies and ordinary cookie behavior apply. Editing in Simple mode and changing languages or modes can start new translations. Models receive separate requests; quota usage can therefore increase with the number of selected models. There is no built-in analytics or persistent translation history. API configuration is saved locally; API keys are encrypted with AES-256-GCM and a PBKDF2-SHA-256 password-derived key. Unlocked keys are cached only in restricted session storage. Passwords and derived keys are not persisted.
 ```
 
 ## 测试服务与凭据维护

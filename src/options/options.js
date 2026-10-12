@@ -1,7 +1,7 @@
 import { DEFAULT_SYSTEM_PROMPT } from '../shared/prompt.js';
 import { t, localizePage, initI18n, onLanguageChanged } from '../shared/i18n.js';
 import { modelConnection } from '../shared/models.js';
-import { fillLanguages, getSettings, setTargetLanguage, setSelectionEnabled, setTranslationMode, permissionOrigin, validateSettings, parseModelInput, MAX_MODELS } from '../shared/settings.js';
+import { fillLanguages, getSettings, setTargetLanguage, setSelectionEnabled, setGoogleTranslationEnabled, setTranslationMode, permissionOrigin, validateSettings, parseModelInput, MAX_MODELS } from '../shared/settings.js';
 await initI18n();
 localizePage();
 const $ = id => document.getElementById(id);
@@ -106,7 +106,7 @@ $('toggle-key').addEventListener('click', () => {
   $('toggle-key').textContent = visible ? t('hide') : t('show');
   $('toggle-key').setAttribute('aria-pressed', String(visible));
 });
-$('settings-form').addEventListener('input', event => { if (!busy && !['target-language', 'selection-enabled', 'translation-mode'].includes(event.target.id)) statusKey('unsaved'); });
+$('settings-form').addEventListener('input', event => { if (!busy && !['target-language', 'selection-enabled', 'translation-mode', 'google-translation-enabled'].includes(event.target.id)) statusKey('unsaved'); });
 $('target-language').addEventListener('change', async () => {
   try {
     await setTargetLanguage($('target-language').value);
@@ -118,6 +118,13 @@ $('selection-enabled').addEventListener('change', async () => {
   try { await setSelectionEnabled(value); $('selection-status').textContent = ''; }
   catch { $('selection-enabled').checked = !value; $('selection-status').textContent = t('selectionSaveFailed'); }
   finally { $('selection-enabled').disabled = false; }
+});
+$('google-translation-enabled').addEventListener('change', async () => {
+  const control = $('google-translation-enabled'), value = control.checked;
+  control.disabled = true;
+  try { await setGoogleTranslationEnabled(value); $('google-translation-setting-status').textContent = ''; }
+  catch { control.checked = !value; $('google-translation-setting-status').textContent = t('googleTranslationSaveFailed'); }
+  finally { control.disabled = false; }
 });
 $('translation-mode').addEventListener('change', async () => {
   const control = $('translation-mode'), value = control.checked;
@@ -182,6 +189,7 @@ async function init() {
   fillLanguages($('target-language'), settings.targetLanguage);
   $('system-prompt').value = settings.systemPrompt || DEFAULT_SYSTEM_PROMPT;
   $('selection-enabled').checked = settings.selectionEnabled;
+  $('google-translation-enabled').checked = settings.googleTranslationEnabled;
   $('translation-mode').checked = settings.translationMode === 'simple';
   $('style').value = settings.style; $('consent').checked = settings.consent;
   savedSettings = settings;
@@ -248,6 +256,7 @@ $('fetch-models').addEventListener('click', async () => {
 window.addEventListener('pagehide', () => modelController?.abort());
 
 chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.googleTranslationEnabled) $('google-translation-enabled').checked = changes.googleTranslationEnabled.newValue !== false;
   if (area === 'local' && changes.translationMode) $('translation-mode').checked = changes.translationMode.newValue === 'simple';
   if (area === 'local' && changes.selectionEnabled) $('selection-enabled').checked = changes.selectionEnabled.newValue !== false;
   if (area === 'local' && (changes.targetLanguagePreference || changes.settings)) {

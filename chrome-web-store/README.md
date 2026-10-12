@@ -1,16 +1,16 @@
 # Transight AI · Chrome Web Store 提交材料
 
-> **安装包状态：已同步当前源码。** `package/transight-0.1.4.zip` 已包含部分网页缺少 `crypto.randomUUID()` 时的划词翻译和语音播报兼容性修复，以及 Simple / Full 模式、源语言选择、目标语言记忆、图片粘贴、本地朗读、划词开关、自定义提示词、五种界面语言及 API Key 密码保护。文件来源、哈希和完整校验结果见 `inventory.json`。本次版本由 **0.1.3** 升至 **0.1.4**，新增 popup Simple / Full 切换并调整顶部按钮顺序，商店截图已重新采集，未向商店提交审核。
+> **材料状态：0.1.5 安装包已按当前源码更新。** 包含 Google 整页翻译、可关闭的免费文字翻译、Full / Simple 入口布局，以及最新提示文案。说明与无版本号截图沿用已同步的材料；完整校验结果见 `inventory.json`。本次未向商店提交审核。
 
-准备日期：2026-10-01；无版本号截图更新：2026-10-10；安装包更新：2026-10-10。当前提交版本：**0.1.4**。
+准备日期：2026-10-01；说明与无版本号截图更新：2026-10-11；安装包更新：2026-10-12。当前提交版本：**0.1.5**。
 
-本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.4.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip`、`transight-0.1.1.zip`、`transight-0.1.2.zip` 和 `transight-0.1.3.zip` 仅作历史保留；若商店已接收过 0.1.4，提交下一次更新前须提升源码版本再打包。
+本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.5.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip`、`transight-0.1.1.zip`、`transight-0.1.2.zip`、`transight-0.1.3.zip` 和 `transight-0.1.4.zip` 仅作历史保留；若商店已接收过 0.1.5，提交下一次更新前须提升源码版本再打包。
 
 ## 逐项上传清单
 
 | 项目 | 材料 | 说明 |
 | --- | --- | --- |
-| 插件安装包 | `package/transight-0.1.4.zip` | **已同步请求 ID 兼容性修复**；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
+| 插件安装包 | `package/transight-0.1.5.zip` | 已包含当前源码的 Google 功能和提示文案；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
 | 名称 / 简短描述 / 版本 | ZIP 内 `manifest.json` 和 `_locales/`；便于复制的汇总见 `listing/metadata.json` | 沿用现有版本和国际化配置，没有创建重复 manifest |
 | 英文详细介绍 | `listing/description.en.txt` | 可直接粘贴到英文商品介绍 |
 | 简体中文详细介绍 | `listing/description.zh-CN.txt` | 可直接粘贴到简体中文商品介绍 |
@@ -36,7 +36,7 @@
 - 英文名称：**Transight AI**。
 - 简体中文名称：**译见 AI · 随手翻译**。
 - 繁体中文名称：**譯見 AI · 隨手翻譯**。
-- 版本：**0.1.4**。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
+- 版本：**0.1.5**。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
 - 英文简短描述：**99** 个字符；简体中文及繁体中文简短描述各 **35** 个字符，日语与韩语长度见 `listing/metadata.json`；五种语言均在 132 字符以内。
 - `manifest.json` 中的 `__MSG_extensionName__` / `__MSG_extensionDescription__` 是现有国际化引用；对应内容已随 `_locales/` 打包，不需要改成固定英文。
 
@@ -54,7 +54,7 @@
 
 ## 素材复用说明
 
-复用现有品牌素材和截图排版，使用五种语言的真实浏览器测试截图；本次重新采集五语言界面，并增加 Simple 精简模式和最新翻译偏好展示。没有重新设计图标，也没有生成虚构 UI。
+复用现有品牌素材和截图排版，使用五种语言的真实浏览器测试截图；本次重新采集五语言界面，展示 Full 翻译按钮旁的 Google 入口、Simple 模式的并排入口和 Google 免费文字开关。没有重新设计图标，也没有生成虚构 UI。
 
 - 图标来自现有 `assets/icon-128.png`。仅为满足商店的留白规范缩放原图，没有重画。提交 ZIP 内的 `assets/icon-128.png` 使用此商店版；源文件和 `dist/` 的开发图标不变，16/32/48px 工具栏图标不变。
 - 多模型截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/popup-multi.png`。
@@ -69,9 +69,9 @@
 
 每种语言保留 5 张（共 25 张），全部为 1280 × 800 RGB PNG；同一顺序对应：
 
-1. `01-multi-model.png`：Full 多模型译文，源语言下拉框、复制和本地朗读；顶部依次为模式切换、显示语言和设置。
-2. `02-on-page.png`：Simple 可编辑原文与单模型译文；无翻译按钮，顶部图标切换 Full。
-3. `03-settings.png`：目标语言、划词开关、Simple / Full 模式和自定义系统提示词。
+1. `01-multi-model.png`：Full 多模型译文，源语言下拉框、复制和本地朗读；翻译按钮旁并排显示 Google 整页与免费文字入口，顶部依次为模式切换、显示语言和设置。
+2. `02-on-page.png`：Simple 可编辑原文与单模型译文；无翻译按钮，Google 两个入口在语言选择下方并排显示，顶部图标切换 Full。
+3. `03-settings.png`：目标语言、划词开关、Google 免费文字翻译开关、Simple / Full 模式和自定义系统提示词。
 4. `04-inline-unlock.png`：浮窗内紧凑解锁，测试密码遮挡。
 5. `05-selection-trigger.png`：选中文字后，末尾附近显示约 2.5 秒的翻译图标。
 
@@ -87,7 +87,7 @@ README 另展示图片粘贴和单行缩略图，不再额外增加商店截图�
 
 1. 开发者账号、注册及后台要求的身份/联系信息。
 2. 可公开访问的隐私政策地址，以及你希望公开的支持邮箱或支持页面。当前没有提供这些信息，因此没有编造 URL、开发者身份或联系方式。
-3. 在 Privacy practices 栏目中如实说明：用户提交的文本、图片及适用的提示词/网页标题和 description 元数据发送到其配置的 AI 服务；API Key 加密保存在浏览器本地，解锁后仅在受限会话存储中缓存；多模型会分别请求，第三方服务可能收费。不要因为没有自建服务器，就宣称“数据从不离开设备”。
+3. 在 Privacy practices 栏目中如实说明：用户提交的文本、图片及适用的提示词/网页标题和 description 元数据发送到其配置的 AI 服务；API Key 加密保存在浏览器本地，解锁后仅在受限会话存储中缓存；多模型会分别请求，第三方服务可能收费；点击 Google 入口会将原文或原网页 URL 传给 Google，新标签页链接可能保留在浏览器历史记录。不要因为没有自建服务器，就宣称“数据从不离开设备”。
 4. 核对全部 HTTP/HTTPS 网站访问权限的理由：普通网页划词翻译，以及访问用户自定义的 AI API。可参考 `dashboard/02-privacy-practices.md` 的英文权限说明；它们是提交辅助草稿，需按实际后台问题确认。
 5. 如审核要求测试方法，提供你认可的可用测试服务与必要说明；不要把真实密钥放进商店图片、公开介绍或安装包。
 6. 上传后检查图片裁切和本地化展示，确认版本号和商品名称后再提交审核。
@@ -96,7 +96,7 @@ README 另展示图片粘贴和单行缩略图，不再额外增加商店截图�
 
 单项权限理由已拆分到 [权限申请说明目录](permission-justifications/README.md)：storage、contextMenus、activeTab、scripting、主机权限、tts，分别提供中英文可复制文案和注意事项。
 
-以下四份文件按后台栏目组织：中文填写指引 + 可粘贴的英文申报/审核文案，复用已有介绍与图片，不重复生成素材。核对日期：**2026-10-06**。
+以下四份文件按后台栏目组织：中文填写指引 + 可粘贴的英文申报/审核文案，复用已有介绍与图片，不重复生成素材。源码与材料同步日期：**2026-10-11**。
 
 | 后台栏目 | 文件 | 包含内容 |
 | --- | --- | --- |
@@ -108,7 +108,7 @@ README 另展示图片粘贴和单行缩略图，不再额外增加商店截图�
 **当前仍需开发者完成，不能直接视为可提交状态：**
 
 - 提供公开隐私政策 URL、运营者与支持联系渠道；许可证不等于隐私政策。
-- 确认数据类别、最小权限和 Limited use 各项声明。当前会处理网站内容、API Key，并在本地读取标签页 URL/来源，不能申报为“不处理数据”。
+- 确认数据类别、最小权限和 Limited use 各项声明。当前会处理网站内容、API Key，读取标签页 URL/来源，并在用户点击整页翻译时将原网页 URL 传给 Google，不能申报为“不处理数据”。
 - API Key 已改为密码加密保存；核对解锁、锁定、旧数据迁移及隐私声明。另需复核模型发现前的凭据使用告知。
 - 确认 Public / All regions，或指定需排除的地区。
 - 提供审核可用的 AI 服务、模型 ID、专用凭据、额度与有效期；真实凭据只填审核后台，**禁止提交至公开仓库**。
@@ -164,4 +164,4 @@ python3 chrome-web-store/tools/validate.py
 - 商店商品信息、分类和语言：https://developer.chrome.com/docs/webstore/cws-dashboard-listing
 - 上传与发布流程：https://developer.chrome.com/docs/webstore/publish
 
-仅更新商店截图时，先用 `scripts/store-screenshots.mjs` 采集五种语言，再运行 `python3 chrome-web-store/tools/prepare-images.py --store-only` 和 `python3 chrome-web-store/tools/validate.py`；不会覆盖 README 截图。
+仅更新商店截图时，先用 `scripts/store-screenshots.mjs` 采集五种语言，再运行 `python3 chrome-web-store/tools/prepare-images.py --store-only` 和 `python3 chrome-web-store/tools/validate.py --assets-only`；不会覆盖 README 截图。

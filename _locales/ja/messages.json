@@ -174,7 +174,7 @@
     "message": "ページの自動スキャン、翻訳履歴、アクセス解析はありません。操作したときだけ動作します。"
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.4"
+    "message": "Transight AI · v0.1.5"
   },
   "builtFor": {
     "message": "読みたい世界を、もっと身近に。"
@@ -688,5 +688,50 @@
   },
   "switchSimpleMode": {
     "message": "Simple Translate に切り替え"
+  },
+  "translateWebsite": {
+    "message": "ページ全体を翻訳"
+  },
+  "websiteTranslationProvider": {
+    "message": "Google · 新しいタブ"
+  },
+  "websiteTranslationHint": {
+    "message": "選択中の翻訳先言語で Google 翻訳を新しいタブに開きます。現在のページの URL が Google に送信されます。"
+  },
+  "websiteTranslationUnavailable": {
+    "message": "このページは翻訳できません。HTTP または HTTPS のウェブページを開いてください。"
+  },
+  "websiteTranslationFailed": {
+    "message": "Google 翻訳を開けませんでした。もう一度お試しください。"
+  },
+  "googleFreeTranslation": {
+    "message": "無料翻訳"
+  },
+  "googleTranslationSetting": {
+    "message": "Google 無料翻訳を有効にする"
+  },
+  "googleTranslationSettingHint": {
+    "message": "初期設定はオンで、変更はすぐに保存されます。ポップアップとページ内パネルに無料翻訳ボタンを表示します。クリックしたときだけ原文を Google に送り、新しいタブで開きます。API キーは不要です。ページ全体の翻訳には影響しません。"
+  },
+  "googleTranslationHint": {
+    "message": "原文のテキストのみ（画像は含みません）を Google に送り、新しいタブで選択中の言語に翻訳します。API キーは不要です。"
+  },
+  "googleTranslationSaveFailed": {
+    "message": "Google 翻訳の設定を保存できませんでした。もう一度お試しください。"
+  },
+  "googleTextRequired": {
+    "message": "まず原文を入力してください。Google 無料翻訳では添付画像を送信しません。"
+  },
+  "googleTextTooLong": {
+    "message": "この Google 翻訳ボタンで送信できる原文は 1 回につき 5,000 文字までです。原文を短くしてお試しください。"
+  },
+  "googleTranslationDisabled": {
+    "message": "Google 無料翻訳は無効です。設定で有効にしてください。"
+  },
+  "googleTranslationFailed": {
+    "message": "Google 翻訳を開けませんでした。もう一度お試しください。"
+  },
+  "googleFreeTranslationAction": {
+    "message": "Google 無料翻訳（新しいタブ）"
   }
 }

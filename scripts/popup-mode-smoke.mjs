@@ -98,6 +98,17 @@ try {
   assert.equal(requests.length, selectedStart + 1);
   assert.equal(await selected.locator('#source').inputValue(), 'Selected webpage text.');
 
+  // Google-entry visibility is independent of the AI request/result lifecycle.
+  const beforeGoogleToggle = requests.length;
+  const beforeGoogleResult = await selected.locator('.result').innerText();
+  for (const googleTranslationEnabled of [false, true]) {
+    await worker.evaluate(googleTranslationEnabled => chrome.storage.local.set({ googleTranslationEnabled }), googleTranslationEnabled);
+    await selected.locator('#google-translation').waitFor({ state: googleTranslationEnabled ? 'visible' : 'hidden' });
+    await selected.waitForTimeout(700);
+    assert.equal(requests.length, beforeGoogleToggle, 'Google preference does not retranslate with AI');
+    assert.equal(await selected.locator('.result').innerText(), beforeGoogleResult, 'existing AI result remains intact');
+  }
+
   // All five languages retain the mode icon and fit a 400px toolbar viewport.
   const output = path.join(root, 'artifacts/popup-modes'); await mkdir(output, { recursive: true });
   for (const language of ['en', 'zh-CN', 'zh-TW', 'ja', 'ko']) {

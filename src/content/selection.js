@@ -217,6 +217,14 @@
     const updatePinLocale = installPin();
     view = new TransightTranslationView(panel, {
       selectionMode: true,
+      async websiteTranslate(targetLanguage) {
+        const response = await send({ type: 'SELECTION_WEBSITE_TRANSLATE', targetLanguage });
+        if (!response?.ok) throw new Error(response?.error || 'websiteTranslationFailed');
+      },
+      async googleTranslate(request) {
+        const response = await send({ type: 'SELECTION_GOOGLE_TRANSLATE', ...request });
+        if (!response?.ok) throw new Error(response?.error || 'googleTranslationFailed');
+      },
       async setTranslationMode(value) {
         const response = await send({ type: 'SELECTION_MODE', value });
         if (!response?.ok) throw new Error();

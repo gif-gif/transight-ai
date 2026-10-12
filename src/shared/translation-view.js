@@ -12,6 +12,7 @@
     const supportsModes = typeof adapter.setTranslationMode === 'function';
     let locale = initialLocale, busy = false, disposed = false, revision = 0;
     let entries = [], statusState, configured = false;
+    let googleOpening = false, websiteOpening = false;
     let editVersion = 0, vaultState, waitingForUnlock = false, pendingRetry = null;
     let speakingEntry, speechId, autoTranslateTimer, composing = false;
     let inputImages = [], imageGeneration = 0, importingImages = 0, imageQueue = Promise.resolve();
@@ -92,6 +93,10 @@
     }
     function renderMode() {
       container.classList.toggle('simple-translate', Boolean(isSimple()));
+      const externalActions = $('external-translation-actions');
+      const actionSlot = isSimple() ? $('simple-external-actions') : root.querySelector('.translation-actions');
+      if (externalActions && actionSlot && externalActions.parentElement !== actionSlot) actionSlot.append(externalActions);
+      if ($('website-translation')) $('website-translation').hidden = typeof adapter.websiteTranslate !== 'function';
       $('source-language').hidden = false;
       root.querySelector('.ui-language-control').hidden = Boolean(adapter.selectionMode);
       $('source').readOnly = false;
@@ -324,9 +329,12 @@
     }
     function applySettings(next, updateTarget = true) {
       const modeChanged = supportsModes && settings.translationMode !== next.translationMode;
-      const changed = JSON.stringify(settings) !== JSON.stringify(next);
+      // Toggling the independent Google entry must not cancel/restart an AI request.
+      const changed = JSON.stringify({ ...settings, googleTranslationEnabled: undefined }) !== JSON.stringify({ ...next, googleTranslationEnabled: undefined });
       if (changed) cancel();
-      settings = next; renderMode(); configured = Boolean(modelIds().length && next.consent); $('setup').hidden = configured;
+      settings = next;
+      if ($('google-translation')) $('google-translation').hidden = next.googleTranslationEnabled === false || typeof adapter.googleTranslate !== 'function';
+      renderMode(); configured = Boolean(modelIds().length && next.consent); $('setup').hidden = configured;
       if (changed || !entries.length) { resetResult(); status(''); }
       if (updateTarget && !busy) $('target').value = next.targetLanguage;
       if (changed && (isSimple() || modeChanged) && ($('source').value.trim() || inputImages.length)) translate();
@@ -450,6 +458,36 @@
       if (!disposed && current === revision && (isSimple() || adapter.autoTranslateTarget)) translate();
     });
     listen($('clear'), 'click', () => { input(''); $('source').focus(); });
+    if ($('translate-website')) listen($('translate-website'), 'click', async () => {
+      if (disposed || websiteOpening || !adapter.websiteTranslate) return;
+      const button = $('translate-website'), message = $('website-translation-status');
+      const target = $('target').value;
+      websiteOpening = true; button.disabled = true; button.setAttribute('aria-busy', 'true'); message.hidden = true;
+      try { await adapter.websiteTranslate(target); }
+      catch (error) {
+        if (disposed) return;
+        const key = ['websiteTranslationUnavailable', 'invalidTarget'].includes(error?.message) ? error.message : 'websiteTranslationFailed';
+        message.dataset.i18n = key; message.textContent = t(key); message.hidden = false;
+      } finally {
+        websiteOpening = false;
+        if (!disposed) { button.disabled = false; button.removeAttribute('aria-busy'); }
+      }
+    });
+    if ($('translate-google')) listen($('translate-google'), 'click', async () => {
+      if (disposed || googleOpening || settings.googleTranslationEnabled === false || !adapter.googleTranslate) return;
+      const button = $('translate-google'), message = $('google-translation-status');
+      const request = { text: $('source').value, targetLanguage: $('target').value, sourceLanguage: $('source-language').value, uiLanguage: locale.language };
+      googleOpening = true; button.disabled = true; button.setAttribute('aria-busy', 'true'); message.hidden = true;
+      try { await adapter.googleTranslate(request); }
+      catch (error) {
+        if (disposed) return;
+        const key = ['googleTextRequired', 'googleTextTooLong', 'googleTranslationDisabled', 'invalidTarget'].includes(error?.message) ? error.message : 'googleTranslationFailed';
+        message.dataset.i18n = key; message.textContent = t(key); message.hidden = false;
+      } finally {
+        googleOpening = false;
+        if (!disposed) { button.disabled = false; button.setAttribute('aria-busy', 'false'); }
+      }
+    });
     listen($('translate'), 'click', translate);
     listen($('cancel-translation'), 'click', cancelTranslation);
     listen(root, 'click', event => {

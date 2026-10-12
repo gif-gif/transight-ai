@@ -12,7 +12,7 @@ test('selection site grants are exact HTTP(S) host patterns, never privileged sc
   for (const url of ['chrome://extensions', 'file:///secret', 'about:blank', 'data:text/plain,hello', 'invalid']) assert.equal(sitePattern(url), null);
 });
 test('only explicitly whitelisted configuration crosses into a webpage', () => {
-  assert.deepEqual(publicSettings({ apiKey: 'SECRET', baseUrl: 'https://private.example', model: 'test', consent: true, targetLanguage: 'ja', futureSecret: 'SECRET', systemPrompt: 'PRIVATE TEMPLATE' }), { model: 'test', models: ['test'], consent: true, targetLanguage: 'ja', selectionEnabled: true, translationMode: 'full' });
+  assert.deepEqual(publicSettings({ apiKey: 'SECRET', baseUrl: 'https://private.example', model: 'test', consent: true, targetLanguage: 'ja', futureSecret: 'SECRET', systemPrompt: 'PRIVATE TEMPLATE' }), { model: 'test', models: ['test'], consent: true, targetLanguage: 'ja', googleTranslationEnabled: true, selectionEnabled: true, translationMode: 'full' });
 });
 test('global selection access, legacy migration, ordering and permission revocation', async () => {
   const event = () => ({ listeners: [], addListener(fn) { this.listeners.push(fn); }, fire(...args) { this.listeners.forEach(fn => fn(...args)); } });
@@ -50,6 +50,38 @@ test('global selection access, legacy migration, ordering and permission revocat
   assert.equal(await message({ type: 'SELECTION_SITE_SET', tabId: 7, enabled: true }, extension), null);
   assert.equal(data.selectionOrigins, undefined);
   assert.deepEqual([...registered.keys()], ['unrelated'], 'only obsolete selection registrations are removed');
+  grants.add('https://reading.example/*');
+  const googleTabs = [];
+  chrome.tabs.create = async options => googleTabs.push(options);
+  const websiteRequest = { type: 'SELECTION_WEBSITE_TRANSLATE', targetLanguage: 'ja', pageUrl: 'https://untrusted.example/' };
+  assert.equal(await message(websiteRequest, extension), null);
+  assert.equal(await message(websiteRequest, { ...sender, id: 'another-extension' }), null);
+  assert.equal((await message(websiteRequest, { ...sender, frameId: 2, url: 'https://reading.example/frame' })).ok, true);
+  assert.equal(new URL(googleTabs[0].url).searchParams.get('u'), tab.url, 'uses sender top-level page, not iframe or payload');
+  assert.equal(new URL(googleTabs[0].url).searchParams.get('tl'), 'ja');
+  assert.equal((await message({ ...websiteRequest, targetLanguage: 'invalid' })).error, 'invalidTarget');
+  assert.equal((await message(websiteRequest, { ...sender, tab: { ...tab, url: 'chrome://settings' } })).error, 'websiteTranslationUnavailable');
+  grants.clear();
+  assert.equal((await message(websiteRequest)).ok, false);
+  assert.equal(googleTabs.length, 1);
+  googleTabs.length = 0;
+  grants.add('https://reading.example/*');
+  const googleRequest = { type: 'SELECTION_GOOGLE_TRANSLATE', text: 'selected & text', targetLanguage: 'ko', sourceLanguage: 'auto' };
+  assert.equal(await message(googleRequest, extension), null, 'page-only message rejects extension UI senders');
+  assert.equal(await message(googleRequest, { ...sender, id: 'another-extension' }), null);
+  assert.equal((await message(googleRequest)).ok, true);
+  assert.equal(new URL(googleTabs[0].url).searchParams.get('text'), googleRequest.text);
+  assert.equal(new URL(googleTabs[0].url).searchParams.get('tl'), 'ko');
+  data.googleTranslationEnabled = false;
+  assert.equal((await message(googleRequest)).error, 'googleTranslationDisabled');
+  chrome.storage.onChanged.fire({ googleTranslationEnabled: { newValue: false } }, 'local');
+  await tick();
+  assert.equal(messages.at(-1).settings.googleTranslationEnabled, false);
+  data.googleTranslationEnabled = true;
+  assert.equal((await message({ ...googleRequest, text: '' })).error, 'googleTextRequired');
+  grants.clear();
+  assert.equal((await message(googleRequest)).ok, false, 'revoked website permissions forbid Google opening too');
+  assert.equal(googleTabs.length, 1);
   grants.add('https://reading.example/*');
   const beforeTargetChange = structuredClone(data.settings);
   assert.equal((await message({ type: 'SELECTION_MODE', value: 'simple' })).ok, true);

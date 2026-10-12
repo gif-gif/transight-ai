@@ -1,4 +1,6 @@
-import { UI_LANGUAGES, t, localeSnapshot, setLanguagePreference, onLanguageChanged } from './i18n.js';
+import { openPageTranslation } from './website-translation.js';
+import { openGoogleTextTranslation } from './google-translation.js';
+import { UI_LANGUAGES, t, getDisplayLanguage, localeSnapshot, setLanguagePreference, onLanguageChanged } from './i18n.js';
 import { getSettings, selectedModels, setTargetLanguage, setTranslationMode } from './settings.js';
 
 export function sitePattern(url) {
@@ -6,7 +8,7 @@ export function sitePattern(url) {
   catch { return null; }
 }
 export function publicSettings(settings) {
-  return { model: settings.model, models: selectedModels(settings), consent: settings.consent === true, targetLanguage: settings.targetLanguage, selectionEnabled: settings.selectionEnabled !== false, translationMode: settings.translationMode === 'simple' ? 'simple' : 'full' };
+  return { model: settings.model, models: selectedModels(settings), consent: settings.consent === true, targetLanguage: settings.targetLanguage, googleTranslationEnabled: settings.googleTranslationEnabled !== false, selectionEnabled: settings.selectionEnabled !== false, translationMode: settings.translationMode === 'simple' ? 'simple' : 'full' };
 }
 export function installSelection(ready, runTranslation, vaultStatus = async () => ({ state: 'empty' })) {
   const jobs = new Map();
@@ -75,6 +77,11 @@ export function installSelection(ready, runTranslation, vaultStatus = async () =
           await setTargetLanguage(message.value); return {};
         case 'SELECTION_MODE':
           await setTranslationMode(message.value); return {};
+        case 'SELECTION_WEBSITE_TRANSLATE':
+          // Translate the sender's top-level tab, not an untrusted payload or whichever tab is now active.
+          await openPageTranslation(sender.tab.url, message.targetLanguage); return {};
+        case 'SELECTION_GOOGLE_TRANSLATE':
+          await openGoogleTextTranslation({ text: message.text, targetLanguage: message.targetLanguage, sourceLanguage: message.sourceLanguage, uiLanguage: getDisplayLanguage() }); return {};
         case 'SELECTION_OPTIONS': await chrome.runtime.openOptionsPage(); return {};
         case 'SELECTION_CANCEL': return {};
         case 'SELECTION_TRANSLATE': {
@@ -90,7 +97,7 @@ export function installSelection(ready, runTranslation, vaultStatus = async () =
   chrome.permissions.onRemoved.addListener(() => serial(reconcile).catch(console.error));
   chrome.runtime.onStartup.addListener(() => serial(reconcile).catch(console.error));
   chrome.runtime.onInstalled.addListener(() => serial(reconcile).catch(console.error));
-  chrome.storage.onChanged.addListener((changes, area) => { if (area === 'local' && (changes.settings || changes.targetLanguagePreference || changes.selectionEnabled || changes.translationMode)) ready.then(async () => broadcast('SELECTION_SETTINGS', { settings: publicSettings(await getSettings()) })).catch(() => {}); });
+  chrome.storage.onChanged.addListener((changes, area) => { if (area === 'local' && (changes.settings || changes.targetLanguagePreference || changes.selectionEnabled || changes.translationMode || changes.googleTranslationEnabled)) ready.then(async () => broadcast('SELECTION_SETTINGS', { settings: publicSettings(await getSettings()) })).catch(() => {}); });
   chrome.storage.onChanged.addListener((changes, area) => {
     if ((area === 'session' && changes.credentialSession) || (area === 'local' && (changes.credentialVault || changes.settings))) {
       ready.then(async () => broadcast('SELECTION_VAULT', { vault: await vaultStatus() })).catch(() => {});

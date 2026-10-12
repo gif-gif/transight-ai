@@ -13,7 +13,7 @@ export async function openContextTranslation(info, tab) {
     if (!response?.ok) throw new Error('Floating view unavailable');
   } catch {
     // Restricted pages/frames still use the shared popup in a standalone window.
-    await chrome.storage.session.set({ contextDraft: info.selectionText });
+    await chrome.storage.session.set({ contextDraft: info.selectionText, contextPageUrl: tab.url || info.pageUrl || '' });
     await chrome.windows.create({
       url: chrome.runtime.getURL('src/popup/popup.html?fallback=1'),
       type: 'popup', width: 400, height: 740
