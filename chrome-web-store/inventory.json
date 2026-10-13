@@ -1,5 +1,5 @@
 {
-  "prepared_date": "2026-10-12",
+  "prepared_date": "2026-10-13",
   "version": "0.1.5",
   "archive": "package/transight-0.1.5.zip",
   "checks": {
@@ -37,13 +37,13 @@
   "files": [
     {
       "path": "README.md",
-      "bytes": 15344,
-      "sha256": "056875b08f4023dc8bccc22248577db9d37e1a55f7c3ff2cc1df38bd005cc61e"
+      "bytes": 15640,
+      "sha256": "041c18fd0548bd735aea8b04658cadaa8cf61242d712aa1f6bace40cb0d4290e"
     },
     {
       "path": "dashboard/01-store-listing.md",
-      "bytes": 5036,
-      "sha256": "37b4350920b8800957f7d401a6ec371d763c86c6d56493a1ebee14ed0a448c00"
+      "bytes": 5238,
+      "sha256": "c649484fde85f21a317b82c0bb96d4e5cb714b305c3c8a532af9136d08958004"
     },
     {
       "path": "dashboard/02-privacy-practices.md",
@@ -164,6 +164,43 @@
       "sha256": "a2040b2b062d1e84472aca4b791d28d2191b2604cf474f3e3b4aea64e7986870"
     },
     {
+      "path": "promo/README.md",
+      "bytes": 1442,
+      "sha256": "12a87e61e6ddbda5d4632efc25707422db81771a8c09d5bcee08abba178aeabc"
+    },
+    {
+      "path": "promo/ja/marquee-1400x560.png",
+      "bytes": 124788,
+      "sha256": "d005987b143eaf61572727cf34a7dfdb394962fdfb2f27d6467005eacdbc3a53",
+      "width": 1400,
+      "height": 560,
+      "mode": "RGB"
+    },
+    {
+      "path": "promo/ja/small-440x280.png",
+      "bytes": 43855,
+      "sha256": "9d311fb9234693205340713bbf750852a4f6fd4b3a915d85458172cf97b4db2c",
+      "width": 440,
+      "height": 280,
+      "mode": "RGB"
+    },
+    {
+      "path": "promo/ko/marquee-1400x560.png",
+      "bytes": 88241,
+      "sha256": "531c17d9681abf164843f13dd619328306e98343c6c70ab5cba49fa86a08e030",
+      "width": 1400,
+      "height": 560,
+      "mode": "RGB"
+    },
+    {
+      "path": "promo/ko/small-440x280.png",
+      "bytes": 33173,
+      "sha256": "60effbc932d8e1f86e38f9f7d898eea7af9bede313e65d32380bcf6b000603bb",
+      "width": 440,
+      "height": 280,
+      "mode": "RGB"
+    },
+    {
       "path": "promo/marquee-1400x560.png",
       "bytes": 106441,
       "sha256": "80b3d4661df8e6ca43167621a2425aed2d09a549fce714ff2b637c6581f00a0d",
@@ -175,6 +212,38 @@
       "path": "promo/small-440x280.png",
       "bytes": 39743,
       "sha256": "b1880c79c096dca287eb4178d2ccf2423778df70acc27db61211ab11e813bef3",
+      "width": 440,
+      "height": 280,
+      "mode": "RGB"
+    },
+    {
+      "path": "promo/zh-CN/marquee-1400x560.png",
+      "bytes": 94598,
+      "sha256": "6a54790d07db0c59bf6daa02fee93b2c3fedff6148d8192c47b833fc8f3cd826",
+      "width": 1400,
+      "height": 560,
+      "mode": "RGB"
+    },
+    {
+      "path": "promo/zh-CN/small-440x280.png",
+      "bytes": 34584,
+      "sha256": "a608c6edc8bc62703861b4e4415b05294b054a69d3f41db68f6d017956d2b673",
+      "width": 440,
+      "height": 280,
+      "mode": "RGB"
+    },
+    {
+      "path": "promo/zh-TW/marquee-1400x560.png",
+      "bytes": 103173,
+      "sha256": "64826f9b3fd4ee45b9f4cf725676fc7c7cf0569960087310e7c28135813712d4",
+      "width": 1400,
+      "height": 560,
+      "mode": "RGB"
+    },
+    {
+      "path": "promo/zh-TW/small-440x280.png",
+      "bytes": 36828,
+      "sha256": "a0b559c6c46321e8e6c5dc67d4b76341eea1af21fbd04b390dd68f2756ab2be6",
       "width": 440,
       "height": 280,
       "mode": "RGB"
@@ -385,9 +454,14 @@
       "sha256": "f34ae46af993b4a9ce969c6ff3b0a5ece4c82077c56fed7c52d8c069c07e76c9"
     },
     {
+      "path": "tools/prepare-promos.py",
+      "bytes": 4253,
+      "sha256": "49188a7313a2c1cbd5d9eb27a7019a3d8074755ac63bec38338e5b2a24aff3e7"
+    },
+    {
       "path": "tools/validate.py",
-      "bytes": 8203,
-      "sha256": "5213b08fa3825074d5581afed95124a28ba9327e2b7c8901411f970e49f8b5c8"
+      "bytes": 8562,
+      "sha256": "9cb03695c9b05b5ec8e8e479a5c7eed7cedd6daea57403c94ce65fea135468a4"
     }
   ]
 }

@@ -23,8 +23,8 @@
 | 繁体中文截图 | `screenshots/zh-TW/01-multi-model.png` 至 `05-selection-trigger.png` | 5 张，每张 1280×800，RGB PNG |
 | 日语截图 | `screenshots/ja/01-multi-model.png` 至 `05-selection-trigger.png` | 5 张，每张 1280×800，RGB PNG |
 | 韩语截图 | `screenshots/ko/01-multi-model.png` 至 `05-selection-trigger.png` | 5 张，每张 1280×800，RGB PNG |
-| 小型宣传图 | `promo/small-440x280.png` | 440×280，RGB PNG，英文通用品牌图 |
-| 大型宣传图 | `promo/marquee-1400x560.png` | 1400×560，RGB PNG，可选上传 |
+| 小型宣传图 | `promo/small-440x280.png` | 440×280，RGB PNG；五语言路径见 [宣传图目录](promo/README.md) |
+| 大型宣传图 | `promo/marquee-1400x560.png` | 1400×560，RGB PNG，可选上传；五语言路径见 [宣传图目录](promo/README.md) |
 | 文件与来源清单 | `inventory.json` | 文件尺寸、SHA-256、素材来源及 ZIP 检查结果 |
 
 ## 商品信息建议
@@ -63,7 +63,7 @@
 - 浮窗内解锁截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-locked.png`，展示最新紧凑解锁表单。
 - 原截图不是商店规定尺寸，因此只对真实截图做裁切、等比缩放和 1280×800 全幅介绍排版；无外部透明边框或信箱式黑边，不修改界面文字、不伪造模型结果。
 - 截图沿用本地测试服务与示例模型；图中已注明测试回复，不代表实际模型的翻译质量。设置截图不展示已保存的 Key，解锁图中的测试密码已遮挡，未包含实际凭据。
-- 两张宣传图沿用此前准备的必要/可选素材，复用现有图标、绿色品牌风格和英文品牌名称。官方文档说明宣传图目前不按语言本地化，因此仅准备一套英文图，不重复制作中文宣传图。
+- 宣传图已于 2026-10-12 补齐五种语言，每种提供 440×280 和 1400×560 两种尺寸。英文复用 `promo/` 根目录现有两张图片，简体中文、繁体中文、日语、韩语分别放在 `promo/{zh-CN,zh-TW,ja,ko}/`，合计 10 张。沿用现有图标、绿色风格和 Transight AI 品牌名，无版本号水印；根据后台实际上传栏位选择使用。路径及单独生成命令见 [宣传图说明](promo/README.md)。
 
 ## 本次截图与功能同步
 
