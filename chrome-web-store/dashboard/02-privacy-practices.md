@@ -1,11 +1,11 @@
 # Privacy practices / 隐私权规范填写指南
 
-核对日期：2026-10-11 · 基于当前 manifest 与源码。英文代码块可粘贴至相应栏位；中文说明用于开发者核对，**不是已通过审核或合规保证**。实现改变后必须同步修改申报与隐私政策。
+核对日期：2026-10-14 · 基于当前 manifest 与源码。英文代码块可粘贴至相应栏位；中文说明用于开发者核对，**不是已通过审核或合规保证**。实现改变后必须同步修改申报与隐私政策。
 
 ## 1. Single purpose / 单一用途
 
 ```text
-Help users understand content across languages: translate typed/selected text or pasted images with a configured AI service, optionally compare model results, or explicitly open Google Translate for source text or an entire webpage in a new tab.
+Help users understand content across languages: translate typed/selected text or pasted images with a configured AI service, optionally compare model results, translate ordinary webpage text in place after explicit confirmation, or open Google Translate for text or a webpage in a new tab.
 ```
 
 ## 2. Permission justification / 权限理由
@@ -17,7 +17,7 @@ Help users understand content across languages: translate typed/selected text or
 ### storage
 
 ```text
-Save the user's AI endpoint, password-encrypted API key, selected model IDs, translation preferences (target language, Simple/Full mode, selection toggle, Google free-text toggle and custom system prompt), interface language, and consent in chrome.storage.local. The API key is encrypted using AES-256-GCM with a password-derived PBKDF2-SHA-256 key. Passwords and derived keys are never saved. Unlocked API keys are held in trusted-context chrome.storage.session until locked or the browser session ends. chrome.storage.session temporarily holds selected text and the original page URL for the standalone fallback window and removes it when the window reads it. Settings are not stored in Chrome sync. Content scripts cannot directly read local API credentials.
+Save the user's AI endpoint, password-encrypted API key, selected model IDs, translation preferences (target language, Simple/Full mode, selection toggle, Google free-text toggle and custom system prompt), interface language, and consent in chrome.storage.local. The API key is encrypted using AES-256-GCM with a password-derived PBKDF2-SHA-256 key. Passwords and derived keys are never saved. Unlocked API keys are held in trusted-context chrome.storage.session until locked or the browser session ends. chrome.storage.session temporarily holds selected text and the original page URL for the standalone fallback window and removes it when the window reads it. Settings are not stored in Chrome sync. Content scripts cannot directly read local API credentials. Restricted session storage also holds temporary AI webpage authorization, provider/model/target metadata and request counters; original and translated page text are not stored there. Authorization is cleared when the session ends.
 ```
 
 ### contextMenus
@@ -29,7 +29,7 @@ Add a Translate selection command to the webpage context menu. The command sends
 ### activeTab
 
 ```text
-When the user opens the toolbar popup, access the active tab to read its current text selection and prefill the source field. Read available page title/description metadata for the translation prompt when applicable. Prefilling does not itself submit a translation. Protected browser pages can still use manual text input. The popup no longer exposes a screenshot capture button; clipboard image translation uses user-initiated paste events instead. Packaged capture/cropping handlers remain in the code, but are not a visible user entry in this release.
+When the user opens the toolbar popup, access the active tab to read its current text selection and prefill the source field. Read available page title/description metadata for the translation prompt when applicable. Prefilling does not itself submit a translation. Protected browser pages can still use manual text input. The popup no longer exposes a screenshot capture button; clipboard image translation uses user-initiated paste events instead. Packaged capture/cropping handlers remain in the code, but are not a visible user entry in this release. On an explicit AI webpage action, identify the active tab. Broad host permissions also authorize page access; activeTab is not a claim that all site access is temporary.
 ```
 
 **提交前最小权限复核**：当前同时申请全站 host access，可能覆盖上述注入所需权限。此说明对应实际用途，但不是证明 `activeTab` 在所有路径均不可替代。若复核后移除权限，应更新 manifest、回归测试、重新打包及同步本文件；本次仅准备材料，不修改权限。
@@ -37,7 +37,7 @@ When the user opens the toolbar popup, access the active tab to read its current
 ### scripting
 
 ```text
-Run a packaged selection-reading function when the toolbar popup is opened, and inject the packaged shared translation view into the selected frame for context-menu translation. Also remove legacy per-site content-script registrations during migration. No remotely downloaded scripts are injected.
+Run a packaged selection-reading function when the toolbar popup is opened, and inject the packaged shared translation view into the selected frame for context-menu translation. Also remove legacy per-site content-script registrations during migration. No remotely downloaded scripts are injected. On an explicit AI webpage action, probe or inject the packaged page-translation controller, recovering stale controllers after extension updates. Page text processing starts only after confirmation; model output is never executed.
 ```
 
 ### tts
@@ -46,14 +46,14 @@ Run a packaged selection-reading function when the toolbar popup is opened, and 
 Read a translated result aloud only when the user clicks its speaker button. The extension uses a Chinese voice explicitly reported by Chrome as local (remote=false) for every target language, preferring zh-CN and otherwise another Chinese locale without rewriting the translated text, handles long text in chunks, and coordinates playback and stopping across its views. There is no automatic playback, remote-voice fallback, cloud speech API, microphone access, or stored audio. Translated text is passed to the selected local speech engine for playback and is not additionally persisted for this feature. If no local Chinese voice is available, the user is prompted to install one; no non-Chinese voice is used as a fallback.
 ```
 
-0.1.5 package 已按当前源码重新生成，完整校验结果见 inventory.json。线上隐私政策也需运营者同步。
+最新安装包的完整校验见 inventory.json。线上隐私政策也需运营者同步。
 
 ### Host permissions: https://*/* and http://*/*
 
 若后台只有一个 Host permissions 理由框，粘贴以下全文；如分别展示，按同一用途拆分。
 
 ```text
-Show the selection-translation control on ordinary HTTP/HTTPS webpages without per-site setup, and open the shared on-page translation panel. All-site access also permits API requests to the user-configured AI endpoint, whose hostname is not fixed. Non-local API endpoints must use HTTPS; HTTP API endpoints are accepted only for localhost or 127.0.0.1. Selecting text alone does not upload it. Translation is triggered by user actions, including opening a selected-text panel, editing source text in Simple mode, changing source/target languages or modes, translating, or retrying. Default text prompts may include available page title and description metadata, but not a scrape of the whole webpage. Image requests omit that page context. AI requests do not send the tab URL as a separate field. Google entries open a normal browser tab only when clicked: free text translation sends the source text and selected languages; whole-page translation sends the original HTTP/HTTPS page URL and target language. They do not send AI credentials, passwords, images, or custom prompts. Google navigation URLs may remain in browser history; Google website policies and normal cookie behavior apply. The extension itself does not scrape or upload the whole DOM.
+Show the selection-translation control on ordinary HTTP/HTTPS webpages without per-site setup, and open the shared on-page translation panel. All-site access also permits API requests to the user-configured AI endpoint, whose hostname is not fixed. Non-local API endpoints must use HTTPS; HTTP API endpoints are accepted only for localhost or 127.0.0.1. Selecting text alone does not upload it. Translation is triggered by user actions, including opening a selected-text panel, editing source text in Simple mode, changing source/target languages or modes, translating, or retrying. Text/selection prompts may include available page title and description metadata, without scanning the whole webpage for those prompt fields. Image requests omit that page context. AI requests do not send the tab URL as a separate field. Google entries open a normal browser tab only when clicked: free text translation sends the source text and selected languages; whole-page translation sends the original HTTP/HTTPS page URL and target language. They do not send AI credentials, passwords, images, or custom prompts. Google navigation URLs may remain in browser history; Google website policies and normal cookie behavior apply. AI webpage translation scans ordinary rendered text only after explicit confirmation, sends it in batches to the configured first model, and processes newly revealed text during that authorized session. These requests do not upload whole HTML/DOM, page URLs or cookies. Page text can contain sensitive information even though forms, editors and code are skipped.
 ```
 
 `http://*/*` 还用于普通 HTTP 网页划词，不应仅解释成“HTTP API 任意访问”。若原文本身含 URL，该 URL 会作为原文的一部分发送。
@@ -68,7 +68,7 @@ All executable JavaScript and styles are packaged with the extension. Remote AI 
 
 ## 4. Data usage / 用户数据处理
 
-### 当前源码新增的数据处理说明（2026-10-11）
+### 当前源码新增的数据处理说明（2026-10-14）
 
 - Google 是新增的第三方接收方：免费文字翻译和整页翻译均仅在点击时打开新标签页；不需要 AI 配置、解锁或 AI 同意状态。用户不得发送敏感文字或网址。Google 页面的 Cookie、登录状态与留存由浏览器和 Google 管理，不能套用 AI API 的省略 Cookie / 禁止重定向策略。
 - 免费文字翻译开关只控制文字入口，不能阻止整页翻译；两个入口均不自动发送、不回填 Google 结果。
@@ -78,25 +78,25 @@ All executable JavaScript and styles are packaged with the extension. Remote AI 
 
 - 划词开关独立保存在本地，默认启用；关闭不影响工具栏或主动右键翻译。
 - 自定义系统提示词保存在本地，翻译时以 system 消息发送到用户配置的服务，不包含在网页内容脚本的设置快照中。
-- 默认模板的 `{{title_prompt}}` 和 `{{summary_prompt}}` 会包含当前网页标题（最多 500 字符）及已有 description 元数据（最多 1,500 字符），在主动网页翻译时随原文发送。删除模板中的对应变量即可不发送这些信息。不会抓取整页正文或额外调用 AI 生成摘要；纯手动输入没有页面上下文。
+- 默认模板的 `{{title_prompt}}` 和 `{{summary_prompt}}` 会包含当前网页标题（最多 500 字符）及已有 description 元数据（最多 1,500 字符），在主动网页翻译时随原文发送。删除模板中的对应变量即可不发送这些信息。此处仅指文字/选区翻译的元数据，不抓取全文生成摘要；AI 网页翻译是独立的确认流程，需扫描并发送普通页面正文。纯手动输入没有页面上下文。
 - 目前没有术语表配置入口，`{{terms_prompt}}` 无可用信息时为空。
-- 数据申报范围同时包含自定义提示词及可用标题/摘要。0.1.5 商店 ZIP 已重新生成；线上隐私政策仍需运营者同步。
+- 数据申报范围同时包含自定义提示词及可用标题/摘要。商店 ZIP 已重新生成；线上隐私政策仍需运营者同步。
 
 
 **不能选择“不收集或使用任何用户数据”**。以下是根据当前实现的建议；在实际后台按字段定义逐项核对。官方 FAQ 将纯本地处理也纳入需要披露的数据处理。
 
 | 后台类别 | 当前代码对应行为 / 建议 |
 | --- | --- |
-| Website content / 网站内容 | **勾选**：读取用户选中或输入的原文、用户粘贴的图片及适用的标题/description 元数据，处理译文；AI 翻译发送至配置的服务，Google 免费文字翻译仅点击时将原文带到 Google 新标签页。不会自动上传整页 DOM |
+| Website content / 网站内容 | **勾选**：读取用户选中或输入的原文、用户粘贴的图片及适用的标题/description 元数据，处理译文；另包括用户明确确认 AI 网页翻译后扫描的普通正文及授权会话内新增可见文字；AI 翻译发送至配置的服务，Google 免费文字翻译仅点击时将原文带到 Google 新标签页。不会自动上传整页 DOM |
 | Authentication information / 身份验证信息 | **勾选**：API Key 本地保存，并通过 Authorization 请求头发送给用户指定的服务；不是插件自己的登录账号 |
 | Web history / 浏览活动（或相近字段） | **勾选并说明按需传输**：读取标签页 URL/来源用于权限和浮窗；点击 Google 整页翻译会将原网页 URL（含查询参数）发送给 Google。备用窗口将原 URL 暂存会话并在读取后删除。不使用 history API 或建立持久浏览历史库，但 Google 标签页的导航 URL 可进入浏览器历史。不能填写“仅本地处理网址” |
 | User activity / 用户活动 | 当前没有点击流、键盘记录、鼠标轨迹或分析日志；仅响应划词、拖动、复制等交互。若新增统计需重新申报 |
-| Personally identifiable information、Personal communications、Health、Financial/payment、Location | 当前没有专门获取身份、邮件、医疗记录、支付信息或定位的功能；但用户自由输入可能含这些内容，处理仍属于原文传输。不可宣称能过滤这些信息。若产品面向这些数据、接入相关来源或后台定义将输入中的此类内容纳入单独类别，应相应勾选，不能以“用户主动输入”为由隐瞒 |
+| Personally identifiable information、Personal communications、Health、Financial/payment、Location | 当前没有专门获取身份、邮件、医疗记录、支付信息或定位的功能；但用户自由输入和主动授权的网页正文可能含这些内容，处理仍属于原文传输。不可宣称能过滤这些信息。若产品面向这些数据、接入相关来源或后台定义将输入中的此类内容纳入单独类别，应相应勾选，不能以“用户主动输入”为由隐瞒 |
 
 如后台提供额外说明框，可填写：
 
 ```text
-The extension processes user-provided source text, translations, AI service settings, and API credentials to provide translation. Source text, model ID, target language, and translation style are sent to the endpoint chosen by the user. The API key is sent to that endpoint for authentication. Model discovery sends connection credentials but no source text. Connection testing sends a short sample translation request. Multiple selected models receive separate requests. Google entries open a normal browser tab only when clicked: free text translation sends the source text and selected languages; whole-page translation sends the original HTTP/HTTPS page URL and target language. They do not send AI credentials, passwords, images, or custom prompts. Google navigation URLs may remain in browser history; Google website policies and normal cookie behavior apply. The extension itself does not scrape or upload the whole DOM. There is no built-in analytics or persistent translation history. Provider retention and use of submitted data are governed by the chosen provider's policies.
+The extension processes user-provided source text, translations, AI service settings, and API credentials to provide translation. Source text, model ID, target language, and translation style are sent to the endpoint chosen by the user. The API key is sent to that endpoint for authentication. Model discovery sends connection credentials but no source text. Connection testing sends a short sample translation request. Multiple selected models receive separate requests. Google entries open a normal browser tab only when clicked: free text translation sends the source text and selected languages; whole-page translation sends the original HTTP/HTTPS page URL and target language. They do not send AI credentials, passwords, images, or custom prompts. Google navigation URLs may remain in browser history; Google website policies and normal cookie behavior apply. AI webpage translation scans ordinary rendered text only after explicit confirmation, sends it in batches to the configured first model, and processes newly revealed text during that authorized session. These requests do not upload whole HTML/DOM, page URLs or cookies. Page text can contain sensitive information even though forms, editors and code are skipped. There is no built-in analytics or persistent translation history. Provider retention and use of submitted data are governed by the chosen provider's policies.
 ```
 
 ### 数据流与保存期限（用于隐私政策及审核核对）
@@ -104,7 +104,7 @@ The extension processes user-provided source text, translations, AI service sett
 | 数据 | 去向 / 保存 |
 | --- | --- |
 | 原文、模型 ID、源/目标语言、系统提示词、翻译风格 | POST 到配置 Base URL 的 `/chat/completions`；Full 每个已选模型分别请求，Simple 仅第一个。点击划词/右键翻译、翻译、重试、修改语言/模式、Simple 停止输入约 0.6 秒均可能发起请求 |
-| 网页上下文 | 可用的标题和 description 元数据通过提示词变量发送；没有整页抓取或额外 AI 摘要。纯手动输入与图片请求不附带页面上下文；删除提示词变量可不使用相应信息 |
+| 文字/选区翻译的网页上下文 | 可用的标题和 description 元数据通过提示词变量发送，不抓取全文生成摘要。AI 网页翻译另见下方会话说明。纯手动输入与图片请求不附带页面上下文；删除提示词变量可不使用相应信息 |
 | 粘贴图片 | 用户主动粘贴到原文框；最多 5 张，处理为最长边不超过 2,048px 的静态 JPEG。预览不上传，翻译时随文字发给配置的服务。仅存在内存，无 local/session storage 或历史保存；第三方服务留存需另行确认 |
 | Google 免费文字翻译 | 点击后将原文（最多 5,000 字符）、源/目标语言及界面语言写入 Google 新标签页 URL；不发送图片、AI Key 或提示词。开关默认开，关闭不影响 AI 与整页翻译 |
 | Google 整页翻译 | 点击后将原网页 HTTP/HTTPS URL 和目标语言带到 Google 新标签页；不是原页面内嵌翻译。URL 可能含查询参数及敏感信息。Google 接收和留存按其政策，导航可能进入浏览器历史 |
@@ -113,6 +113,7 @@ The extension processes user-provided source text, translations, AI service sett
 | 解锁密码 | 至少 6 个字符；仅用于本地派生解密密钥，不持久保存、不发送给 AI 服务。页面浮窗使用扩展来源的独立 iframe 收集密码，通过扩展内部消息发送给后台；父页面仅收到高度通知，不收到密码 |
 | 模型列表 | GET `/models` 返回的数据供设置页选择；选中的模型 ID 会保存。获取模型可在勾选翻译同意前执行，仍会发送 API Key，不要宣称同意前绝无网络请求 |
 | 连接测试 | 对每个已选模型发送 `Hello, world!`，目标语言为简体中文 |
+| AI 网页正文与会话 | 明确确认后分批向第一个模型发送普通文本及会话内新增可见文本；不发送完整 DOM、网址或 Cookie。原文/译文仅保留页面内存；临时授权与模型/目标语言/计数在受限 session 保存，会话结束清理。URL 变化结束会话，达到每轮限制后需再次确认。停止不能撤回已发出请求 |
 | 原文与译文 | 主要存在当前界面内存；没有持久翻译历史。关闭界面或清空输入可移除当前展示，但已发出的请求不能保证从服务端撤回 |
 | 备用窗口原文与页面 URL | 临时写入 `chrome.storage.session.contextDraft` / `contextPageUrl`，窗口读取后删除；未读取时可能保留至会话结束。原 URL 仅在用户点击 Google 整页翻译后传给 Google |
 | 偏好、同意状态、API 配置 | 保留在本地直到用户修改、清除扩展数据或卸载；不经 Chrome sync。当前没有专用“一键删除全部数据”按钮 |
@@ -139,7 +140,7 @@ The extension processes user-provided source text, translations, AI service sett
 
 ## 源码核对入口
 
-`manifest.json`；`src/shared/settings.js`；`src/shared/credentials.js`；`src/shared/credential-access.js`；`src/unlock/unlock.html`；`src/unlock/unlock.js`；`src/shared/translator.js`；`src/shared/models.js`；`src/background.js`；`src/popup/popup.js`；`src/options/options.js`；`src/shared/context-menu.js`；`src/shared/selection-background.js`；`src/shared/translation-view.js`；`src/shared/google-translation.js`；`src/shared/website-translation.js`。
+`manifest.json`；`src/shared/settings.js`；`src/shared/credentials.js`；`src/shared/credential-access.js`；`src/unlock/unlock.html`；`src/unlock/unlock.js`；`src/shared/translator.js`；`src/shared/models.js`；`src/background.js`；`src/popup/popup.js`；`src/options/options.js`；`src/shared/context-menu.js`；`src/shared/selection-background.js`；`src/shared/translation-view.js`；`src/shared/google-translation.js`；`src/shared/website-translation.js`；`src/shared/page-background.js`；`src/shared/page-translation.js`；`src/content/page-engine.js`；`src/content/page-translation.js`。
 
 ## 官方参考
 

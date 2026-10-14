@@ -74,5 +74,5 @@ export function localizePage(root = document) {
 // Public copy only. Never include provider configuration in content-script payloads.
 export function localeSnapshot() {
   return { language: getDisplayLanguage(), preference: getLanguagePreference(),
-    messages: Object.fromEntries(Object.keys(catalogs.en).map(key => [key, t(key)])) };
+    messages: Object.fromEntries(Object.keys(catalogs.en).map(key => [key, catalogs[getDisplayLanguage()][key]?.message || catalogs.en[key].message])) };
 }

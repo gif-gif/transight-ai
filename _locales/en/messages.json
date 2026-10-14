@@ -174,7 +174,7 @@
     "message": "No automatic page scanning, translation history, or analytics. It works only when you ask."
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.5"
+    "message": "Transight AI · v0.1.6"
   },
   "builtFor": {
     "message": "Built for a world worth reading."
@@ -733,5 +733,89 @@
   },
   "googleFreeTranslationAction": {
     "message": "Google free translation (new tab)"
+  },
+  "aiPageTranslate": {
+    "message": "AI page translation"
+  },
+  "aiPageHint": {
+    "message": "Translate this page in place using your first configured AI model"
+  },
+  "pageConsent": {
+    "message": "Visible and subsequently loaded page text will be sent to the provider above. Signed-in pages may contain sensitive information. API charges may apply. Forms, editors and code are excluded. Start only if you agree. Stopping cannot recall text already sent."
+  },
+  "pageStart": {
+    "message": "Agree & start"
+  },
+  "pageStop": {
+    "message": "Stop"
+  },
+  "pageOriginal": {
+    "message": "Show original"
+  },
+  "pageTranslated": {
+    "message": "Show translation"
+  },
+  "pageRestore": {
+    "message": "Restore & end"
+  },
+  "pageContinue": {
+    "message": "Agree & translate more"
+  },
+  "pageExpand": {
+    "message": "Expand"
+  },
+  "pageCollapse": {
+    "message": "Collapse"
+  },
+  "pageClose": {
+    "message": "Restore original and close"
+  },
+  "pageReady": {
+    "message": "Keeps page elements and links; text wrapping may change."
+  },
+  "pageWorking": {
+    "message": "Translating"
+  },
+  "pageWatching": {
+    "message": "Current content processed · Watching new text"
+  },
+  "pageStopped": {
+    "message": "Stopped"
+  },
+  "pageProgress": {
+    "message": "$1 / $2 text segments · $3 skipped/failed"
+  },
+  "pageBudget": {
+    "message": "This round reached its 60,000-character / 100-request limit. Continuing may incur additional costs."
+  },
+  "pageSessionExpired": {
+    "message": "The translation session was interrupted. Start again to resume unfinished text."
+  },
+  "pageInvalidBatch": {
+    "message": "This text block is too large or cannot be safely translated."
+  },
+  "pageInvalidResponse": {
+    "message": "The model returned an invalid structure. Original text was kept; start again to retry."
+  },
+  "pageConfigChanged": {
+    "message": "The provider or first model changed. Reopen AI page translation to start a new session."
+  },
+  "pageNavigated": {
+    "message": "The page address changed. Translation stopped to avoid sending the next page automatically."
+  },
+  "pageRetry": {
+    "message": "Retry unfinished text"
+  },
+  "aiPageUnavailable": {
+    "message": "AI page translation is unavailable here. Open a regular webpage and wait for it to finish loading."
+  },
+  "aiPageInjectionFailed": {
+    "message": "Cannot enable AI translation on this page. Check the extension’s site access, then reload the page and try again."
+  },
+  "aiPageRefreshRequired": {
+    "message": "The AI page translation connection is no longer available. Reload the extension and the webpage, then try again."
+  },
+  "aiPageOpenFailed": {
+    "message": "Cannot start AI page translation. Reload the webpage and try again."
   }
 }

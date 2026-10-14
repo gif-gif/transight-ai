@@ -1,43 +1,31 @@
-Transight AI — Across languages. Closer in meaning. · v0.1.5
+Transight AI — Across languages. Closer in meaning.
 
-Translate text and pasted images using your own AI service. Open the toolbar popup, click the icon near selected webpage text, or use the right-click translation command.
+Translate selected text, typed text, pasted images, or an entire webpage using your own AI service. Open the toolbar popup, click the icon beside a selection, or use the right-click translation command.
 
-GOOGLE TRANSLATION — NO API KEY REQUIRED
-• Translate entire page opens Google's website translator in a new tab, using the current target language and the original page URL. Available in the popup, selection panel, and right-click panel; it does not replace content in the original page.
-• Google free translation opens the source text (up to 5,000 characters), selected source language, and target language in a new Google tab. Results are not inserted into the extension. Images and AI credentials are not sent.
-• Full mode places both icons next to the green Translate button. Simple groups them below the language selectors. Hover for labels. Settings can disable free text translation (on by default), without affecting AI or whole-page translation.
-• Only clicking a Google entry sends its text or URL. These values can appear in browser history; avoid sensitive content and private URLs. Google's policies and service availability apply. Whole-page translation accepts HTTP/HTTPS only; private, login-only, and intranet pages may not work. No Google translation API or availability guarantee is included.
+AI WEBPAGE TRANSLATION — STAY ON THE PAGE
+• Choose AI webpage translation in the popup or a selection/right-click panel. Review the provider, first configured model, target language, privacy notice and possible costs, then confirm before page text is sent.
+• Ordinary rendered text is translated in place. Page elements, links and event handlers are retained; translated text can change line wrapping and element heights.
+• Stop, compare original/translation, restore and end the session, or collapse the toolbar. Newly revealed or added text is processed during the authorized session. A URL change ends the session; continuing after a round limit needs confirmation.
+• Forms, editors, code, hidden text and no-translate regions are skipped. Other page text can still contain sensitive information. Iframe content, Shadow DOM, PDFs and image/canvas text are not supported. Uses a dedicated structured prompt rather than the custom text-translation prompt.
 
-SIMPLE OR FULL — YOUR CHOICE
-• Full Translate is the default: compare up to 5 selected models in independent result cards, with per-model copying and retry.
-• Enable Simple Translate in Settings or use the page panel’s layout icon. It uses only the first selected model and shows editable source text, translation, and source/target language selectors, without a Translate button.
-• In Simple mode, changing either language or pausing typing for about 0.6 seconds starts a new translation. Copy and local speech remain available.
-• Switch back to Full from the same icon. The mode preference is saved and synchronized across the toolbar popup, page panels, and Settings.
+SIMPLE OR FULL
+• Full mode compares up to 5 models in separate cards. Copy, cancel, or retry failed results independently.
+• Simple mode uses only the first model, with editable source text and source/target selectors. It translates automatically after a short typing pause or language change, without a Translate button.
+• Switch modes from the layout icon or Settings. Mode and target language preferences stay synchronized across popup, panels and Settings.
+• Select text to show a compact icon near its end. Selection alone sends nothing. Click to translate, pin the panel, or drag its top bar.
+• Copy and speech controls are available in both modes. Speech uses an installed local Chinese voice for all languages; pronunciation quality varies. No automatic playback.
 
-READ WITHOUT LEAVING THE PAGE
-• Select webpage text to show a compact translation icon near the selection end for about 2.5 seconds. Selecting alone does not upload text; clicking opens translation.
-• Pin the current panel and drag its top bar. With 1–2 models the height adapts; with more models the first two results are visible and the rest scroll, subject to screen space.
-• Choose automatic source detection or a specific source language. Target preferences are remembered across popup, panels, and Settings.
-• Cancel a running translation in Full mode or retry just a failed model. Authentication errors link directly to Settings.
-• Click a speaker icon for local read-aloud, and click again to stop. There is no automatic playback. Availability depends on an installed local Chinese voice for all target languages.
+IMAGES AND SETTINGS
+• Paste up to 5 clipboard images in Full mode; thumbnails scroll horizontally and can be removed individually. Requires a model that accepts images. Previewing alone does not upload images. Use a system screenshot tool, then paste.
+• Enable/disable automatic selection controls, choose translation style, fetch a model list or enter model IDs, and customize the text-translation system prompt. Optional page context for text/selection prompts uses available title/description metadata, not an AI-generated whole-page summary.
+• Five interface languages: English, Simplified Chinese, Traditional Chinese, Japanese and Korean. Browser language is followed by default with English fallback. Ten target languages are supported.
 
-IMAGES AND PERSONAL PREFERENCES
-• Paste clipboard images into the source field in the toolbar popup or Full panel. Attach up to 5 images in a horizontally scrollable thumbnail row, enter text below, or delete individual images.
-• Requires image-input support from your selected model. Pasting and previewing alone do not upload images. The popup no longer has a screenshot capture button; use your system screenshot tool, then paste.
-• Enable/disable automatic selection controls in Settings. Manual toolbar and right-click translation remain available when disabled.
-• Customize the system prompt or restore the default. Supported placeholders include source text, source/target language, available page title/description metadata, and translation style. No whole-page scraping or separate AI summary is performed.
+SEPARATE GOOGLE SHORTCUTS
+• Google whole-page translation opens the original HTTP/HTTPS page URL with the current target language in a new Google tab. It does not modify the original page; private or login-only sites may not work.
+• Google free text translation opens up to 5,000 source characters with the chosen languages in a new tab. It can be disabled in Settings. Neither entry requires an AI key. Results stay on Google.
+• Only clicking sends text or a URL to Google. No AI credentials or images are included. URLs/text may appear in browser history; Google policies and availability apply.
 
-SET UP YOUR SERVICE
-1. Enter a Chat Completions-compatible Base URL and API key if required.
-2. Fetch the provider’s model list or enter IDs manually, then choose up to 5 models.
-3. To save a key, set and confirm a local unlock password of at least 6 characters. Review the data-sharing notice, save, and test the connection.
-4. Translate from the toolbar or an ordinary HTTP/HTTPS webpage. Unlock in the popup/panel when needed; pending work resumes.
+SETUP AND PRIVACY
+Enter a Chat Completions-compatible Base URL, API key if needed, and model IDs. To persist a key, create a local unlock password of at least 6 characters. Keys are encrypted locally using AES-256-GCM with a PBKDF2-derived key; unlocked keys are held in restricted session storage. Unlock inside the popup/panel when needed. Passwords are not sent to AI providers.
 
-Five interface languages: English, Simplified Chinese, Traditional Chinese, Japanese, Korean. The interface follows the browser with English fallback. Change it in the popup or Settings; page panels follow that preference without a separate language button. Ten translation languages include Chinese (both scripts), English, Japanese, Korean, French, German, Spanish, Russian, and Portuguese.
-
-PRIVACY AND LIMITATIONS
-No subscription, key, or credits are included. Provider charges may apply; each model receives a separate request. For AI translation, text, images, and applicable prompt/page metadata are sent to your configured AI endpoint. Google entries instead open Google with text or a page URL as described above. Editing in Simple mode, switching languages or modes, and retrying may send new requests. Model discovery contacts /models and may send the key; connection testing sends sample text. Canceling cannot retract data already received by the provider.
-
-Keys are encrypted locally with AES-256-GCM and a password-derived key; unlocked keys are held in restricted session storage. Unlock again after browser restart or extension reload/update. Passwords are not saved or sent to AI providers. There is no Chrome sync, built-in analytics, persistent translation history, or audio storage. Images remain in memory, and speech uses only voices reported as local. Third-party provider policies still apply.
-
-On-page features are restricted on Chrome internal pages, the Chrome Web Store, and other protected pages. Model discovery and image input depend on your provider. AI translations may be inaccurate; verify important information.
+AI requests send submitted text, images and applicable prompt metadata to your configured endpoint. After explicit AI webpage confirmation, ordinary page text, including newly revealed content, is sent in batches; whole HTML/DOM, page URL and cookies are not included in those requests. Original/translated page text remains in memory, not persistent history. API authentication is sent to the configured provider. Model discovery and connection testing also contact that provider. Multiple models and automatic retranslation can increase usage costs. No service, key, credits or subscription is included; there is no built-in analytics or persistent translation history. Protected browser pages cannot host on-page controls.

@@ -27,9 +27,7 @@ for locale, record in metadata['localizations'].items():
     assert len(record['short_description'])==record['description_character_count']<=132
 for filename in ['description.en.txt','description.zh-CN.txt','description.zh-TW.txt','description.ja.txt','description.ko.txt']:
     description=(OUT/'listing'/filename).read_text()
-    # Listing titles may omit a release number; any explicit version must match.
-    listed_versions=re.findall(r'\bv(\d+\.\d+\.\d+)\b', description.splitlines()[0])
-    assert all(version == manifest['version'] for version in listed_versions), f'Stale listing version: {filename}'
+    assert not re.search(r'\bv?\d+\.\d+\.\d+\b', description), f'Visible version in listing: {filename}'
     assert 'Google' in description, f'Missing Google translation disclosure: {filename}'
 dashboard_docs=['01-store-listing.md','02-privacy-practices.md','03-distribution.md','04-test-instructions.md']
 for filename in dashboard_docs:
@@ -43,7 +41,7 @@ for locale in ['zh-CN','zh-TW','ja','ko']:
     expected[f'promo/{locale}/marquee-1400x560.png']=(1400,560)
 for locale in ['en','zh-CN','zh-TW','ja','ko']:
     screenshots=sorted((OUT/'screenshots'/locale).glob('*.png'))
-    assert {p.name for p in screenshots} == {'01-multi-model.png','02-on-page.png','03-settings.png','04-inline-unlock.png','05-selection-trigger.png'}, locale
+    assert {p.name for p in screenshots} == {'01-multi-model.png','02-on-page.png','03-settings.png','04-ai-page.png','05-selection-trigger.png'}, locale
     expected.update({str(p.relative_to(OUT)):(1280,800) for p in screenshots})
 for filename,dimensions in expected.items():
     im=Image.open(OUT/filename)
@@ -96,7 +94,7 @@ report={'prepared_date':date.today().isoformat(),'version':manifest['version'],'
         'validation_mode':'assets-only' if args.assets_only else 'release',
         'archive_status':archive_status,'ready_to_upload_archive':source_matches,
         'archive_differences':{'missing':missing,'extra':extra,'changed':changed},
-        'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-simple.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/settings-preferences.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-locked.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-trigger.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
+        'sources':{'icon':'assets/icon-128.png','screenshots':['artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/popup-multi.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-simple.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/settings-preferences.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/ai-page-result.png','artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-trigger.png'],'promotions':'Original typography/layout reusing the existing Transight icon and colors'},'files':files}
 (OUT/'inventory.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 screenshot_count = sum(len(list((OUT/'screenshots'/locale).glob('*.png'))) for locale in ['en','zh-CN','zh-TW','ja','ko'])
 print(f'PASS: localized descriptions, padded icon, {screenshot_count} screenshots, 10 promotional tiles in 5 languages, 4 dashboard guides and permission explanations.')

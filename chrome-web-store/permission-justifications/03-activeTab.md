@@ -1,17 +1,17 @@
 # 需请求 activeTab 的理由
 
-适用版本：**0.1.5** · 源码核对日期：**2026-10-11**。
+源码核对日期：**2026-10-14**。
 
 ## 中文填写内容
 
 ```text
-用户主动打开工具栏弹出窗口时，用于访问当前标签页，读取当前选中的文字并填入原文框；在适用时读取网页标题和 description 元数据，供翻译提示词使用。仅填入原文不会自动提交翻译。在浏览器受保护页面无法读取选区时，仍可手动输入。当前版本没有可见的截图按钮；剪贴板图片来自用户主动粘贴，不能将其描述为依靠 activeTab 读取剪贴板。
+用户主动打开工具栏弹出窗口时，用于访问当前标签页，读取当前选中的文字并填入原文框；在适用时读取网页标题和 description 元数据，供翻译提示词使用。仅填入原文不会自动提交翻译。在浏览器受保护页面无法读取选区时，仍可手动输入。当前版本没有可见的截图按钮；剪贴板图片来自用户主动粘贴，不能将其描述为依靠 activeTab 读取剪贴板。用户主动点击 AI 网页翻译时，用于定位当前标签页；请求的全站主机权限也为网页访问提供授权，不能以 activeTab 代替对此范围的说明。
 ```
 
 ## English — 可直接粘贴到英文后台
 
 ```text
-When the user opens the toolbar popup, access the active tab to read its current text selection and prefill the source field. Read available page title/description metadata for the translation prompt when applicable. Prefilling does not itself submit a translation. Protected browser pages can still use manual text input. The popup no longer exposes a screenshot capture button; clipboard image translation uses user-initiated paste events instead. Packaged capture/cropping handlers remain in the code, but are not a visible user entry in this release.
+When the user opens the toolbar popup, access the active tab to read its current text selection and prefill the source field. Read available page title/description metadata for the translation prompt when applicable. Prefilling does not itself submit a translation. Protected browser pages can still use manual text input. The popup no longer exposes a screenshot capture button; clipboard image translation uses user-initiated paste events instead. Packaged capture/cropping handlers remain in the code, but are not a visible user entry in this release. On an explicit AI webpage action, identify the active tab. Broad host permissions also authorize page access; activeTab is not a claim that all site access is temporary.
 ```
 
 ## 提交前注意（不必复制到理由框）

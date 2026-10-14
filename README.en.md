@@ -4,7 +4,7 @@
 
 An AI translation Chrome extension MVP built with **Manifest V3 and vanilla JavaScript / HTML / CSS**. It has no runtime dependencies or embedded API keys. Run `npm run build` to generate an unpacked extension in `dist/`, ready to load into Chrome. No ZIP is generated.
 
-**Current version: 0.1.5** (docs and screenshots updated October 11, 2026). Google whole-page translation and optional free text translation are available in the popup, selection panel, and right-click panel. Full mode places both beside Translate; Simple groups them below the language selectors. Load `dist/` for development, reload the extension, and refresh existing pages. [`transight-0.1.5.zip`](chrome-web-store/package/transight-0.1.5.zip) was rebuilt from the current source on October 12, 2026, including these features and the latest tooltip wording.
+**Current version: 0.1.6** (documentation and screenshots updated October 14, 2026). New **AI in-place webpage translation** uses the first configured model and current target language after confirmation. It preserves page elements and links, with stop, original/translation toggle, and restore controls. AI page-entry errors are now specific to that feature, and panel action-row typography matches the popup. Google translation remains a separate option. For development, load `dist/`, reload the extension, and refresh the webpage. Store package: [`transight-0.1.6.zip`](chrome-web-store/package/transight-0.1.6.zip).
 
 ## Features
 
@@ -20,6 +20,18 @@ An AI translation Chrome extension MVP built with **Manifest V3 and vanilla Java
 - **Multi-model comparison**: select up to 5 models using checkboxes or comma-separated IDs. Requests run in parallel with independent result, loading/error, and copy controls. Legacy single-model settings remain compatible.
 - **Connection testing**, loading indicators, timeouts, and actionable authentication, rate-limit, and model error messages.
 - **All-site selection**: HTTP/HTTPS access is declared at installation/update, without per-site enable buttons. Only clicking the translate button sends the selected text.
+
+### In-place AI page translation
+
+![AI webpage translation: translated text on the original page with restore controls](docs/screenshots/en/ai-page-result.png)
+
+Choose **AI page translation** in the popup, selection panel, or right-click panel, then confirm the provider and possible costs. Your **first configured model** translates the current page progressively into the selected target language without navigation. Elements and links remain intact; stop, original/translation toggle, safe restoration, and session-scoped dynamic text are supported. Forms, editors, code, and hidden text are excluded. Wrapping and height can change. Each round allows up to 60,000 characters / 100 requests; continuing requires confirmation. Existing Google actions are unchanged.
+
+Included in the current store package. See the [implementation guide (Chinese)](docs/ai-page-translation.md) for limitations, privacy, and tests.
+
+**Scope and privacy:** ordinary rendered text in the top frame of HTTP/HTTPS pages only; iframe internals, Shadow DOM, PDFs and image/canvas text are unsupported. After confirmation, text batches and newly revealed session content go to your provider; ordinary text can still contain sensitive information. These requests exclude whole HTML/DOM, page URLs and cookies. Original/translated text stays in page memory; authorization and counters use restricted session storage. URL changes end the session. This feature uses a dedicated structured prompt, not the custom text-translation template below.
+
+AI webpage regression: `npm run test:ai-page-translation` (requires Playwright / Chromium). A local mock service tests confirmation, DOM preservation, dynamic text, cancellation/restoration, entry errors and Full/Simple font parity; this does not establish real-model quality.
 
 ### Whole-page translation (Google)
 
@@ -65,7 +77,7 @@ Settings can enable or disable the selection trigger (on by default). Changes sa
 Edit the system prompt or restore the default, then save settings. An empty prompt uses the default. The limit is 16,000 characters, shared across selected models. Restore only edits the draft until saved. The template is sent as a `system` message; source text is also sent separately as a `user` message.
 
 - `{{text}}`: source text; `{{from}}`: the selected source language in either mode, or automatic detection when unspecified; `{{to}}`: current target language.
-- `{{title_prompt}}`: webpage title; `{{summary_prompt}}`: existing `description` metadata. No full-page scraping or additional AI summarization request.
+- `{{title_prompt}}`: webpage title; `{{summary_prompt}}`: existing `description` metadata. For text/selection translation, this uses metadata only, without full-page scraping or an additional AI summarization request. AI webpage translation has its own confirmed text-scanning flow.
 - `{{terms_prompt}}`: relevant terminology, empty while no glossary is configured.
 - `{{imt_style_guide}}`: selected translation style.
 
@@ -245,7 +257,7 @@ Input/password fields, editable regions, and the panel itself do not trigger sel
 
 - **API keys are password-encrypted in `chrome.storage.local`, never Chrome-synced.** AES-256-GCM uses a PBKDF2-SHA-256-derived key (600,000 iterations), a random salt and a fresh IV. Passwords and derived keys are never saved. Unlocked API keys live only in trusted-context `chrome.storage.session` until locked or the browser session/extension reload ends. This protects locked persistent data, not a compromised browser or device. Avoid storing highly privileged production keys in shared browsers, and use spending limits and least-privilege credentials.
 - Local storage access is restricted to `TRUSTED_CONTEXTS`, so injected content scripts cannot directly read API keys. AI API requests run in the extension background; Google entries open normal browser tabs.
-- AI requests are triggered by translation actions, including Simple-mode edits, language/mode changes and retries; connection tests and model discovery also contact the configured service. Google buttons send the source text or page URL only when clicked. Google navigation URLs may remain in browser history. The extension does not automatically scan entire pages, keep persistent translation history, or include analytics tracking.
+- AI requests are triggered by translation actions, including Simple-mode edits, language/mode changes and retries; connection tests and model discovery also contact the configured service. Google buttons send the source text or page URL only when clicked. Google navigation URLs may remain in browser history. The extension does not upload an entire page without confirmation. AI webpage translation separately asks for confirmation before scanning and sending text batches. There is no persistent translation history or built-in analytics.
 - Your provider may process submitted text and explicitly submitted screenshots according to its own policies. Avoid sending sensitive information. The on-page panel is not a secure interface for displaying confidential content.
 - AI API requests omit browser cookies and do not follow redirects, preventing credentials from being forwarded to another address.
 - Translation output is rendered with `textContent`; returned HTML or Markdown is not executed.
@@ -256,12 +268,12 @@ Input/password fields, editable regions, and the panel itself do not trigger sel
 
 | Permission | Purpose |
 | --- | --- |
-| `storage` | Local settings and temporary selections/original page URLs for restricted-page fallback |
+| `storage` | Settings, encrypted credentials, temporary unlock/selections/page URLs and AI page authorization/counters; no saved page body or translations |
 | `contextMenus` | Add the selected-text translation command to the context menu |
 | `activeTab` | Read the active page selection and applicable context after user action; capture handlers remain packaged but have no visible entry |
-| `scripting` | Read selected text or inject the translation panel |
+| `scripting` | Read selections, inject panels, and probe/inject the packaged AI page controller on explicit user action |
 | `tts` | Read translations on request with local voices and manage playback/stop events |
-| `host_permissions`: all HTTP/HTTPS sites | Inject selection controls and access the configured API. Chrome may show an all-site access warning at install/update |
+| `host_permissions`: all HTTP/HTTPS sites | Inject selection controls, support confirmed AI page translation, and access the configured API. Chrome may show an all-site access warning at install/update |
 
 ## Development and Testing
 

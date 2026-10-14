@@ -174,7 +174,7 @@
     "message": "ページの自動スキャン、翻訳履歴、アクセス解析はありません。操作したときだけ動作します。"
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.5"
+    "message": "Transight AI · v0.1.6"
   },
   "builtFor": {
     "message": "読みたい世界を、もっと身近に。"
@@ -733,5 +733,89 @@
   },
   "googleFreeTranslationAction": {
     "message": "Google 無料翻訳（新しいタブ）"
+  },
+  "aiPageTranslate": {
+    "message": "AI ページ翻訳"
+  },
+  "aiPageHint": {
+    "message": "設定した最初の AI モデルで、このページをその場で翻訳"
+  },
+  "pageConsent": {
+    "message": "現在および後から読み込まれるページのテキストを上記プロバイダーに送信します。ログイン中のページには機密情報が含まれる場合があり、API 料金が発生する可能性があります。フォーム、エディター、コードは除外します。同意する場合のみ開始してください。送信済みの内容は取り消せません。"
+  },
+  "pageStart": {
+    "message": "同意して開始"
+  },
+  "pageStop": {
+    "message": "停止"
+  },
+  "pageOriginal": {
+    "message": "原文を表示"
+  },
+  "pageTranslated": {
+    "message": "訳文を表示"
+  },
+  "pageRestore": {
+    "message": "原文に戻して終了"
+  },
+  "pageContinue": {
+    "message": "同意して続きを翻訳"
+  },
+  "pageExpand": {
+    "message": "展開"
+  },
+  "pageCollapse": {
+    "message": "折りたたむ"
+  },
+  "pageClose": {
+    "message": "原文に戻して閉じる"
+  },
+  "pageReady": {
+    "message": "ページの要素とリンクは保持します。改行や高さは変わる場合があります。"
+  },
+  "pageWorking": {
+    "message": "翻訳中"
+  },
+  "pageWatching": {
+    "message": "現在の内容を処理済み · 新しい内容を待機"
+  },
+  "pageStopped": {
+    "message": "停止しました"
+  },
+  "pageProgress": {
+    "message": "テキスト $1 / $2 件 · スキップ・失敗 $3 件"
+  },
+  "pageBudget": {
+    "message": "今回の上限（60,000 文字 / 100 リクエスト）に達しました。続行すると追加料金が発生する場合があります。"
+  },
+  "pageSessionExpired": {
+    "message": "翻訳セッションが中断されました。再開すると未処理のテキストを翻訳します。"
+  },
+  "pageInvalidBatch": {
+    "message": "テキストブロックが大きすぎるか、安全に翻訳できません。"
+  },
+  "pageInvalidResponse": {
+    "message": "モデルの応答形式が正しくありません。原文を保持しました。再開して再試行できます。"
+  },
+  "pageConfigChanged": {
+    "message": "プロバイダーまたは最初のモデルが変更されました。AI ページ翻訳を開き直してください。"
+  },
+  "pageNavigated": {
+    "message": "ページのアドレスが変わったため停止しました。次のページは自動送信しません。"
+  },
+  "pageRetry": {
+    "message": "未完了のテキストを再試行"
+  },
+  "aiPageUnavailable": {
+    "message": "このページでは AI ページ翻訳を利用できません。通常のウェブページの読み込み完了後にお試しください。"
+  },
+  "aiPageInjectionFailed": {
+    "message": "このページで AI 翻訳を有効にできません。拡張機能のサイトへのアクセス権を確認し、ページを再読み込みしてください。"
+  },
+  "aiPageRefreshRequired": {
+    "message": "AI ページ翻訳の接続が無効になりました。拡張機能とページを再読み込みしてお試しください。"
+  },
+  "aiPageOpenFailed": {
+    "message": "AI ページ翻訳を開始できません。ページを再読み込みしてお試しください。"
   }
 }

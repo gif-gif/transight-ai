@@ -96,6 +96,7 @@
       const externalActions = $('external-translation-actions');
       const actionSlot = isSimple() ? $('simple-external-actions') : root.querySelector('.translation-actions');
       if (externalActions && actionSlot && externalActions.parentElement !== actionSlot) actionSlot.append(externalActions);
+      if ($('ai-page-translation')) $('ai-page-translation').hidden = typeof adapter.aiPageTranslate !== 'function';
       if ($('website-translation')) $('website-translation').hidden = typeof adapter.websiteTranslate !== 'function';
       $('source-language').hidden = false;
       root.querySelector('.ui-language-control').hidden = Boolean(adapter.selectionMode);
@@ -458,6 +459,19 @@
       if (!disposed && current === revision && (isSimple() || adapter.autoTranslateTarget)) translate();
     });
     listen($('clear'), 'click', () => { input(''); $('source').focus(); });
+    if ($('translate-ai-page')) listen($('translate-ai-page'), 'click', async () => {
+      if (disposed || !adapter.aiPageTranslate) return;
+      const button = $('translate-ai-page'), message = $('website-translation-status');
+      button.disabled = true; message.hidden = true;
+      try { await adapter.aiPageTranslate($('target').value); }
+      catch (error) {
+        if (disposed) return;
+        const key = ['aiPageUnavailable', 'aiPageInjectionFailed', 'aiPageRefreshRequired', 'invalidTarget'].includes(error?.message)
+          ? error.message : /Extension context invalidated|Receiving end does not exist|message port closed/i.test(error?.message || '')
+            ? 'aiPageRefreshRequired' : 'aiPageOpenFailed';
+        message.dataset.i18n = key; message.textContent = t(key); message.hidden = false;
+      } finally { if (!disposed) button.disabled = false; }
+    });
     if ($('translate-website')) listen($('translate-website'), 'click', async () => {
       if (disposed || websiteOpening || !adapter.websiteTranslate) return;
       const button = $('translate-website'), message = $('website-translation-status');

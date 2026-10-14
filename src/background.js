@@ -1,3 +1,5 @@
+import { installPageTranslation } from './shared/page-background.js';
+import { translatePageBatch } from './shared/page-translation.js';
 import { installScreenshot, SCREENSHOT_PAGE } from './shared/screenshot.js';
 import { installSpeech } from './shared/speech.js';
 import { openContextTranslation } from './shared/context-menu.js';
@@ -122,3 +124,19 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 });
 
 installSelection(languageReady, runTranslation, () => credentials.status());
+
+// Page batches use independent owners and cancellation; vault locking still aborts all API traffic.
+async function pageConfig() {
+  await languageReady;
+  const settings = validateSettings(await getSettings());
+  if (!await chrome.permissions.contains({ origins: [permissionOrigin(settings.baseUrl)] })) throw new Error(t('permissionMissing'));
+  const vault = await credentials.status();
+  if (vault.state === 'locked') { const error = new Error(t('vaultLockedError')); error.code = 'PAGE_LOCKED'; throw error; }
+  return { ...settings, apiKey: await credentials.resolve(settings.baseUrl) };
+}
+installPageTranslation(languageReady, pageConfig, (blocks, session, signal) => withRequest(signal, async requestSignal => {
+  const settings = await pageConfig();
+  if (requestSignal.aborted) throw new Error('pageStopped');
+  if (settings.baseUrl !== session.baseUrl || settings.models[0] !== session.model) throw new Error('pageConfigChanged');
+  return translatePageBatch(blocks, { ...settings, model: session.model, models: [session.model] }, session.target, { signal: requestSignal });
+}));

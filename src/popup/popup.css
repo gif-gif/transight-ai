@@ -98,3 +98,12 @@ html.standalone body{width:400px;max-width:100%}
 .simple-translate .website-translation{flex:1;min-width:0}
 .simple-translate .website-translation-button{width:100%;justify-content:flex-start;padding:5px 8px;font-size:12px;text-align:left}
 .simple-translate .website-translation-button span{display:inline}
+
+/* Keep the new in-place AI action distinct from Google's new-tab actions. */
+.translation-actions:has(#ai-page-translation:not([hidden])) kbd{display:none}
+.simple-translate .external-translation-actions{width:100%}
+.simple-translate .website-translation-button span{white-space:normal;line-height:1.35}
+
+/* Match the popup's existing action text in the isolated selection panel too.
+   Do not inherit different body/Shadow DOM base sizes (10.5px vs. 14px). */
+.translation-actions,.external-translation-actions{font-size:10.5px;line-height:1.6}

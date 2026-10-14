@@ -7,8 +7,8 @@ document.documentElement.classList.toggle('standalone', standalone);
 await initI18n();
 const requestIds = new Set();
 let selectedContext, selectedText;
-const contextDraft = standalone ? await chrome.storage.session.get(['contextDraft', 'contextPageUrl']) : {};
-if (standalone) await chrome.storage.session.remove(['contextDraft', 'contextPageUrl']);
+const contextDraft = standalone ? await chrome.storage.session.get(['contextDraft', 'contextPageUrl', 'contextTabId']) : {};
+if (standalone) await chrome.storage.session.remove(['contextDraft', 'contextPageUrl', 'contextTabId']);
 async function getVaultStatus() {
   const response = await chrome.runtime.sendMessage({ type: 'VAULT_STATUS' });
   if (!response?.ok) throw new Error();
@@ -27,6 +27,12 @@ const view = new TransightTranslationView(document, {
     requestIds.clear();
   },
   setTargetLanguage, setTranslationMode,
+  async aiPageTranslate(targetLanguage) {
+    if (standalone && !Number.isInteger(contextDraft.contextTabId)) throw new Error('aiPageUnavailable');
+    const response = await chrome.runtime.sendMessage({ type: 'AI_PAGE_OPEN', targetLanguage, ...(standalone ? { tabId: contextDraft.contextTabId } : {}) });
+    if (!response?.ok) throw new Error(response?.error || 'aiPageRefreshRequired');
+    if (!standalone) window.close();
+  },
   googleTranslate: openGoogleTextTranslation,
   websiteTranslate: standalone ? target => openPageTranslation(contextDraft.contextPageUrl, target) : openWebsiteTranslation,
   settingsUrl: chrome.runtime.getURL('src/options/options.html'),

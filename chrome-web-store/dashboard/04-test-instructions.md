@@ -1,6 +1,6 @@
 # Test instructions / 测试说明
 
-核对日期：2026-10-11 · 版本：0.1.5。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
+核对日期：2026-10-14。以下是审核员可读的英文模板，**不是已提供可用测试服务**。测试说明栏可选，但本插件完整功能依赖 AI 服务，建议主动提供有效、可复现的审核路径。
 
 Google 两个入口可在没有 AI 配置时检查；自动化素材测试仅拦截导航并使用本机模拟 AI，不代表已验证真实 Google/AI 服务可达。若审核 AI 功能仍需下列测试资料。
 
@@ -19,7 +19,7 @@ Google 两个入口可在没有 AI 配置时检查；自动化素材测试仅拦
 ## 可粘贴的英文审核说明
 
 ```text
-Transight AI 0.1.5 — reviewer instructions
+Transight AI — reviewer instructions
 
 Purpose: translate user-provided text using the user's configured AI service. No Transight AI account or extension login is required. AI service access is needed for successful translations.
 
@@ -68,7 +68,11 @@ Support contact: <REVIEW_SUPPORT_CONTACT>
 
 18. Free-text toggle: disable Google free translation in Settings. Its icon disappears immediately in open popup/panels, while whole-page and AI translation remain available and ongoing AI work/results stay intact. Reload to confirm persistence, then enable it again. Hover and accessible labels should match each of the five interface languages. Neither Google entry sends content merely by appearing.
 
-Limitations: on-page controls cannot run on chrome:// pages, the Chrome Web Store, or other protected pages. Use manual input in the toolbar popup there. Automatic selection controls are intended for ordinary webpage text, not editable fields. Allow the extension's requested site access for on-page tests. Model discovery depends on provider support; manual model entry is supported. There is no phonetic transcription, in-place webpage translation, or persistent translation history. Google whole-page translation opens a new tab. Speech requires an installed local Chinese voice; foreign-language pronunciation depends on that engine. The popup no longer has a screenshot capture entry; test images by pasting them into Full mode.
+19. AI in-place webpage translation: open an ordinary HTTP/HTTPS article, choose AI webpage translation from the popup or selection/context panel, and verify the confirmation shows the provider, first configured model, selected target language and data/cost notice. Merely opening the confirmation must not send page text. Unlock locally if necessary, then confirm. The configured service must support structured text responses; page translation uses its own prompt, not the custom text prompt.
+
+20. Verify that text changes within the original page while links and DOM elements remain usable. Use original/translation toggle, stop, restore/end and collapse. Newly added or revealed text is translated during the same authorized session. Navigate to a different URL to end it. A round is limited to 60,000 characters / 100 requests; continuation requires confirmation. Forms, editable fields, code, hidden/no-translate regions, iframe content, Shadow DOM, PDFs and image/canvas text are not supported. Text wrapping and heights may change. Ordinary page text may contain sensitive information. Stop does not retract already sent requests. The AI entry must show an AI-specific error, not a Google error, on restricted pages or unavailable extension contexts. After extension updates, reload the extension and webpage if prompted.
+
+Limitations: on-page controls cannot run on chrome:// pages, the Chrome Web Store, or other protected pages. Use manual input in the toolbar popup there. Automatic selection controls are intended for ordinary webpage text, not editable fields. Allow the extension's requested site access for on-page tests. Model discovery depends on provider support; manual model entry is supported. There is no phonetic transcription or persistent translation history. AI in-place webpage translation is available on supported ordinary webpages after confirmation. Google whole-page translation opens a new tab. Speech requires an installed local Chinese voice; foreign-language pronunciation depends on that engine. The popup no longer has a screenshot capture entry; test images by pasting them into Full mode.
 
 Data handling: AI requests send submitted text, pasted images, applicable prompt/page metadata, and credentials to the configured endpoint. Clicking Google free text instead sends source text/languages via a Google navigation URL; whole-page translation sends the original page URL/target. No AI key, password, image or custom prompt is sent to Google. Navigation may be stored in browser history; Google website policies and ordinary cookie behavior apply. Editing in Simple mode and changing languages or modes can start new translations. Models receive separate requests; quota usage can therefore increase with the number of selected models. There is no built-in analytics or persistent translation history. API configuration is saved locally; API keys are encrypted with AES-256-GCM and a PBKDF2-SHA-256 password-derived key. Unlocked keys are cached only in restricted session storage. Passwords and derived keys are not persisted.
 ```

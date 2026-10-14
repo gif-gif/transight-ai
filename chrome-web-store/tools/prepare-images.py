@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Adapt existing artwork and actual UI screenshots; no new UI captures or AI images.
 Run after the five-locale browser suite with Python 3 + Pillow.
 Updates store assets, root README screenshots and existing localized extension screenshots.
@@ -76,40 +77,49 @@ art=Image.open(ROOT/'assets/icon-128.png').convert('RGBA').resize((96,96),Image.
 icon.paste(art,(16,16))
 save_if_changed(icon, OUT/'icons/icon-128.png')
 
-# -*- coding: utf-8 -*-
 # Copy describes only visible, currently shipped controls. UI pixels come from
 # the isolated browser suite; the mock replies do not represent model quality.
-SHOT_COPY = {
-'en': [
- ('One text.\nMore perspectives.', ['Full mode: compare up to 5 models.', 'Copy, listen, or retry each result.', 'AI + Google shortcuts side by side.']),
- ('Less interface.\nMore understanding.', ['Simple mode uses your first model.', 'Edit the source. Translation follows.', 'Google text / page opens a new tab.']),
- ('Translate\nyour way.', ['Choose Simple or Full mode.', 'Toggle free Google text translation.', 'Write your own system prompt.']),
- ('Unlock here.\nKeep translating.', ['Unlock in the popup or page panel.', 'Your API key stays encrypted at rest.', 'Passwords are not sent to AI services.']),
- ('Select a passage.\nStart right there.', ['A small icon near the selection end.', 'Click to open the translation panel.', 'Selection alone sends no request.'])],
-'zh-CN': [
- ('一段原文，\n多种模型对照。', ['Full 模式，最多对比 5 个模型。','独立译文、复制、朗读与重试。','AI 按钮旁，Google 双入口并排。']),
- ('少一点界面，\n多一点理解。', ['Simple 模式，只用第一个模型。','编辑原文，停笔后自动翻译。','Google 文字 / 整页在新标签打开。']),
- ('按你的方式，\n开始翻译。', ['选择 Simple 或 Full 模式。','可开关 Google 免费文字翻译。','自定义翻译系统提示词。']),
- ('就地解锁，\n继续翻译。', ['在弹窗或页面浮窗直接解锁。','API Key 在本地加密保存。','解锁密码不发送给 AI 服务。']),
- ('选中一段，\n从这里开始。', ['小图标贴近选中文字的末尾。','点击打开翻译浮窗。','仅选中文字，不发送翻译请求。'])],
-'zh-TW': [
- ('一段原文，\n多種模型對照。', ['Full 模式，最多比較 5 個模型。','獨立譯文、複製、朗讀與重試。','AI 按鈕旁，Google 雙入口並排。']),
- ('少一點介面，\n多一點理解。', ['Simple 模式，只用第一個模型。','編輯原文，停筆後自動翻譯。','Google 文字 / 整頁在新分頁開啟。']),
- ('按你的方式，\n開始翻譯。', ['選擇 Simple 或 Full 模式。','可開關 Google 免費文字翻譯。','自訂翻譯系統提示詞。']),
- ('就地解鎖，\n繼續翻譯。', ['在彈出視窗或頁面浮窗直接解鎖。','API Key 在本機加密儲存。','解鎖密碼不傳送給 AI 服務。']),
- ('選取一段，\n從這裡開始。', ['小圖示靠近所選文字的末尾。','點擊開啟翻譯浮動視窗。','僅選取文字，不傳送翻譯請求。'])],
-'ja': [
- ('ひとつの文章を、\n複数の視点で。', ['Full モードで最大 5 モデルを比較。','結果ごとにコピー・読み上げ・再試行。','AI ボタンの隣に Google の入口。']),
- ('シンプルに、\n理解を深く。', ['Simple は最初のモデルだけを使用。','原文を編集すると、自動で再翻訳。','Google の文字・ページ翻訳は新タブへ。']),
- ('あなたに合った\n翻訳体験を。', ['Simple / Full モードを切り替え。','Google 無料翻訳をオン・オフ。','システムプロンプトを自由に編集。']),
- ('その場で解除。\n翻訳を続けよう。', ['ポップアップやパネルでロック解除。','API キーはローカルで暗号化保存。','解除用パスワードは AI に送信しません。']),
- ('文章を選択。\nそこから翻訳。', ['選択範囲の末尾に小さなアイコン。','クリックで翻訳パネルを表示。','選択するだけでは送信しません。'])],
-'ko': [
- ('하나의 원문,\n다양한 관점.', ['Full 모드에서 최대 5개 모델 비교.','결과별 복사, 읽기, 다시 시도.','AI 버튼 옆에 Google 번역 바로가기.']),
- ('더 간결하게,\n더 깊이 이해하기.', ['Simple은 첫 번째 모델만 사용합니다.','원문을 수정하면 자동으로 번역합니다.','Google 글·페이지 번역은 새 탭에서.']),
- ('나에게 맞는\n번역 방식.', ['Simple / Full 모드를 선택하세요.','Google 무료 번역을 켜거나 끄세요.','시스템 프롬프트를 직접 작성하세요.']),
- ('여기서 잠금 해제,\n번역은 계속.', ['팝업이나 페이지 패널에서 바로 해제.','API 키는 로컬에 암호화 저장됩니다.','해제 비밀번호는 AI에 보내지 않습니다.']),
- ('문장을 선택하고,\n바로 시작하세요.', ['선택한 텍스트 끝에 작은 아이콘.','클릭하면 번역 패널이 열립니다.','선택만으로는 요청을 보내지 않습니다.'])]}
+SHOT_COPY = {'en': [('One text.\nMore perspectives.',
+         ['Full mode: compare up to 5 models.',
+          'Copy, listen, or retry each result.',
+          'AI + Google shortcuts side by side.']),
+        ('Less interface.\nMore understanding.',
+         ['Simple mode uses your first model.',
+          'Edit the source. Translation follows.',
+          'Google text / page opens a new tab.']),
+        ('Translate\nyour way.',
+         ['Choose Simple or Full mode.',
+          'Toggle free Google text translation.',
+          'Write your own system prompt.']),
+        ('Same page.\nA new language.',
+         ['Your first AI model translates in place.',
+          'Compare, stop, or restore the original.',
+          'Page text is sent only after approval.']),
+        ('Select a passage.\nStart right there.',
+         ['A small icon near the selection end.',
+          'Click to open the translation panel.',
+          'Selection alone sends no request.'])],
+ 'zh-CN': [('一段原文，\n多种模型对照。', ['Full 模式，最多对比 5 个模型。', '独立译文、复制、朗读与重试。', 'AI 按钮旁，Google 双入口并排。']),
+           ('少一点界面，\n多一点理解。', ['Simple 模式，只用第一个模型。', '编辑原文，停笔后自动翻译。', 'Google 文字 / 整页在新标签打开。']),
+           ('按你的方式，\n开始翻译。', ['选择 Simple 或 Full 模式。', '可开关 Google 免费文字翻译。', '自定义翻译系统提示词。']),
+           ('网页不跳转，\n语言更贴近。', ['第一模型，原位翻译网页正文。', '对照原文、停止或恢复页面。', '确认后才发送页面文本。']),
+           ('选中一段，\n从这里开始。', ['小图标贴近选中文字的末尾。', '点击打开翻译浮窗。', '仅选中文字，不发送翻译请求。'])],
+ 'zh-TW': [('一段原文，\n多種模型對照。', ['Full 模式，最多比較 5 個模型。', '獨立譯文、複製、朗讀與重試。', 'AI 按鈕旁，Google 雙入口並排。']),
+           ('少一點介面，\n多一點理解。', ['Simple 模式，只用第一個模型。', '編輯原文，停筆後自動翻譯。', 'Google 文字 / 整頁在新分頁開啟。']),
+           ('按你的方式，\n開始翻譯。', ['選擇 Simple 或 Full 模式。', '可開關 Google 免費文字翻譯。', '自訂翻譯系統提示詞。']),
+           ('網頁不跳轉，\n語言更貼近。', ['第一模型，原位翻譯網頁文字。', '對照原文、停止或還原頁面。', '確認後才傳送頁面文字。']),
+           ('選取一段，\n從這裡開始。', ['小圖示靠近所選文字的末尾。', '點擊開啟翻譯浮動視窗。', '僅選取文字，不傳送翻譯請求。'])],
+ 'ja': [('ひとつの文章を、\n複数の視点で。', ['Full モードで最大 5 モデルを比較。', '結果ごとにコピー・読み上げ・再試行。', 'AI ボタンの隣に Google の入口。']),
+        ('シンプルに、\n理解を深く。', ['Simple は最初のモデルだけを使用。', '原文を編集すると、自動で再翻訳。', 'Google の文字・ページ翻訳は新タブへ。']),
+        ('あなたに合った\n翻訳体験を。', ['Simple / Full モードを切り替え。', 'Google 無料翻訳をオン・オフ。', 'システムプロンプトを自由に編集。']),
+        ('同じページで、\n新しい言葉へ。', ['最初の AI モデルでページ内翻訳。', '原文との比較・停止・復元に対応。', '確認してからページ本文を送信。']),
+        ('文章を選択。\nそこから翻訳。', ['選択範囲の末尾に小さなアイコン。', 'クリックで翻訳パネルを表示。', '選択するだけでは送信しません。'])],
+ 'ko': [('하나의 원문,\n다양한 관점.', ['Full 모드에서 최대 5개 모델 비교.', '결과별 복사, 읽기, 다시 시도.', 'AI 버튼 옆에 Google 번역 바로가기.']),
+        ('더 간결하게,\n더 깊이 이해하기.',
+         ['Simple은 첫 번째 모델만 사용합니다.', '원문을 수정하면 자동으로 번역합니다.', 'Google 글·페이지 번역은 새 탭에서.']),
+        ('나에게 맞는\n번역 방식.', ['Simple / Full 모드를 선택하세요.', 'Google 무료 번역을 켜거나 끄세요.', '시스템 프롬프트를 직접 작성하세요.']),
+        ('같은 페이지,\n새로운 언어.', ['첫 AI 모델로 페이지 내 번역.', '원문 비교, 중지와 복원을 지원.', '확인 후에만 페이지 글을 전송.']),
+        ('문장을 선택하고,\n바로 시작하세요.', ['선택한 텍스트 끝에 작은 아이콘.', '클릭하면 번역 패널이 열립니다.', '선택만으로는 요청을 보내지 않습니다.'])]}
 NOTES = {
 'en': ('Actual UI · Local mock service; example results only.', 'AI: your API. Google: opens a new tab.'),
 'zh-CN': ('实际界面 · 本地模拟服务，译文仅为示例。','AI 需自备 API；Google 在新标签打开。'),
@@ -143,7 +153,7 @@ for locale, folder, zh in [('en-US','en',False),('zh-CN','zh-CN',True),('zh-TW',
     sources=[('popup-multi.png','01-multi-model.png',(0,0,400,710)),
              ('selection-simple.png','02-on-page.png',(0,64,424,435)),
              ('settings-preferences.png','03-settings.png',settings_crop(src/'settings-preferences.png')),
-             ('selection-locked.png','04-inline-unlock.png',(696,0,1120,860)),
+             ('ai-page-result.png','04-ai-page.png',(0,0,1280,850)),
              ('selection-trigger.png','05-selection-trigger.png',(0,0,424,160))]
     for index,((source,filename,box),(title,lines)) in enumerate(zip(sources,SHOT_COPY[folder]),1):
         box=crop_boxes.get(source, box)
@@ -153,6 +163,14 @@ for locale, folder, zh in [('en-US','en',False),('zh-CN','zh-CN',True),('zh-TW',
         for i,line in enumerate(lines): fitted_text(im,(60,412+i*48),line,23,535,color=MUTED,zh=zh)
         fitted_text(im,(60,675),NOTES[folder][1],17,535,color=MUTED,zh=zh)
         fitted_text(im,(60,716),NOTES[folder][0],16,535,color=MUTED,zh=zh)
+        if source == 'ai-page-result.png':
+            im=canvas()
+            fitted_text(im,(650,57),title.replace('\n',' '),27,565,bold=True,zh=zh)
+            fitted_text(im,(60,111),lines[0]+' '+lines[1],21,1160,color=MUTED,zh=zh)
+            screenshot(im,src/source,box,(216,157),(848,563))
+            fitted_text(im,(60,738),lines[2]+' '+NOTES[folder][0],17,1160,color=MUTED,zh=zh)
+            save_if_changed(im,dest/filename)
+            continue
         width,height=box[2]-box[0],box[3]-box[1]
         scale=min(530/width,710/height,1.25)
         size=(round(width*scale),round(height*scale))
@@ -196,7 +214,7 @@ else:
     for folder in ['', *locale_dirs]:
         readme_images.update(str(p.relative_to(ROOT)) for p in (ROOT/'docs/screenshots'/folder).glob('*.png'))
     for folder in ['', *locale_dirs]:
-        for name in ['popup-simple.png', 'external-translation.png']:
+        for name in ['popup-simple.png', 'external-translation.png', 'ai-page-confirm.png', 'ai-page-result.png']:
             readme_images.add(str((ROOT/'docs/screenshots'/folder/name).relative_to(ROOT)))
     for relative in sorted(readme_images):
         target=ROOT/relative

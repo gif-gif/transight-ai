@@ -174,7 +174,7 @@
     "message": "不自动扫描网页，不保存翻译历史，没有分析追踪。只在你主动使用时工作。"
   },
   "versionBrand": {
-    "message": "译见 AI · v0.1.5"
+    "message": "译见 AI · v0.1.6"
   },
   "builtFor": {
     "message": "为值得阅读的世界而造。"
@@ -733,5 +733,89 @@
   },
   "googleFreeTranslationAction": {
     "message": "Google 免费翻译（新标签页）"
+  },
+  "aiPageTranslate": {
+    "message": "AI 网页翻译"
+  },
+  "aiPageHint": {
+    "message": "使用已配置的第一个 AI 模型，原位翻译当前网页"
+  },
+  "pageConsent": {
+    "message": "当前及后续加载的网页文字将发送给上方服务商。已登录网页可能含敏感信息，调用可能产生费用。跳过表单、编辑器和代码。请确认同意后开始；停止无法撤回已发送的文字。"
+  },
+  "pageStart": {
+    "message": "同意并开始"
+  },
+  "pageStop": {
+    "message": "停止"
+  },
+  "pageOriginal": {
+    "message": "查看原文"
+  },
+  "pageTranslated": {
+    "message": "查看译文"
+  },
+  "pageRestore": {
+    "message": "恢复原文并结束"
+  },
+  "pageContinue": {
+    "message": "同意并继续翻译"
+  },
+  "pageExpand": {
+    "message": "展开"
+  },
+  "pageCollapse": {
+    "message": "收起"
+  },
+  "pageClose": {
+    "message": "恢复原文并关闭"
+  },
+  "pageReady": {
+    "message": "保留网页元素和链接，译文长度可能改变换行和高度。"
+  },
+  "pageWorking": {
+    "message": "正在翻译"
+  },
+  "pageWatching": {
+    "message": "当前内容已处理 · 等待新内容"
+  },
+  "pageStopped": {
+    "message": "已停止"
+  },
+  "pageProgress": {
+    "message": "$1 / $2 段文字 · $3 段跳过或失败"
+  },
+  "pageBudget": {
+    "message": "本轮已达 6 万字符 / 100 次请求上限，继续翻译可能产生额外费用。"
+  },
+  "pageSessionExpired": {
+    "message": "翻译会话已中断，请重新开始以继续未完成的文字。"
+  },
+  "pageInvalidBatch": {
+    "message": "文字块过大或无法安全翻译。"
+  },
+  "pageInvalidResponse": {
+    "message": "模型返回的结构不正确，已保留原文，可重新开始重试。"
+  },
+  "pageConfigChanged": {
+    "message": "服务商或第一个模型已改变，请重新打开 AI 网页翻译。"
+  },
+  "pageNavigated": {
+    "message": "网页地址已改变，翻译已停止，避免自动发送下一个网页的内容。"
+  },
+  "pageRetry": {
+    "message": "重试未完成文字"
+  },
+  "aiPageUnavailable": {
+    "message": "当前页面不支持 AI 网页翻译，请在普通网页加载完成后使用。"
+  },
+  "aiPageInjectionFailed": {
+    "message": "无法在此网页启用 AI 翻译，请检查扩展的网站访问权限，并刷新网页重试。"
+  },
+  "aiPageRefreshRequired": {
+    "message": "AI 网页翻译连接已失效，请重新加载扩展并刷新网页后重试。"
+  },
+  "aiPageOpenFailed": {
+    "message": "无法启动 AI 网页翻译，请刷新网页后重试。"
   }
 }

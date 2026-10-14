@@ -1,6 +1,7 @@
 // Focus-independent material capture using the shipped UI's saved language preference.
 // This is not a substitute for native toolbar/automatic-language regression tests.
 import assert from 'node:assert/strict';
+import { articleHTML, articleText, articleTranslations } from './page-translation-screenshot-fixture.mjs';
 import { mkdtemp, cp, mkdir, rm, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -11,6 +12,7 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright')
 const root = fileURLToPath(new URL('../', import.meta.url));
 const manifest = JSON.parse(await readFile(path.join(root, 'manifest.json')));
 let fixtureReply;
+const pageRequests = [];
 const locale = process.env.TEST_BROWSER_LOCALE || 'ja-JP';
 const language = { 'en-US': 'en', 'zh-CN': 'zh-CN', 'zh-TW': 'zh-TW', 'ja-JP': 'ja', 'ko-KR': 'ko' }[locale];
 assert.ok(language, 'supported screenshot locale');
@@ -19,6 +21,7 @@ const temp = await mkdtemp(path.join(tmpdir(), 'transight-materials-'));
 const output = path.join(root, 'artifacts/screenshots', locale);
 await mkdir(output, { recursive: true });
 const server = http.createServer(async (req, res) => {
+  if (req.url === '/article') { res.setHeader('Content-Type', 'text/html; charset=utf-8'); res.end(articleHTML); return; }
   if (req.url === '/sample') {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.end('<html><body><h1>Reading across borders</h1><p id="sample">A little understanding brings us closer.</p></body></html>'); return;
@@ -28,6 +31,18 @@ const server = http.createServer(async (req, res) => {
   if (req.url !== '/v1/chat/completions' || req.method !== 'POST') { res.writeHead(404); res.end('{}'); return; }
   let body = ''; for await (const chunk of req) body += chunk;
   const request = JSON.parse(body);
+  let blocks;
+  try { blocks = JSON.parse(request.messages[1].content).blocks; } catch { /* Selection request. */ }
+  if (blocks) {
+    pageRequests.push(request);
+    const translations = articleTranslations[language === 'en' ? 'zh-CN' : language];
+    const segments = blocks.flatMap(block => block.segments.map(segment => {
+      const index = articleText.indexOf(segment.text.trim());
+      assert.ok(index >= 0, `Unexpected article text: ${segment.text}`);
+      return { id: segment.id, text: translations[index] };
+    }));
+    res.end(JSON.stringify({ choices: [{ message: { content: JSON.stringify({ segments }) } }] })); return;
+  }
   res.end(JSON.stringify({ choices: [{ message: { content: fixtureReply ?? (request.model === 'z-model' ? '多一份理解，便少一分距离。' : '多一点理解，让我们更靠近。') } }] }));
 });
 // Hide release labels only while capturing; runtime UI and layout remain unchanged.
@@ -45,6 +60,7 @@ async function capture(page, options) {
 }
 let context;
 const cropBoxes = {};
+const inputBoxes = {};
 try {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const extension = path.join(temp, 'extension');
@@ -72,6 +88,9 @@ try {
       if (page === sample) {
         const box = await ui('.translation-view', 'function(){const r=this.getBoundingClientRect();return r.width && r.height ? [Math.max(0,Math.floor(r.left)-8),Math.max(0,Math.floor(r.top)-8),Math.min(innerWidth,Math.ceil(r.right)+8),Math.min(innerHeight,Math.ceil(r.bottom)+8)] : undefined}');
         if (box) cropBoxes[path.basename(options.path)] = box;
+        if (path.basename(options.path) === 'selection-image-strip.png') {
+          inputBoxes['selection-image-strip.png'] = await ui('.translation-actions', 'function(){const p=this.closest(".translation-view").getBoundingClientRect(),r=this.getBoundingClientRect();return [Math.max(0,Math.floor(p.left)-8),Math.max(0,Math.floor(p.top)-8),Math.min(innerWidth,Math.ceil(p.right)+8),Math.min(innerHeight,Math.ceil(r.bottom)+8)]}');
+        }
       }
       await capture(page, options);
     } finally {
@@ -88,6 +107,14 @@ try {
   await popup.locator('#translate').click();
   await popup.locator('.result-card[data-state="success"]').nth(1).waitFor();
   await capturePanelSafe(popup, { path: path.join(output, 'popup-multi.png') });
+  await popup.locator('#translation-mode').click();
+  await popup.locator('.result-card[data-state="success"]').waitFor();
+  await popup.waitForFunction(() => document.querySelector('#translate').getBoundingClientRect().height === 0);
+  const simpleResult = await popup.locator('.result-card').last().boundingBox();
+  assert.ok(simpleResult);
+  await capturePanelSafe(popup, { path: path.join(output, 'popup-simple.png'), clip: { x: 0, y: 0, width: 400, height: Math.ceil(simpleResult.y + simpleResult.height + 16) } });
+  await popup.locator('#translation-mode').click();
+  await popup.locator('.result-card[data-state="success"]').nth(1).waitFor();
   async function models(values) {
     await worker.evaluate(async models => {
       const { settings } = await chrome.storage.local.get('settings');
@@ -152,6 +179,10 @@ try {
   assert.equal(await ui('.version'), `v${manifest.version}`);
   assert.equal(await ui('.translation-view', 'function(){return this.lang}'), language);
   await capturePanelSafe(sample, { path: path.join(output, 'selection.png') });
+  const googleClip = await ui('.translation-actions', 'function(){const r=this.getBoundingClientRect(),p=this.closest(".translation-view").getBoundingClientRect();return {x:Math.max(0,p.x-8),y:Math.max(0,p.y-8),width:Math.min(innerWidth-p.x+8,p.width+16),height:r.bottom-p.y+16}}');
+  assert.equal(await ui('#translate-google', 'function(){return this.getBoundingClientRect().width > 0}'), true);
+  assert.equal(await ui('#translate-website', 'function(){return this.getBoundingClientRect().width > 0}'), true);
+  await capturePanelSafe(sample, { path: path.join(output, 'external-translation.png'), clip: googleClip });
   await click('#pin-view');
   assert.equal(await ui('#pin-view', 'function(){return this.getAttribute("aria-pressed")}'), 'true');
   const point = await ui('.topbar', 'function(){const r=this.getBoundingClientRect();return {x:r.x+30,y:r.y+24}}');
@@ -199,6 +230,33 @@ try {
   fixtureReply = undefined;
   await click('#close-view');
   await models(['mock-translator', 'z-model']);
+  // Capture the real page-translation confirmation and result UI with local fixtures.
+  const article = await context.newPage();
+  await article.setViewportSize({ width: 1280, height: 850 });
+  await article.goto(`${base}/article`);
+  const articleTabId = await worker.evaluate(async url => (await chrome.tabs.query({})).find(tab => tab.url === url).id, `${base}/article`);
+  const opened = await popup.evaluate(({ tabId, targetLanguage }) => chrome.runtime.sendMessage({ type: 'AI_PAGE_OPEN', tabId, targetLanguage }), { tabId: articleTabId, targetLanguage: language === 'en' ? 'zh-CN' : language });
+  assert.equal(opened.ok, true, JSON.stringify(opened));
+  const pageBar = async id => (await worker.evaluate(({ tabId, id }) => chrome.scripting.executeScript({ target: { tabId }, func: id => {
+    const host = document.querySelector('[data-transight="page"]');
+    if (!host) return null;
+    const el = chrome.dom.openOrClosedShadowRoot(host).getElementById(id);
+    const rect = el.getBoundingClientRect();
+    return { text: el.textContent, hidden: el.hidden, x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+  }, args: [id] }), { tabId: articleTabId, id }))[0].result;
+  await until(async () => !!await pageBar('start'));
+  assert.equal(pageRequests.length, 0, 'Opening confirmation must not upload page text');
+  await capture(article, { path: path.join(output, 'ai-page-confirm.png') });
+  const start = await pageBar('start'); await article.mouse.click(start.x, start.y);
+  const expected = articleTranslations[language === 'en' ? 'zh-CN' : language];
+  await until(async () => await article.locator('h1').textContent() === expected[0] && (await pageBar('progress')).text.includes(catalog.pageWatching.message));
+  assert.ok(pageRequests.length > 0);
+  assert.ok(pageRequests.every(request => request.model === 'mock-translator'));
+  assert.equal(await article.locator('a').getAttribute('href'), '#guide');
+  await capture(article, { path: path.join(output, 'ai-page-result.png') });
+  const restore = await pageBar('restore'); await article.mouse.click(restore.x, restore.y);
+  await until(async () => await article.locator('h1').textContent() === articleText[0]);
+  await article.close();
   await options.locator('#lock-vault').click();
   await options.locator('#vault-unlock-fields:visible').waitFor();
   await openContext();
@@ -208,7 +266,7 @@ try {
   await unlock.waitForFunction(() => innerHeight < 125 && document.body.getBoundingClientRect().height <= innerHeight);
   await capturePanelSafe(sample, { path: path.join(output, 'selection-locked.png') });
   assert.deepEqual(errors, []);
-  await writeFile(path.join(output, 'capture-info.json'), JSON.stringify({ version: manifest.version, versionWatermarks: 'hidden', locale, language, cropBoxes, method: 'isolated Chromium; saved extension language preference; local mock API', capturedAt: new Date().toISOString() }, null, 2)+'\n');
+  await writeFile(path.join(output, 'capture-info.json'), JSON.stringify({ version: manifest.version, versionWatermarks: 'hidden', locale, language, cropBoxes, inputBoxes, features: ['ai-page-translation'], method: 'isolated Chromium; saved extension language preference; local mock API', capturedAt: new Date().toISOString() }, null, 2)+'\n');
   console.log('PASS: actual localized popup/settings, Simple/Full, pasted images, context panel, masked inline unlock.');
   console.log('Screenshots:', output);
 } finally {

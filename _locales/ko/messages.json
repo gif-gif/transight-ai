@@ -174,7 +174,7 @@
     "message": "페이지 자동 스캔, 번역 기록, 사용 분석이 없습니다. 사용자가 요청할 때만 작동합니다."
   },
   "versionBrand": {
-    "message": "Transight AI · v0.1.5"
+    "message": "Transight AI · v0.1.6"
   },
   "builtFor": {
     "message": "읽고 싶은 세상을 더 가까이."
@@ -733,5 +733,89 @@
   },
   "googleFreeTranslationAction": {
     "message": "Google 무료 번역 (새 탭)"
+  },
+  "aiPageTranslate": {
+    "message": "AI 페이지 번역"
+  },
+  "aiPageHint": {
+    "message": "설정한 첫 번째 AI 모델로 현재 페이지를 바로 번역"
+  },
+  "pageConsent": {
+    "message": "현재 및 이후 로드되는 페이지 텍스트가 위 제공업체로 전송됩니다. 로그인한 페이지에는 민감한 정보가 포함될 수 있으며 API 요금이 발생할 수 있습니다. 양식, 편집기, 코드는 제외합니다. 동의하는 경우에만 시작하세요. 이미 전송된 내용은 취소할 수 없습니다."
+  },
+  "pageStart": {
+    "message": "동의하고 시작"
+  },
+  "pageStop": {
+    "message": "중지"
+  },
+  "pageOriginal": {
+    "message": "원문 보기"
+  },
+  "pageTranslated": {
+    "message": "번역 보기"
+  },
+  "pageRestore": {
+    "message": "원문 복원 및 종료"
+  },
+  "pageContinue": {
+    "message": "동의하고 더 번역"
+  },
+  "pageExpand": {
+    "message": "펼치기"
+  },
+  "pageCollapse": {
+    "message": "접기"
+  },
+  "pageClose": {
+    "message": "원문 복원 후 닫기"
+  },
+  "pageReady": {
+    "message": "페이지 요소와 링크를 유지합니다. 줄바꿈이나 높이는 달라질 수 있습니다."
+  },
+  "pageWorking": {
+    "message": "번역 중"
+  },
+  "pageWatching": {
+    "message": "현재 내용 처리 완료 · 새 내용 대기 중"
+  },
+  "pageStopped": {
+    "message": "중지됨"
+  },
+  "pageProgress": {
+    "message": "텍스트 $1 / $2개 · 건너뜀/실패 $3개"
+  },
+  "pageBudget": {
+    "message": "이번 번역의 60,000자 / 100회 요청 한도에 도달했습니다. 계속하면 추가 비용이 발생할 수 있습니다."
+  },
+  "pageSessionExpired": {
+    "message": "번역 세션이 중단되었습니다. 다시 시작하면 미완료 텍스트를 번역합니다."
+  },
+  "pageInvalidBatch": {
+    "message": "텍스트 블록이 너무 크거나 안전하게 번역할 수 없습니다."
+  },
+  "pageInvalidResponse": {
+    "message": "모델 응답 구조가 올바르지 않습니다. 원문을 유지했습니다. 다시 시작하여 재시도할 수 있습니다."
+  },
+  "pageConfigChanged": {
+    "message": "제공업체 또는 첫 번째 모델이 변경되었습니다. AI 페이지 번역을 다시 여세요."
+  },
+  "pageNavigated": {
+    "message": "페이지 주소가 변경되어 번역을 중지했습니다. 다음 페이지 내용은 자동으로 전송하지 않습니다."
+  },
+  "pageRetry": {
+    "message": "미완료 텍스트 재시도"
+  },
+  "aiPageUnavailable": {
+    "message": "이 페이지에서는 AI 페이지 번역을 사용할 수 없습니다. 일반 웹페이지의 로딩이 완료된 후 사용해 주세요."
+  },
+  "aiPageInjectionFailed": {
+    "message": "이 페이지에서 AI 번역을 활성화할 수 없습니다. 확장 프로그램의 사이트 접근 권한을 확인하고 페이지를 새로고침해 주세요."
+  },
+  "aiPageRefreshRequired": {
+    "message": "AI 페이지 번역 연결이 끊겼습니다. 확장 프로그램을 다시 로드하고 웹페이지를 새로고침한 후 다시 시도해 주세요."
+  },
+  "aiPageOpenFailed": {
+    "message": "AI 페이지 번역을 시작할 수 없습니다. 웹페이지를 새로고침한 후 다시 시도해 주세요."
   }
 }

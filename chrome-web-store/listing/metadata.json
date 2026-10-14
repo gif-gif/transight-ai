@@ -1,5 +1,5 @@
 {
-  "version": "0.1.5",
+  "version": "0.1.6",
   "primary_language": "English (en)",
   "recommended_category": "Productivity",
   "recommended_subcategory_if_available": "Tools",
@@ -40,7 +40,7 @@
     "日本語 (ja)",
     "한국어 (ko)"
   ],
-  "materials_updated": "2026-10-11",
+  "materials_updated": "2026-10-14",
   "package_status": "current",
   "google_translation": {
     "whole_page": "opens original HTTP/HTTPS URL in Google Translate in a new tab",
@@ -53,5 +53,29 @@
       "right-click fallback window"
     ]
   },
-  "package_updated": "2026-10-12"
+  "package_updated": "2026-10-14",
+  "ai_page_translation": {
+    "mode": "in-place; first configured model; current target language; explicit confirmation before sending page text",
+    "controls": [
+      "stop",
+      "original/translation toggle",
+      "restore/end",
+      "collapse",
+      "settings",
+      "inline unlock"
+    ],
+    "data": "ordinary rendered text batches and newly revealed text during authorized session; no whole HTML/DOM, page URL or cookies",
+    "limitations": [
+      "text may reflow",
+      "no iframe internals",
+      "no Shadow DOM",
+      "no PDF",
+      "no image/canvas OCR"
+    ],
+    "round_limits": {
+      "characters": 60000,
+      "requests": 100,
+      "continuation": "explicit confirmation"
+    }
+  }
 }

@@ -1,16 +1,16 @@
 # Transight AI · Chrome Web Store 提交材料
 
-> **材料状态：0.1.5 安装包已按当前源码更新。** 包含 Google 整页翻译、可关闭的免费文字翻译、Full / Simple 入口布局，以及最新提示文案。说明与无版本号截图沿用已同步的材料；完整校验结果见 `inventory.json`。本次未向商店提交审核。
+> **材料状态：安装包、五语言介绍和截图已按当前源码同步。** 新增 AI 原位网页翻译；完整校验见 `inventory.json`。尚未提交商店审核。
 
-准备日期：2026-10-01；说明与无版本号截图更新：2026-10-11；安装包更新：2026-10-12。当前提交版本：**0.1.5**。
+准备日期：2026-10-01；说明与无版本号截图更新：2026-10-14；安装包更新：2026-10-14。安装版本见 manifest 和 listing/metadata.json；商店展示文案与截图不包含版本号。
 
-本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.5.zip`**，不要把整个材料目录压缩上传。`transight-0.1.0.zip`、`transight-0.1.1.zip`、`transight-0.1.2.zip`、`transight-0.1.3.zip` 和 `transight-0.1.4.zip` 仅作历史保留；若商店已接收过 0.1.5，提交下一次更新前须提升源码版本再打包。
+本目录与 `dist/` 完全分离。上传时只选择 **`package/transight-0.1.6.zip`**，不要把整个材料目录压缩上传。其余 ZIP 仅作历史保留，不要误上传旧包。
 
 ## 逐项上传清单
 
 | 项目 | 材料 | 说明 |
 | --- | --- | --- |
-| 插件安装包 | `package/transight-0.1.5.zip` | 已包含当前源码的 Google 功能和提示文案；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
+| 插件安装包 | `package/transight-0.1.6.zip` | 包含当前 AI 原位网页翻译、Google 入口和最新修复；ZIP 根目录直接包含 `manifest.json`，包含运行文件及 Apache-2.0 许可证 |
 | 名称 / 简短描述 / 版本 | ZIP 内 `manifest.json` 和 `_locales/`；便于复制的汇总见 `listing/metadata.json` | 沿用现有版本和国际化配置，没有创建重复 manifest |
 | 英文详细介绍 | `listing/description.en.txt` | 可直接粘贴到英文商品介绍 |
 | 简体中文详细介绍 | `listing/description.zh-CN.txt` | 可直接粘贴到简体中文商品介绍 |
@@ -36,7 +36,7 @@
 - 英文名称：**Transight AI**。
 - 简体中文名称：**译见 AI · 随手翻译**。
 - 繁体中文名称：**譯見 AI · 隨手翻譯**。
-- 版本：**0.1.5**。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
+- 安装版本：以 `listing/metadata.json` 和包内 manifest 为准。如果后台已有同版本上传记录，请先提升源 `manifest.json` 的版本再打包，勿只重命名 ZIP。
 - 英文简短描述：**99** 个字符；简体中文及繁体中文简短描述各 **35** 个字符，日语与韩语长度见 `listing/metadata.json`；五种语言均在 132 字符以内。
 - `manifest.json` 中的 `__MSG_extensionName__` / `__MSG_extensionDescription__` 是现有国际化引用；对应内容已随 `_locales/` 打包，不需要改成固定英文。
 
@@ -54,16 +54,16 @@
 
 ## 素材复用说明
 
-复用现有品牌素材和截图排版，使用五种语言的真实浏览器测试截图；本次重新采集五语言界面，展示 Full 翻译按钮旁的 Google 入口、Simple 模式的并排入口和 Google 免费文字开关。没有重新设计图标，也没有生成虚构 UI。
+复用现有品牌素材和截图排版，使用五种语言的真实浏览器测试截图；本次重新采集五语言界面，展示 AI 原位网页翻译、Full 与 Simple 模式、设置和划词入口。没有重新设计图标，也没有生成虚构 UI。
 
 - 图标来自现有 `assets/icon-128.png`。仅为满足商店的留白规范缩放原图，没有重画。提交 ZIP 内的 `assets/icon-128.png` 使用此商店版；源文件和 `dist/` 的开发图标不变，16/32/48px 工具栏图标不变。
 - 多模型截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/popup-multi.png`。
 - 页面浮窗截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-simple.png`。
 - 设置截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/settings-preferences.png`，展示翻译偏好、Simple / Full、划词开关和自定义提示词。
-- 浮窗内解锁截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-locked.png`，展示最新紧凑解锁表单。
+- AI 原位网页翻译截图来自现有 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/ai-page-result.png`，展示页面内的翻译结果与控制栏。
 - 原截图不是商店规定尺寸，因此只对真实截图做裁切、等比缩放和 1280×800 全幅介绍排版；无外部透明边框或信箱式黑边，不修改界面文字、不伪造模型结果。
 - 截图沿用本地测试服务与示例模型；图中已注明测试回复，不代表实际模型的翻译质量。设置截图不展示已保存的 Key，解锁图中的测试密码已遮挡，未包含实际凭据。
-- 宣传图已于 2026-10-12 补齐五种语言，每种提供 440×280 和 1400×560 两种尺寸。英文复用 `promo/` 根目录现有两张图片，简体中文、繁体中文、日语、韩语分别放在 `promo/{zh-CN,zh-TW,ja,ko}/`，合计 10 张。沿用现有图标、绿色风格和 Transight AI 品牌名，无版本号水印；根据后台实际上传栏位选择使用。路径及单独生成命令见 [宣传图说明](promo/README.md)。
+- 宣传图已于 2026-10-14 补齐五种语言，每种提供 440×280 和 1400×560 两种尺寸。英文复用 `promo/` 根目录现有两张图片，简体中文、繁体中文、日语、韩语分别放在 `promo/{zh-CN,zh-TW,ja,ko}/`，合计 10 张。沿用现有图标、绿色风格和 Transight AI 品牌名，无版本号水印；根据后台实际上传栏位选择使用。路径及单独生成命令见 [宣传图说明](promo/README.md)。
 
 ## 本次截图与功能同步
 
@@ -72,7 +72,7 @@
 1. `01-multi-model.png`：Full 多模型译文，源语言下拉框、复制和本地朗读；翻译按钮旁并排显示 Google 整页与免费文字入口，顶部依次为模式切换、显示语言和设置。
 2. `02-on-page.png`：Simple 可编辑原文与单模型译文；无翻译按钮，Google 两个入口在语言选择下方并排显示，顶部图标切换 Full。
 3. `03-settings.png`：目标语言、划词开关、Google 免费文字翻译开关、Simple / Full 模式和自定义系统提示词。
-4. `04-inline-unlock.png`：浮窗内紧凑解锁，测试密码遮挡。
+4. `04-ai-page.png`：网页内翻译与状态工具栏，支持原文对照与恢复。
 5. `05-selection-trigger.png`：选中文字后，末尾附近显示约 2.5 秒的翻译图标。
 
 第 5 张来自 `artifacts/screenshots/{en-US,zh-CN,zh-TW,ja-JP,ko-KR}/selection-trigger.png`。
@@ -87,7 +87,7 @@ README 另展示图片粘贴和单行缩略图，不再额外增加商店截图�
 
 1. 开发者账号、注册及后台要求的身份/联系信息。
 2. 可公开访问的隐私政策地址，以及你希望公开的支持邮箱或支持页面。当前没有提供这些信息，因此没有编造 URL、开发者身份或联系方式。
-3. 在 Privacy practices 栏目中如实说明：用户提交的文本、图片及适用的提示词/网页标题和 description 元数据发送到其配置的 AI 服务；API Key 加密保存在浏览器本地，解锁后仅在受限会话存储中缓存；多模型会分别请求，第三方服务可能收费；点击 Google 入口会将原文或原网页 URL 传给 Google，新标签页链接可能保留在浏览器历史记录。不要因为没有自建服务器，就宣称“数据从不离开设备”。
+3. 在 Privacy practices 栏目中如实说明：用户提交的文本、图片及适用的提示词/网页标题和 description 元数据发送到其配置的 AI 服务；AI 原位网页翻译另需明确确认，将普通页面正文及授权会话内新出现文本分批发送至第一个模型；API Key 加密保存在浏览器本地，解锁后仅在受限会话存储中缓存；多模型会分别请求，第三方服务可能收费；点击 Google 入口会将原文或原网页 URL 传给 Google，新标签页链接可能保留在浏览器历史记录。不要因为没有自建服务器，就宣称“数据从不离开设备”。
 4. 核对全部 HTTP/HTTPS 网站访问权限的理由：普通网页划词翻译，以及访问用户自定义的 AI API。可参考 `dashboard/02-privacy-practices.md` 的英文权限说明；它们是提交辅助草稿，需按实际后台问题确认。
 5. 如审核要求测试方法，提供你认可的可用测试服务与必要说明；不要把真实密钥放进商店图片、公开介绍或安装包。
 6. 上传后检查图片裁切和本地化展示，确认版本号和商品名称后再提交审核。
@@ -96,7 +96,7 @@ README 另展示图片粘贴和单行缩略图，不再额外增加商店截图�
 
 单项权限理由已拆分到 [权限申请说明目录](permission-justifications/README.md)：storage、contextMenus、activeTab、scripting、主机权限、tts，分别提供中英文可复制文案和注意事项。
 
-以下四份文件按后台栏目组织：中文填写指引 + 可粘贴的英文申报/审核文案，复用已有介绍与图片，不重复生成素材。源码与材料同步日期：**2026-10-11**。
+以下四份文件按后台栏目组织：中文填写指引 + 可粘贴的英文申报/审核文案，复用已有介绍与图片，不重复生成素材。源码与材料同步日期：**2026-10-14**。
 
 | 后台栏目 | 文件 | 包含内容 |
 | --- | --- | --- |
@@ -125,7 +125,7 @@ npm run package
 
 该命令先执行静态检查及单元测试，再从当前源码白名单打包，并包含根目录 `LICENSE`；ZIP 输出到本目录的 `package/`，**不写入、不清理 `dist/`**。`npm run build` 仍只构建开发者模式加载目录，不生成 ZIP。
 
-截图从实际扩展界面采集，不重建界面；仅在截图时临时隐藏版本标签、去掉设置页品牌文字后的版本号，保留原有布局，正常使用插件时仍显示版本。采集记录保留实际版本号，并标记 `versionWatermarks: hidden`，图片适配脚本会检查该标记，避免重新使用带版本号的旧截图。当前复用 2026-10-09 采集的五语言无版本号截图，界面未变时不重复生成图片；截图对应的实际版本仅记录在采集元数据中。以下命令使用隔离的无界面 Chromium、本地模拟服务及插件自身的显示语言偏好采集当前源码界面（需要 Playwright 与 Chromium；自定义路径见根 README）：
+截图从实际扩展界面采集，不重建界面；仅在截图时临时隐藏版本标签、去掉设置页品牌文字后的版本号，保留原有布局，正常使用插件时仍显示版本。采集记录保留实际版本号，并标记 `versionWatermarks: hidden`，图片适配脚本会检查该标记，避免重新使用带版本号的旧截图。本次已重新采集当前源码的五语言无版本号截图；未变化的图标与宣传图继续复用；截图对应的实际版本仅记录在采集元数据中。以下命令使用隔离的无界面 Chromium、本地模拟服务及插件自身的显示语言偏好采集当前源码界面（需要 Playwright 与 Chromium；自定义路径见根 README）：
 
 ```sh
 npm run build
@@ -134,7 +134,7 @@ for locale in en-US zh-CN zh-TW ja-JP ko-KR; do
 done
 ```
 
-采集脚本检查实际版本号、语言、多模型结果、Simple / Full 切换、图片粘贴、固定拖动和内嵌解锁，输出到 `artifacts/screenshots/`，再由图片适配脚本同步至 README 和商店素材。回复来自本地模拟服务；仅使用测试凭据，密码以掩码显示。该流程不代替真实工具栏尺寸、浏览器自动语言及第三方 AI 服务测试。
+采集脚本检查实际版本号、语言、AI 网页确认与恢复、多模型结果、Simple / Full 切换、图片粘贴、固定拖动和内嵌解锁，输出到 `artifacts/screenshots/`，再由图片适配脚本同步至 README 和商店素材。回复来自本地模拟服务；仅使用测试凭据，密码以掩码显示。该流程不代替真实工具栏尺寸、浏览器自动语言及第三方 AI 服务测试。
 
 需要完整界面回归时，可单独执行 `TEST_STORE_ASSETS=1 TEST_BROWSER_LOCALE=en-US npm run test:browser`。macOS 的原生语言回归使用有界面浏览器，可能受窗口焦点影响。`TEST_STORE_ASSETS=1` 仅跳过无用户入口的旧截图后台测试；后台可另行用 `TEST_SCREENSHOT_ONLY=1 TEST_BROWSER_HEADLESS=1 TEST_BROWSER_LOCALE=zh-CN npm run test:browser` 检查（原生浏览器语言需匹配测试环境）。
 
@@ -165,3 +165,7 @@ python3 chrome-web-store/tools/validate.py
 - 上传与发布流程：https://developer.chrome.com/docs/webstore/publish
 
 仅更新商店截图时，先用 `scripts/store-screenshots.mjs` 采集五种语言，再运行 `python3 chrome-web-store/tools/prepare-images.py --store-only` 和 `python3 chrome-web-store/tools/validate.py --assets-only`；不会覆盖 README 截图。
+
+## AI 网页翻译素材补充
+
+五语言商店截图各保留 5 张：多模型、Simple 浮窗、设置、AI 原位网页翻译、划词图标。第四张为 `04-ai-page.png`，原内嵌解锁示例仍保留在 README 截图库。整页示例来自真实扩展及本地模拟服务，不代表实际模型质量。全部截图隐藏版本标签；商店详细介绍不写版本号。版本仅用于 manifest、元数据、包名和校验记录。AI 整页功能需用户确认后发送普通页面文本，使用第一个模型；与另开标签页的 Google 功能区分。

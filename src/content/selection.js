@@ -217,6 +217,11 @@
     const updatePinLocale = installPin();
     view = new TransightTranslationView(panel, {
       selectionMode: true,
+      async aiPageTranslate(targetLanguage) {
+        const response = await send({ type: 'AI_PAGE_OPEN', targetLanguage });
+        if (!response?.ok) throw new Error(response?.error || 'aiPageRefreshRequired');
+        close();
+      },
       async websiteTranslate(targetLanguage) {
         const response = await send({ type: 'SELECTION_WEBSITE_TRANSLATE', targetLanguage });
         if (!response?.ok) throw new Error(response?.error || 'websiteTranslationFailed');

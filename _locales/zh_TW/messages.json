@@ -174,7 +174,7 @@
     "message": "不自動掃描網頁，不儲存翻譯紀錄，沒有分析追蹤。只在你主動使用時運作。"
   },
   "versionBrand": {
-    "message": "譯見 AI · v0.1.5"
+    "message": "譯見 AI · v0.1.6"
   },
   "builtFor": {
     "message": "為值得閱讀的世界而造。"
@@ -733,5 +733,89 @@
   },
   "googleFreeTranslationAction": {
     "message": "Google 免費翻譯（新分頁）"
+  },
+  "aiPageTranslate": {
+    "message": "AI 網頁翻譯"
+  },
+  "aiPageHint": {
+    "message": "使用已設定的第一個 AI 模型，原位翻譯目前網頁"
+  },
+  "pageConsent": {
+    "message": "目前及後續載入的網頁文字將傳送給上方服務商。已登入網頁可能含敏感資訊，呼叫可能產生費用。略過表單、編輯器和程式碼。請確認同意後開始；停止無法撤回已傳送的文字。"
+  },
+  "pageStart": {
+    "message": "同意並開始"
+  },
+  "pageStop": {
+    "message": "停止"
+  },
+  "pageOriginal": {
+    "message": "檢視原文"
+  },
+  "pageTranslated": {
+    "message": "檢視譯文"
+  },
+  "pageRestore": {
+    "message": "還原原文並結束"
+  },
+  "pageContinue": {
+    "message": "同意並繼續翻譯"
+  },
+  "pageExpand": {
+    "message": "展開"
+  },
+  "pageCollapse": {
+    "message": "收合"
+  },
+  "pageClose": {
+    "message": "還原原文並關閉"
+  },
+  "pageReady": {
+    "message": "保留網頁元素和連結，譯文長度可能改變換行和高度。"
+  },
+  "pageWorking": {
+    "message": "正在翻譯"
+  },
+  "pageWatching": {
+    "message": "目前內容已處理 · 等待新內容"
+  },
+  "pageStopped": {
+    "message": "已停止"
+  },
+  "pageProgress": {
+    "message": "$1 / $2 段文字 · $3 段略過或失敗"
+  },
+  "pageBudget": {
+    "message": "本輪已達 6 萬字元 / 100 次請求上限，繼續翻譯可能產生額外費用。"
+  },
+  "pageSessionExpired": {
+    "message": "翻譯工作階段已中斷，請重新開始以繼續未完成的文字。"
+  },
+  "pageInvalidBatch": {
+    "message": "文字區塊過大或無法安全翻譯。"
+  },
+  "pageInvalidResponse": {
+    "message": "模型傳回的結構不正確，已保留原文，可重新開始重試。"
+  },
+  "pageConfigChanged": {
+    "message": "服務商或第一個模型已變更，請重新開啟 AI 網頁翻譯。"
+  },
+  "pageNavigated": {
+    "message": "網頁位址已變更，翻譯已停止，避免自動傳送下一個網頁的內容。"
+  },
+  "pageRetry": {
+    "message": "重試未完成文字"
+  },
+  "aiPageUnavailable": {
+    "message": "目前頁面不支援 AI 網頁翻譯，請在一般網頁載入完成後使用。"
+  },
+  "aiPageInjectionFailed": {
+    "message": "無法在此網頁啟用 AI 翻譯，請檢查擴充功能的網站存取權限，並重新整理網頁再試。"
+  },
+  "aiPageRefreshRequired": {
+    "message": "AI 網頁翻譯連線已失效，請重新載入擴充功能並重新整理網頁後再試。"
+  },
+  "aiPageOpenFailed": {
+    "message": "無法啟動 AI 網頁翻譯，請重新整理網頁後再試。"
   }
 }
