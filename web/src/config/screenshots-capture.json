@@ -1,0 +1,347 @@
+{
+  "zh-cn": {
+    "version": "0.1.6",
+    "versionWatermarks": "hidden",
+    "locale": "zh-CN",
+    "language": "zh-CN",
+    "cropBoxes": {
+      "selection.png": [
+        1,
+        97,
+        415,
+        770
+      ],
+      "external-translation.png": [
+        1,
+        97,
+        415,
+        770
+      ],
+      "selection-pinned.png": [
+        141,
+        137,
+        555,
+        810
+      ],
+      "selection-simple.png": [
+        1,
+        97,
+        415,
+        483
+      ],
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        892
+      ],
+      "context-multi.png": [
+        705,
+        9,
+        1119,
+        682
+      ],
+      "panel.png": [
+        705,
+        9,
+        1119,
+        578
+      ],
+      "selection-locked.png": [
+        705,
+        9,
+        1119,
+        819
+      ]
+    },
+    "inputBoxes": {
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        534
+      ]
+    },
+    "features": [
+      "ai-page-translation"
+    ],
+    "method": "isolated Chromium; saved extension language preference; local mock API",
+    "capturedAt": "2026-10-14T06:22:41.965Z"
+  },
+  "zh-tw": {
+    "version": "0.1.6",
+    "versionWatermarks": "hidden",
+    "locale": "zh-TW",
+    "language": "zh-TW",
+    "cropBoxes": {
+      "selection.png": [
+        1,
+        97,
+        415,
+        770
+      ],
+      "external-translation.png": [
+        1,
+        97,
+        415,
+        770
+      ],
+      "selection-pinned.png": [
+        141,
+        137,
+        555,
+        810
+      ],
+      "selection-simple.png": [
+        1,
+        97,
+        415,
+        483
+      ],
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        892
+      ],
+      "context-multi.png": [
+        705,
+        9,
+        1119,
+        682
+      ],
+      "panel.png": [
+        705,
+        9,
+        1119,
+        578
+      ],
+      "selection-locked.png": [
+        705,
+        9,
+        1119,
+        819
+      ]
+    },
+    "inputBoxes": {
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        534
+      ]
+    },
+    "features": [
+      "ai-page-translation"
+    ],
+    "method": "isolated Chromium; saved extension language preference; local mock API",
+    "capturedAt": "2026-10-14T06:23:09.215Z"
+  },
+  "en": {
+    "version": "0.1.6",
+    "versionWatermarks": "hidden",
+    "locale": "en-US",
+    "language": "en",
+    "cropBoxes": {
+      "selection.png": [
+        1,
+        97,
+        415,
+        786
+      ],
+      "external-translation.png": [
+        1,
+        97,
+        415,
+        786
+      ],
+      "selection-pinned.png": [
+        141,
+        137,
+        555,
+        826
+      ],
+      "selection-simple.png": [
+        1,
+        97,
+        415,
+        487
+      ],
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        908
+      ],
+      "context-multi.png": [
+        705,
+        9,
+        1119,
+        698
+      ],
+      "panel.png": [
+        705,
+        9,
+        1119,
+        594
+      ],
+      "selection-locked.png": [
+        705,
+        9,
+        1119,
+        852
+      ]
+    },
+    "inputBoxes": {
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        550
+      ]
+    },
+    "features": [
+      "ai-page-translation"
+    ],
+    "method": "isolated Chromium; saved extension language preference; local mock API",
+    "capturedAt": "2026-10-14T06:23:06.162Z"
+  },
+  "ja": {
+    "version": "0.1.6",
+    "versionWatermarks": "hidden",
+    "locale": "ja-JP",
+    "language": "ja",
+    "cropBoxes": {
+      "selection.png": [
+        1,
+        97,
+        415,
+        770
+      ],
+      "external-translation.png": [
+        1,
+        97,
+        415,
+        770
+      ],
+      "selection-pinned.png": [
+        141,
+        137,
+        555,
+        810
+      ],
+      "selection-simple.png": [
+        1,
+        97,
+        415,
+        483
+      ],
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        892
+      ],
+      "context-multi.png": [
+        705,
+        9,
+        1119,
+        682
+      ],
+      "panel.png": [
+        705,
+        9,
+        1119,
+        578
+      ],
+      "selection-locked.png": [
+        705,
+        9,
+        1119,
+        854
+      ]
+    },
+    "inputBoxes": {
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        534
+      ]
+    },
+    "features": [
+      "ai-page-translation"
+    ],
+    "method": "isolated Chromium; saved extension language preference; local mock API",
+    "capturedAt": "2026-10-14T06:23:12.176Z"
+  },
+  "ko": {
+    "version": "0.1.6",
+    "versionWatermarks": "hidden",
+    "locale": "ko-KR",
+    "language": "ko",
+    "cropBoxes": {
+      "selection.png": [
+        1,
+        97,
+        415,
+        770
+      ],
+      "external-translation.png": [
+        1,
+        97,
+        415,
+        770
+      ],
+      "selection-pinned.png": [
+        141,
+        137,
+        555,
+        810
+      ],
+      "selection-simple.png": [
+        1,
+        97,
+        415,
+        483
+      ],
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        892
+      ],
+      "context-multi.png": [
+        705,
+        9,
+        1119,
+        682
+      ],
+      "panel.png": [
+        705,
+        9,
+        1119,
+        578
+      ],
+      "selection-locked.png": [
+        705,
+        9,
+        1119,
+        836
+      ]
+    },
+    "inputBoxes": {
+      "selection-image-strip.png": [
+        1,
+        97,
+        415,
+        534
+      ]
+    },
+    "features": [
+      "ai-page-translation"
+    ],
+    "method": "isolated Chromium; saved extension language preference; local mock API",
+    "capturedAt": "2026-10-14T06:23:15.325Z"
+  }
+}

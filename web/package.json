@@ -8,7 +8,9 @@
     "build": "astro check && astro build",
     "preview": "astro preview --host 127.0.0.1",
     "check": "astro check",
-    "test": "npm run build && node --test checks/*.mjs"
+    "test": "npm run build && node --test checks/*.mjs",
+    "screenshots:sync": "node scripts/sync-screenshots.mjs",
+    "test:browser": "node scripts/browser-smoke.mjs"
   },
   "engines": {
     "node": ">=22.12.0"
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "sharp": "^0.35.5",
     "typescript": "^6.0.3"
   },
   "license": "Apache-2.0"
