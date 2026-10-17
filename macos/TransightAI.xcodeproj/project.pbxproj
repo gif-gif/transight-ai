@@ -1,0 +1,43 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 60;
+	objects = {
+		000000000000000000000064 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransightApp.swift; sourceTree = "<group>"; };
+		0000000000000000000000C8 = { isa = PBXBuildFile; fileRef = 000000000000000000000064; };
+		000000000000000000000065 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceView.swift; sourceTree = "<group>"; };
+		0000000000000000000000C9 = { isa = PBXBuildFile; fileRef = 000000000000000000000065; };
+		000000000000000000000066 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslatorView.swift; sourceTree = "<group>"; };
+		0000000000000000000000CA = { isa = PBXBuildFile; fileRef = 000000000000000000000066; };
+		000000000000000000000067 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		0000000000000000000000CB = { isa = PBXBuildFile; fileRef = 000000000000000000000067; };
+		000000000000000000000068 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		0000000000000000000000CC = { isa = PBXBuildFile; fileRef = 000000000000000000000068; };
+		000000000000000000000069 = { isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0000000000000000000000CD = { isa = PBXBuildFile; fileRef = 000000000000000000000069; };
+		00000000000000000000006E = { isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Transight AI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		00000000000000000000006F = { isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		000000000000000000000070 = { isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TransightAI.entitlements; sourceTree = "<group>"; };
+		000000000000000000000071 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		0000000000000000000000D2 = { isa = PBXBuildFile; productRef = 000000000000000000000262; };
+		00000000000000000000012C = { isa = PBXGroup; children = (00000000000000000000012D, 00000000000000000000012F, 000000000000000000000071, 00000000000000000000012E); sourceTree = "<group>"; };
+		00000000000000000000012D = { isa = PBXGroup; children = (000000000000000000000064, 000000000000000000000065, 000000000000000000000066, 000000000000000000000067, 000000000000000000000068, 000000000000000000000069); path = Sources/TransightApp; sourceTree = "<group>"; };
+		00000000000000000000012E = { isa = PBXGroup; children = (00000000000000000000006E); name = Products; sourceTree = "<group>"; };
+		00000000000000000000012F = { isa = PBXGroup; children = (00000000000000000000006F, 000000000000000000000070); path = Configuration; sourceTree = "<group>"; };
+		000000000000000000000190 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (0000000000000000000000C8, 0000000000000000000000C9, 0000000000000000000000CA, 0000000000000000000000CB, 0000000000000000000000CC); runOnlyForDeploymentPostprocessing = 0; };
+		000000000000000000000191 = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (0000000000000000000000CD); runOnlyForDeploymentPostprocessing = 0; };
+		000000000000000000000192 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (0000000000000000000000D2); runOnlyForDeploymentPostprocessing = 0; };
+		0000000000000000000001F4 = { isa = PBXNativeTarget; buildConfigurationList = 0000000000000000000002BD; buildPhases = (000000000000000000000190, 000000000000000000000192, 000000000000000000000191); buildRules = (); dependencies = (); name = TransightAI; packageProductDependencies = (000000000000000000000262); productName = "Transight AI"; productReference = 00000000000000000000006E; productType = "com.apple.product-type.application"; };
+		000000000000000000000258 = { isa = XCLocalSwiftPackageReference; relativePath = .; };
+		000000000000000000000262 = { isa = XCSwiftPackageProductDependency; package = 000000000000000000000258; productName = TransightCore; };
+		0000000000000000000002BC = { isa = XCConfigurationList; buildConfigurations = (0000000000000000000002C6, 0000000000000000000002C7); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0000000000000000000002BD = { isa = XCConfigurationList; buildConfigurations = (0000000000000000000002D0, 0000000000000000000002D1); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		0000000000000000000002C6 = { isa = XCBuildConfiguration; buildSettings = { CLANG_ENABLE_MODULES = YES; MACOSX_DEPLOYMENT_TARGET = 14.0; SDKROOT = macosx; SWIFT_VERSION = 6.0; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = YES; GCC_OPTIMIZATION_LEVEL = 0; ONLY_ACTIVE_ARCH = YES; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)"; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; }; name = Debug; };
+		0000000000000000000002C7 = { isa = XCBuildConfiguration; buildSettings = { CLANG_ENABLE_MODULES = YES; MACOSX_DEPLOYMENT_TARGET = 14.0; SDKROOT = macosx; SWIFT_VERSION = 6.0; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; SWIFT_COMPILATION_MODE = wholemodule; SWIFT_OPTIMIZATION_LEVEL = "-O"; }; name = Release; };
+		0000000000000000000002D0 = { isa = XCBuildConfiguration; buildSettings = { ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor; CODE_SIGN_ENTITLEMENTS = Configuration/TransightAI.entitlements; CODE_SIGN_STYLE = Automatic; COMBINE_HIDPI_IMAGES = YES; CURRENT_PROJECT_VERSION = 1; ENABLE_APP_SANDBOX = YES; ENABLE_HARDENED_RUNTIME = YES; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = Configuration/Info.plist; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks"; MARKETING_VERSION = 0.1.0; PRODUCT_BUNDLE_IDENTIFIER = com.transight.ai.mac; PRODUCT_NAME = "Transight AI"; SWIFT_EMIT_LOC_STRINGS = YES; }; name = Debug; };
+		0000000000000000000002D1 = { isa = XCBuildConfiguration; buildSettings = { ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor; CODE_SIGN_ENTITLEMENTS = Configuration/TransightAI.entitlements; CODE_SIGN_STYLE = Automatic; COMBINE_HIDPI_IMAGES = YES; CURRENT_PROJECT_VERSION = 1; ENABLE_APP_SANDBOX = YES; ENABLE_HARDENED_RUNTIME = YES; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = Configuration/Info.plist; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks"; MARKETING_VERSION = 0.1.0; PRODUCT_BUNDLE_IDENTIFIER = com.transight.ai.mac; PRODUCT_NAME = "Transight AI"; SWIFT_EMIT_LOC_STRINGS = YES; }; name = Release; };
+		000000000000000000000001 = { isa = PBXProject; attributes = { BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 1600; TargetAttributes = { 0000000000000000000001F4 = { CreatedOnToolsVersion = 16.0; }; }; }; buildConfigurationList = 0000000000000000000002BC; compatibilityVersion = "Xcode 15.0"; developmentRegion = zh_CN; hasScannedForEncodings = 0; knownRegions = (zh_CN, en, Base); mainGroup = 00000000000000000000012C; packageReferences = (000000000000000000000258); productRefGroup = 00000000000000000000012E; projectDirPath = ""; projectRoot = ""; targets = (0000000000000000000001F4); };
+	};
+	rootObject = 000000000000000000000001;
+}
