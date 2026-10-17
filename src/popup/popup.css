@@ -30,7 +30,7 @@ html.standalone body{width:400px;max-width:100%}
 /* Retrying is an action, presented as an inline text link. */
 .retry-result{display:inline;padding:2px 0;border:0;border-radius:2px;background:transparent;color:var(--accent);font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .retry-result:hover{color:var(--accent-dark);background:transparent}
-.retry-result:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.retry-result:focus-visible{outline:none}
 
 .copy-result{width:32px;min-width:32px;height:32px;min-height:32px;padding:6px;color:var(--muted)}
 .copy-result svg{width:18px;height:18px}
@@ -52,7 +52,7 @@ html.standalone body{width:400px;max-width:100%}
 
 .settings-link{color:var(--accent);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .settings-link:hover{color:var(--accent-dark)}
-.settings-link:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.settings-link:focus-visible{outline:none}
 
 /* Images lead the source area; text starts immediately below, on the same left edge. */
 .source-image-wrap{padding:2px 13px 4px}
