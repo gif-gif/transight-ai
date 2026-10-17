@@ -1,6 +1,9 @@
 ---
-import { siteLinks } from '../../config/site';
+import { storeListingUrl } from '../../config/site';
 import { getPrivacyPolicy } from '../../i18n/privacy';
+import ScreenshotGallery from '../../components/ScreenshotGallery.astro';
+import Capabilities from '../../components/Capabilities.astro';
+import SelectionTrigger from '../../components/SelectionTrigger.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { locales, getDictionary, localePath, type Locale } from '../../i18n';
 export function getStaticPaths() { return locales.map((locale) => ({ params: { locale } })); }
@@ -14,8 +17,11 @@ const t = getDictionary(locale);
     <aside class="notice"><h2>{t.guide.requirements}</h2><p>{t.guide.requirementText}</p></aside>
     <ol class="guide-steps" role="list">{t.guide.steps.map((step, index) => <li id={`step-${index + 1}`}>
       <span class="step-number">0{index + 1}</span>
-      <div><h2>{step.title}</h2><p>{step.text}</p>{index === 0 && <a class="button button-primary store-link" href={siteLinks.storeSearch} target="_blank" rel="noopener noreferrer">{t.store.search}<span aria-hidden="true">↗</span></a>}<p class="step-detail">{step.detail}</p></div>
+      <div><h2>{step.title}</h2><p>{step.text}</p>{index === 0 && <a class="button button-primary store-link" href={storeListingUrl(locale)} target="_blank" rel="noopener noreferrer">{t.store.open}<span aria-hidden="true">↗</span></a>}<p class="step-detail">{step.detail}</p></div>
     </li>)}</ol>
+    <SelectionTrigger locale={locale} />
+    <Capabilities locale={locale} detailed />
+    <ScreenshotGallery locale={locale} />
     <aside class="notice" id="privacy"><h2>{t.guide.privacyTitle}</h2><p>{t.guide.privacyText}</p><a class="text-link privacy-policy-link" href={localePath(locale, 'privacy')}>{getPrivacyPolicy(locale).title} <span aria-hidden="true">→</span></a></aside>
   </article>
 </SiteLayout>

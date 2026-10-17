@@ -1,0 +1,24 @@
+---
+import images from '../config/screenshots.json';
+import { screenshots } from '../i18n/screenshots';
+import type { Locale } from '../i18n';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = screenshots[locale];
+---
+<section class="screenshot-gallery" id="screenshots" aria-labelledby="screenshots-title">
+  <h2 id="screenshots-title">{t.title}</h2>
+  <p class="screenshot-intro">{t.description}</p>
+  <div class="screenshot-grid">
+    {images[locale].map((image) => {
+      const caption = t.items[image.id as keyof typeof t.items];
+      return <figure>
+        <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`${t.enlarge}: ${caption}`}>
+          <img src={image.src} width={image.width} height={image.height} alt={caption} loading="lazy" decoding="async" />
+          <span class="screenshot-enlarge">{t.enlarge} <span aria-hidden="true">↗</span></span>
+        </a>
+        <figcaption>{caption}</figcaption>
+      </figure>;
+    })}
+  </div>
+</section>

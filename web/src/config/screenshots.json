@@ -1,0 +1,312 @@
+{
+  "zh-cn": [
+    {
+      "id": "ai-page-confirm",
+      "src": "/screenshots/zh-cn/ai-page-confirm.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "ai-page-result",
+      "src": "/screenshots/zh-cn/ai-page-result.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "simple",
+      "src": "/screenshots/zh-cn/simple.webp",
+      "width": 414,
+      "height": 386
+    },
+    {
+      "id": "google",
+      "src": "/screenshots/zh-cn/google.webp",
+      "width": 414,
+      "height": 352
+    },
+    {
+      "id": "popup-simple",
+      "src": "/screenshots/zh-cn/popup-simple.webp",
+      "width": 400,
+      "height": 385
+    },
+    {
+      "id": "images",
+      "src": "/screenshots/zh-cn/images.webp",
+      "width": 414,
+      "height": 437
+    },
+    {
+      "id": "selection",
+      "src": "/screenshots/zh-cn/selection.webp",
+      "width": 1120,
+      "height": 980
+    },
+    {
+      "id": "comparison",
+      "src": "/screenshots/zh-cn/comparison.webp",
+      "width": 400,
+      "height": 800
+    },
+    {
+      "id": "settings",
+      "src": "/screenshots/zh-cn/settings.webp",
+      "width": 1120,
+      "height": 2383
+    },
+    {
+      "id": "unlock",
+      "src": "/screenshots/zh-cn/unlock.webp",
+      "width": 1120,
+      "height": 980
+    }
+  ],
+  "zh-tw": [
+    {
+      "id": "ai-page-confirm",
+      "src": "/screenshots/zh-tw/ai-page-confirm.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "ai-page-result",
+      "src": "/screenshots/zh-tw/ai-page-result.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "simple",
+      "src": "/screenshots/zh-tw/simple.webp",
+      "width": 414,
+      "height": 386
+    },
+    {
+      "id": "google",
+      "src": "/screenshots/zh-tw/google.webp",
+      "width": 414,
+      "height": 352
+    },
+    {
+      "id": "popup-simple",
+      "src": "/screenshots/zh-tw/popup-simple.webp",
+      "width": 400,
+      "height": 385
+    },
+    {
+      "id": "images",
+      "src": "/screenshots/zh-tw/images.webp",
+      "width": 414,
+      "height": 437
+    },
+    {
+      "id": "selection",
+      "src": "/screenshots/zh-tw/selection.webp",
+      "width": 1120,
+      "height": 980
+    },
+    {
+      "id": "comparison",
+      "src": "/screenshots/zh-tw/comparison.webp",
+      "width": 400,
+      "height": 800
+    },
+    {
+      "id": "settings",
+      "src": "/screenshots/zh-tw/settings.webp",
+      "width": 1120,
+      "height": 2404
+    },
+    {
+      "id": "unlock",
+      "src": "/screenshots/zh-tw/unlock.webp",
+      "width": 1120,
+      "height": 980
+    }
+  ],
+  "en": [
+    {
+      "id": "ai-page-confirm",
+      "src": "/screenshots/en/ai-page-confirm.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "ai-page-result",
+      "src": "/screenshots/en/ai-page-result.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "simple",
+      "src": "/screenshots/en/simple.webp",
+      "width": 414,
+      "height": 390
+    },
+    {
+      "id": "google",
+      "src": "/screenshots/en/google.webp",
+      "width": 414,
+      "height": 368
+    },
+    {
+      "id": "popup-simple",
+      "src": "/screenshots/en/popup-simple.webp",
+      "width": 400,
+      "height": 390
+    },
+    {
+      "id": "images",
+      "src": "/screenshots/en/images.webp",
+      "width": 414,
+      "height": 453
+    },
+    {
+      "id": "selection",
+      "src": "/screenshots/en/selection.webp",
+      "width": 1120,
+      "height": 980
+    },
+    {
+      "id": "comparison",
+      "src": "/screenshots/en/comparison.webp",
+      "width": 400,
+      "height": 800
+    },
+    {
+      "id": "settings",
+      "src": "/screenshots/en/settings.webp",
+      "width": 1120,
+      "height": 2479
+    },
+    {
+      "id": "unlock",
+      "src": "/screenshots/en/unlock.webp",
+      "width": 1120,
+      "height": 980
+    }
+  ],
+  "ja": [
+    {
+      "id": "ai-page-confirm",
+      "src": "/screenshots/ja/ai-page-confirm.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "ai-page-result",
+      "src": "/screenshots/ja/ai-page-result.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "simple",
+      "src": "/screenshots/ja/simple.webp",
+      "width": 414,
+      "height": 386
+    },
+    {
+      "id": "google",
+      "src": "/screenshots/ja/google.webp",
+      "width": 414,
+      "height": 352
+    },
+    {
+      "id": "popup-simple",
+      "src": "/screenshots/ja/popup-simple.webp",
+      "width": 400,
+      "height": 385
+    },
+    {
+      "id": "images",
+      "src": "/screenshots/ja/images.webp",
+      "width": 414,
+      "height": 437
+    },
+    {
+      "id": "selection",
+      "src": "/screenshots/ja/selection.webp",
+      "width": 1120,
+      "height": 980
+    },
+    {
+      "id": "comparison",
+      "src": "/screenshots/ja/comparison.webp",
+      "width": 400,
+      "height": 800
+    },
+    {
+      "id": "settings",
+      "src": "/screenshots/ja/settings.webp",
+      "width": 1120,
+      "height": 2499
+    },
+    {
+      "id": "unlock",
+      "src": "/screenshots/ja/unlock.webp",
+      "width": 1120,
+      "height": 980
+    }
+  ],
+  "ko": [
+    {
+      "id": "ai-page-confirm",
+      "src": "/screenshots/ko/ai-page-confirm.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "ai-page-result",
+      "src": "/screenshots/ko/ai-page-result.webp",
+      "width": 1280,
+      "height": 850
+    },
+    {
+      "id": "simple",
+      "src": "/screenshots/ko/simple.webp",
+      "width": 414,
+      "height": 386
+    },
+    {
+      "id": "google",
+      "src": "/screenshots/ko/google.webp",
+      "width": 414,
+      "height": 352
+    },
+    {
+      "id": "popup-simple",
+      "src": "/screenshots/ko/popup-simple.webp",
+      "width": 400,
+      "height": 385
+    },
+    {
+      "id": "images",
+      "src": "/screenshots/ko/images.webp",
+      "width": 414,
+      "height": 437
+    },
+    {
+      "id": "selection",
+      "src": "/screenshots/ko/selection.webp",
+      "width": 1120,
+      "height": 980
+    },
+    {
+      "id": "comparison",
+      "src": "/screenshots/ko/comparison.webp",
+      "width": 400,
+      "height": 800
+    },
+    {
+      "id": "settings",
+      "src": "/screenshots/ko/settings.webp",
+      "width": 1120,
+      "height": 2444
+    },
+    {
+      "id": "unlock",
+      "src": "/screenshots/ko/unlock.webp",
+      "width": 1120,
+      "height": 980
+    }
+  ]
+}

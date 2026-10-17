@@ -18,7 +18,7 @@ export function showScreenshotPicker(token, labels) {
     .hint{top:16px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none}
     .actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;right:16px;bottom:16px;cursor:default}
     button{font:inherit;color:#fff;background:#394252;border:0;border-radius:6px;padding:7px 12px;cursor:pointer}
-    button.confirm{background:#ffb65c;color:#21180d} button:disabled{opacity:.45;cursor:default} button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+    button.confirm{background:#ffb65c;color:#21180d} button:disabled{opacity:.45;cursor:default} button:focus{outline:none} button:focus-visible{filter:brightness(.94)}
     [hidden]{display:none!important}
   </style><div class="surface" tabindex="-1" role="dialog" aria-modal="true"><div class="region" hidden></div><div class="hint" role="status"></div><div class="actions"><span class="size"></span><button class="cancel"></button><button class="confirm" disabled></button></div></div>`;
   const surface = shadow.querySelector('.surface'), region = shadow.querySelector('.region');

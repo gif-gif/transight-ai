@@ -16,11 +16,11 @@ export default defineConfig({
   trailingSlash: 'always',
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'zh-cn', 'zh-tw'],
+    locales: ['en', 'zh-cn', 'zh-tw', 'ja', 'ko'],
     routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
   integrations: site ? [sitemap({
     filter: (page) => new URL(page).pathname !== '/',
-    i18n: { defaultLocale: 'en', locales: { en: 'en', 'zh-cn': 'zh-CN', 'zh-tw': 'zh-TW' } },
+    i18n: { defaultLocale: 'en', locales: { en: 'en', 'zh-cn': 'zh-CN', 'zh-tw': 'zh-TW', ja: 'ja', ko: 'ko' } },
   })] : [],
 });

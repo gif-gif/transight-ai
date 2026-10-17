@@ -1,0 +1,62 @@
+{
+  "zh-cn": {
+    "full": {
+      "src": "/screenshots/zh-cn/selection-trigger-full.webp",
+      "width": 1280,
+      "height": 800
+    },
+    "detail": {
+      "src": "/screenshots/zh-cn/selection-trigger-detail.webp",
+      "width": 424,
+      "height": 160
+    }
+  },
+  "zh-tw": {
+    "full": {
+      "src": "/screenshots/zh-tw/selection-trigger-full.webp",
+      "width": 1280,
+      "height": 800
+    },
+    "detail": {
+      "src": "/screenshots/zh-tw/selection-trigger-detail.webp",
+      "width": 424,
+      "height": 160
+    }
+  },
+  "en": {
+    "full": {
+      "src": "/screenshots/en/selection-trigger-full.webp",
+      "width": 1280,
+      "height": 800
+    },
+    "detail": {
+      "src": "/screenshots/en/selection-trigger-detail.webp",
+      "width": 424,
+      "height": 160
+    }
+  },
+  "ja": {
+    "full": {
+      "src": "/screenshots/ja/selection-trigger-full.webp",
+      "width": 1280,
+      "height": 800
+    },
+    "detail": {
+      "src": "/screenshots/ja/selection-trigger-detail.webp",
+      "width": 424,
+      "height": 160
+    }
+  },
+  "ko": {
+    "full": {
+      "src": "/screenshots/ko/selection-trigger-full.webp",
+      "width": 1280,
+      "height": 800
+    },
+    "detail": {
+      "src": "/screenshots/ko/selection-trigger-detail.webp",
+      "width": 424,
+      "height": 160
+    }
+  }
+}

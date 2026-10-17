@@ -25,7 +25,7 @@ const canonical = Astro.site ? new URL(localePath(locale, page), Astro.site) : u
     <meta property="og:site_name" content={t.brand} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:locale" content={locale === 'en' ? 'en_US' : localeInfo[locale].lang.replace('-', '_')} />
+    <meta property="og:locale" content={localeInfo[locale].og} />
     {canonical && <>
       <link rel="canonical" href={canonical} />
       <meta property="og:url" content={canonical} />
