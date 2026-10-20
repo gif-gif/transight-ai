@@ -94,6 +94,13 @@ try {
       const response = await page.request.get(new URL(await link.getAttribute('href'), base).href);
       assert.equal(response.status(), 200);
       assert.match(response.headers()['content-type'], /image\/webp/);
+      await link.click();
+      const lightbox = page.locator('dialog.lightbox');
+      assert.equal(await lightbox.evaluate(dialog => dialog.open), true);
+      assert.equal(await lightbox.locator('img').getAttribute('src'), new URL(await link.getAttribute('href'), base).href);
+      assert.equal(context.pages().length, 1, 'Image previews must open in-page, not in a new tab');
+      await page.keyboard.press('Escape');
+      assert.equal(await lightbox.evaluate(dialog => dialog.open), false);
       const capabilities = page.locator('#capabilities');
       assert.equal(await capabilities.locator('article').count(), 7);
       for (const id of ['ai-page', 'modes', 'images', 'speech', 'controls', 'google', 'website']) {

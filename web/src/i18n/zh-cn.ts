@@ -7,6 +7,7 @@ export const zhCN = {
     guideTitle: '开始使用 — 译见 AI', guideDescription: "从 Chrome 应用商店直接安装。配置自选 AI 服务即可原处翻译；也可无需 API Key，在新标签页使用 Google 文字或整页翻译。无需下载源码或构建工具。",
   },
   nav: { features: '功能', how: '使用方式', guide: '开始使用', language: '显示语言', main: '主导航', skip: '跳转到主要内容' },
+  lightbox: { close: '关闭图片预览' },
   hero: {
     eyebrow: '完全开源 · 为 Chrome 而生', title: '选中文字，轻轻一点，', accent: '译文，就在眼前。',
     description: '选中单词、句子或整段文字，点击旁边的翻译图标，原处即见译文。不用复制粘贴，不必切换页面，让阅读一气呵成。',

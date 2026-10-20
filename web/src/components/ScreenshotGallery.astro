@@ -13,9 +13,9 @@ const t = screenshots[locale];
     {images[locale].map((image) => {
       const caption = t.items[image.id as keyof typeof t.items];
       return <figure>
-        <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`${t.enlarge}: ${caption}`}>
+        <a href={image.src} data-lightbox={caption} aria-label={`${t.enlarge}: ${caption}`}>
           <img src={image.src} width={image.width} height={image.height} alt={caption} loading="lazy" decoding="async" />
-          <span class="screenshot-enlarge">{t.enlarge} <span aria-hidden="true">↗</span></span>
+          <span class="screenshot-enlarge">{t.enlarge} <span aria-hidden="true">⤢</span></span>
         </a>
         <figcaption>{caption}</figcaption>
       </figure>;

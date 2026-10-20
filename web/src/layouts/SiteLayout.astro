@@ -3,6 +3,7 @@ import { getDictionary, locales, localeInfo, localePath, type Locale, type Page 
 import { getPrivacyPolicy } from '../i18n/privacy';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ImageLightbox from '../components/ImageLightbox.astro';
 import '../styles/global.css';
 interface Props { locale: Locale; page?: Page }
 const { locale, page = '' } = Astro.props;
@@ -39,5 +40,6 @@ const canonical = Astro.site ? new URL(localePath(locale, page), Astro.site) : u
     <Header locale={locale} page={page} />
     <main id="main"><slot /></main>
     <Footer locale={locale} />
+    <ImageLightbox locale={locale} />
   </body>
 </html>

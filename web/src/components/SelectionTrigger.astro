@@ -15,9 +15,9 @@ const image = images[locale];
   </header>
   <div class="trigger-layout">
     <figure>
-      <a class="trigger-preview" href={image.full.src} target="_blank" rel="noopener noreferrer" aria-label={t.enlarge}>
+      <a class="trigger-preview" href={image.full.src} data-lightbox={t.caption} aria-label={t.enlarge}>
         <img src={image.detail.src} width={image.detail.width} height={image.detail.height} alt={t.alt} loading="lazy" decoding="async" />
-        <span class="trigger-enlarge">{t.enlarge}<span aria-hidden="true">↗</span></span>
+        <span class="trigger-enlarge">{t.enlarge}<span aria-hidden="true">⤢</span></span>
       </a>
       <figcaption>{t.caption}</figcaption>
       <p class="trigger-hint">{t.hint}</p>

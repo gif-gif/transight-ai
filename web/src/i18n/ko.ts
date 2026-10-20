@@ -10,6 +10,7 @@ export const ko: Dictionary = {
     guideDescription: "Chrome 웹 스토어에서 바로 설치하세요. 자신의 AI 서비스를 설정해 페이지 안에서 번역하거나, API 키 없이 Google 텍스트·전체 페이지 번역을 새 탭에서 사용할 수 있습니다. 소스 다운로드나 빌드 도구는 필요 없습니다.",
   },
   nav: { features: '기능', how: '사용 방법', guide: '시작하기', language: '언어', main: '주요 탐색', skip: '본문으로 건너뛰기' },
+  lightbox: { close: '이미지 미리보기 닫기' },
   hero: {
     eyebrow: '완전한 오픈 소스 · CHROME용',
     title: '선택하고, 클릭하세요.', accent: '번역은 바로 그 자리에.',
