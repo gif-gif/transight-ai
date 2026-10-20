@@ -8,6 +8,7 @@ export const en = {
     guideDescription: "Install directly from the Chrome Web Store. Connect your own AI service to translate in place, or use Google text and whole-page translation in a new tab without an API key. No source download or build tools are needed.",
   },
   nav: { features: 'Features', how: 'How it works', guide: 'Get started', language: 'Language', main: 'Main navigation', skip: 'Skip to content' },
+  lightbox: { close: 'Close image preview' },
   hero: {
     eyebrow: 'FULLY OPEN SOURCE · MADE FOR CHROME',
     title: 'Select. Click.',

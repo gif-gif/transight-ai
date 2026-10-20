@@ -10,6 +10,7 @@ export const ja: Dictionary = {
     guideDescription: "Chrome ウェブストアから直接インストールできます。自分の AI サービスを設定してその場で翻訳するか、API キーなしで Google のテキスト・ページ翻訳を新しいタブに開きます。ソースの取得やビルドツールは不要です。",
   },
   nav: { features: '機能', how: '使い方', guide: 'はじめる', language: '言語', main: 'メインナビゲーション', skip: '本文へスキップ' },
+  lightbox: { close: '画像プレビューを閉じる' },
   hero: {
     eyebrow: '完全オープンソース · CHROME 向け',
     title: '選んで、クリック。', accent: '翻訳は、その場で。',

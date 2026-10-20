@@ -1,0 +1,47 @@
+---
+import { getDictionary, type Locale } from '../i18n';
+interface Props { locale: Locale }
+const t = getDictionary(Astro.props.locale);
+---
+<dialog class="lightbox" aria-labelledby="lightbox-caption">
+  <figure>
+    <img src="" alt="" decoding="async" />
+    <figcaption id="lightbox-caption"></figcaption>
+  </figure>
+  <button class="lightbox-close" type="button" aria-label={t.lightbox.close}><span aria-hidden="true">×</span></button>
+</dialog>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('dialog.lightbox');
+  const image = dialog?.querySelector('img');
+  const caption = dialog?.querySelector('figcaption');
+  document.querySelectorAll<HTMLAnchorElement>('a[data-lightbox]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      // Let modified clicks (new tab/window) keep the native link behaviour.
+      if (!dialog || !image || !caption || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      const preview = link.querySelector('img');
+      image.src = link.href;
+      image.alt = preview?.alt ?? '';
+      caption.textContent = link.dataset.lightbox || preview?.alt || '';
+      dialog.showModal();
+    });
+  });
+  dialog?.addEventListener('click', (event) => {
+    // Clicking the backdrop or the close button dismisses; clicking the image does not.
+    if (event.target === dialog || (event.target instanceof Element && event.target.closest('.lightbox-close'))) dialog.close();
+  });
+  dialog?.addEventListener('close', () => { image?.removeAttribute('src'); });
+</script>
+<style>
+  .lightbox { width: min(1400px, calc(100vw - 48px)); max-width: none; max-height: calc(100dvh - 48px); padding: 0; border: 0; background: transparent; overflow: visible; }
+  .lightbox::backdrop { background: #101a16d9; }
+  :global(html:has(dialog.lightbox[open])) { overflow: hidden; }
+  .lightbox figure { display: grid; justify-items: center; gap: 14px; }
+  .lightbox img { max-width: 100%; max-height: calc(100dvh - 120px); width: auto; height: auto; border-radius: 10px; background: var(--color-surface); box-shadow: 0 24px 64px #0006; }
+  .lightbox figcaption { color: #fff; font-size: 14px; text-align: center; }
+  .lightbox-close { position: fixed; top: 16px; right: 16px; display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #ffffff26; color: #fff; font-size: 28px; line-height: 1; cursor: pointer; }
+  .lightbox-close:hover { background: #ffffff40; }
+  @media (max-width: 760px) {
+    .lightbox { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); }
+  }
+</style>

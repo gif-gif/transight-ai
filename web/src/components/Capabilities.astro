@@ -19,7 +19,7 @@ const previews = images[locale].filter(image => image.id === 'ai-page-confirm' |
   </div>
   {!detailed && <div class="capability-previews">
     {previews.map(image => <figure>
-      <a href={image.src} target="_blank" rel="noopener noreferrer" aria-label={`${screenshots[locale].enlarge}: ${screenshots[locale].items[image.id as keyof typeof screenshots[typeof locale]['items']]}`}>
+      <a href={image.src} data-lightbox aria-label={`${screenshots[locale].enlarge}: ${screenshots[locale].items[image.id as keyof typeof screenshots[typeof locale]['items']]}`}>
         <img src={image.src} width={image.width} height={image.height} alt={screenshots[locale].items[image.id as keyof typeof screenshots[typeof locale]['items']]} loading="lazy" decoding="async" />
       </a>
       <figcaption>{screenshots[locale].items[image.id as keyof typeof screenshots[typeof locale]['items']]}</figcaption>
